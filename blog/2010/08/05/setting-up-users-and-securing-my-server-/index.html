@@ -1,0 +1,391 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Setting up users and securing my server.  - andrewmccall.com</title>
+  <meta name="author" content="Andrew McCall">
+
+  
+  <meta name="description" content="Last night I got the server upgraded to ububtu 10.04 and installed puppet. The first and only recipe we&#8217;ve got is one to make sure our sudoers &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://andrewmccall.com/blog/2010/08/05/setting-up-users-and-securing-my-server-/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="andrewmccall.com" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">andrewmccall.com</a></h1>
+  
+    <h2>My stie</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:andrewmccall.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Setting Up Users and Securing My Server.</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-05T00:00:00+01:00" pubdate data-updated="true">Aug 5<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content">Last night I got the server upgraded to ububtu 10.04 and installed puppet. The first and only recipe we&#8217;ve got is one to make sure our sudoers file has the proper permissions. Tonight I&#8217;m hoping to:
+<ul>
+	<li>Add myself a user</li>
+	<li>Automatically create me ssh key</li>
+	<li>Prevent root from logging in via ssh</li>
+	<li>Prevent users from logging in other than with a key.</li>
+	<li>It would be nice to be able to email me my key since I don&#8217;t run puppet on my mac, though I may be convinced to go down that route if it proves too difficult.</li>
+</ul>
+Longer term I&#8217;m hoping to extend this same process to create user certificates for https client certificate authentication and it would be nice to use the same key, certificates and revocation process to issue new credential to users or to even lock them out. Bearing that all in mind, but not getting too hung up on stuff I&#8217;m doing later, off we go.
+
+<h3>Create the users module</h3>
+
+We&#8217;re going to do this pretty much straight out of the puppet best practice guide, the first thing we&#8217;ll do is flesh out our users module.
+
+<div class="CodeRay">
+  <div class="code"><pre># cd /etc/puppet
+# mkdir -p modules/user/manifests</pre></div>
+</div>
+
+
+Then create a virtual users file:
+
+<em><div class="CodeRay">
+  <div class="code"><pre>modules/user/manifests/virtual.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre># virtual.pp
+#
+# People accounts of interest as virtual resources
+class user::virtual {
+    @user { &quot;andrewmccall&quot;:
+        ensure  =&gt; &quot;present&quot;,
+        uid     =&gt; &quot;1001&quot;,
+        gid     =&gt; &quot;1001&quot;,
+        comment =&gt; &quot;Andrew McCall&quot;,
+        home    =&gt; &quot;/home/andrewmccall&quot;,
+        shell   =&gt; &quot;/bin/bash&quot;,
+    }
+}</pre></div>
+</div>
+
+
+Next let&#8217;s move me from a virtual user to an actual user
+
+<em><div class="CodeRay">
+  <div class="code"><pre>modules/users/manifests/unixadmins.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre># unixadmins.pp
+#
+# Realize the members of the Unix team and include any contractors
+
+class user::unixadmins inherits user::virtual {
+    # Realize our team members
+    realize(
+        User[&quot;andrewmccall&quot;]
+    )
+}</pre></div>
+</div>
+
+
+Next we need to create an init.pp for the module.
+
+<em><div class="CodeRay">
+  <div class="code"><pre>modules/users/manifests/init.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre>import &quot;*&quot;
+class user {
+    include user::virtual, user::unixadmins
+}</pre></div>
+</div>
+
+
+Now we need to go back and update the site.pp - at this stage I also add a node.pp below to manage individual hosts. 
+
+<em><div class="CodeRay">
+  <div class="code"><pre>manifests/site.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre># site.pp
+
+import &quot;nodes&quot;
+
+Exec { path =&gt; &quot;/usr/bin:/usr/sbin/:/bin:/sbin&quot; }</pre></div>
+</div>
+
+
+<em><div class="CodeRay">
+  <div class="code"><pre>manifests/site.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre># node.pp
+
+node default {
+  include sudo, user
+}</pre></div>
+</div>
+
+
+Once I got that all setup I ran puppet from the command line:
+
+<div class="CodeRay">
+  <div class="code"><pre># puppet -v --modulepath=/etc/puppet/modules /etc/puppet/manifests/site.pp</pre></div>
+</div>
+
+
+And I got an error: 
+
+<div class="CodeRay">
+  <div class="code"><pre>info: Autoloaded module sudo
+info: Autoloaded module user
+info: Applying configuration version '1281041300'
+err: //user::virtual/User[andrewmccall]/ensure: change from absent to present failed: Could not create user andrewmccall: Execution of '/usr/sbin/useradd -u 1001 -g 1001 -s /bin/bash -c Andrew McCall -d /home/andrewmccall andrewmccall' returned 6: useradd: group '1001' does not exist</pre></div>
+</div>
+
+
+Unfortunately I&#8217;m going to have to leave it at that for the night, see you tomorrow.
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew McCall</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-05T00:00:00+01:00" pubdate data-updated="true">Aug 5<span>th</span>, 2010</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://andrewmccall.com/blog/2010/08/05/setting-up-users-and-securing-my-server-/" data-via="andrewmccall" data-counturl="http://andrewmccall.com/blog/2010/08/05/setting-up-users-and-securing-my-server-/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2010/08/04/upgrading-my-server-and-installing-puppet/" title="Previous Post: Upgrading my server and installing puppet">&laquo; Upgrading my server and installing puppet</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2010/08/09/groups-in-puppet-/" title="Next Post: Groups in puppet.">Groups in puppet. &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/octopress/">Octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/11/customer-support-what-a-joke-/">Customer support, what a joke.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/23/validation-1-0-0-released-/">Validation 1.0.0 released.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/16/oembed/">oEmbed</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/15/even-more-secure-passwords-/">Even more secure passwords.</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/andrewmccall">@andrewmccall</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'andrewmccall',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("andrewmccall", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/andrewmccall" class="twitter-follow-button" data-show-count="false">Follow @andrewmccall</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Andrew McCall -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

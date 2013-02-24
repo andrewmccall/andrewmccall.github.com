@@ -1,0 +1,275 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Some thoughts on unit tests - andrewmccall.com</title>
+  <meta name="author" content="Andrew McCall">
+
+  
+  <meta name="description" content="First of all, I don&#8217;t go in for the whole write a test that fails before I write any code. But I do aim for as close to 100% code coverage as I &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://andrewmccall.com/blog/2009/07/09/some-thoughts-on-unit-tests/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="andrewmccall.com" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">andrewmccall.com</a></h1>
+  
+    <h2>My stie</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:andrewmccall.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Some Thoughts on Unit Tests</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-09T00:00:00+01:00" pubdate data-updated="true">Jul 9<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content">First of all, I don&#8217;t go in for the whole write a test that fails before I write any code. But I do aim for as close to 100% code coverage as I can get, again sometimes I pick and choose what I want to ignore when it comes to missing methods. Testing every getter and setter in a Java bean for 100% coverage seems like total overkill to me.
+
+I do rely heavily on tests when it comes to regression testing - making sure I haven&#8217;t broken anything. I&#8217;ve spent time having to go through every page on a fair sized web app after every release and inevitably finding something broken that I then had to quickly patch. Once it&#8217;s patched you start the testing over again and probably find a few more things. With no way back &nbsp;it ends up an all nighter. It&#8217;s not a lot of fun and testing helps prevent it.
+
+The other reason I write tesst is that they help a huge amount when I refactor code. Like over the last few days. I&#8217;ve spent them undertaking a major retooling of large swaths of code. I&#8217;ve been pulling out all the RDBMS stuff from some user management code and replacing it with a Hbase implementation. It&#8217;s also shown me that the code was pretty tied to the RDBMS implementations, much more than I&#8217;d originally thought.
+
+It&#8217;s not anymore, and I&#8217;m not sure I could have pulled it apart without a coherent set of unit tests.&nbsp;I&#8217;ll post a little on the strategy for writing tests I&#8217;ve implemented to prevent it in the future a bit later.
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew McCall</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-09T00:00:00+01:00" pubdate data-updated="true">Jul 9<span>th</span>, 2009</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://andrewmccall.com/blog/2009/07/09/some-thoughts-on-unit-tests/" data-via="andrewmccall" data-counturl="http://andrewmccall.com/blog/2009/07/09/some-thoughts-on-unit-tests/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2009/07/07/i-ve-made-a-little-jsr303-annotation-library/" title="Previous Post: I've made a little JSR303 annotation library">&laquo; I've made a little JSR303 annotation library</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2009/07/19/stop-asking-questions-/" title="Next Post: Stop asking questions.">Stop asking questions. &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/octopress/">Octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/11/customer-support-what-a-joke-/">Customer support, what a joke.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/23/validation-1-0-0-released-/">Validation 1.0.0 released.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/16/oembed/">oEmbed</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/15/even-more-secure-passwords-/">Even more secure passwords.</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/andrewmccall">@andrewmccall</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'andrewmccall',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("andrewmccall", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/andrewmccall" class="twitter-follow-button" data-show-count="false">Follow @andrewmccall</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Andrew McCall -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,732 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>andrewmccall.com</title>
+  <meta name="author" content="Andrew McCall">
+
+  
+  <meta name="description" content="Jeff Atwood was pleased to find that his coding conventions, the ones we all settle into, have been tending towards those of a style of programming &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://andrewmccall.com/blog/page/11/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="andrewmccall.com" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">andrewmccall.com</a></h1>
+  
+    <h2>My stie</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:andrewmccall.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/07/10/spartan-programming/">Spartan Programming</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-07-10T00:00:00+01:00" pubdate data-updated="true">Jul 10<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://codinghorror.com">Jeff Atwood</a> was pleased to find that his coding conventions, the ones we all settle into, have been tending towards those of a style of programming called Spartan Programming. Which is minimalist programming, as in &#8220;a spartan lifestyle&#8221;. Check his <a href="http://www.codinghorror.com/blog/archives/001148.html">post</a> out for a more in depth explination but suffice to say the aim is to reduce complexity in any way possible. </p>
+
+<p>I&#8217;ve got to agree that more and more I&#8217;ve tended in that direction too. I don&#8217;t remember the last time I had more than a handful of conditionals or loops in a method. My methods are terse and accomplish one thing, sub tasks are split out into other methods. It&#8217;s come very naturally, but it has taken time. I don&#8217;t think it&#8217;s something you can be taught, or learn. It&#8217;s definitely a practice thing. </p>
+
+<p>One aspect of Spartan Programming where I disagree is with the terse variable names. I think they could end up introducing more accidental and avoidable errors. They lessen the utility of some key IDE features. And generally would just make my life harder, so I&#8217;ve gone the other way. Once upon a time I would happily create the following code: </p>
+
+<div class="CodeRay">
+  <div class="code"><pre>public void sendMessage() {
+    MimeMessage m = new MimeMessage();
+    m.setBody(&quot;This is a test&quot;);
+    m.send();
+}</pre></div>
+</div>
+
+
+<p>These days I try to avoid calling variables things like <em>m</em> and prefer to call them what they are: </p>
+
+<div class="CodeRay">
+  <div class="code"><pre>public void sendMessage() {
+    MimeMessage message = new MimeMessage();
+    message.setBody(&quot;This is a test&quot;);
+    message.send();
+}</pre></div>
+</div>
+
+
+<p>I know the arguments and logic: </p>
+<ul>
+<li>The method should be simple enough that the variable name <em>m</em> is clear enough. </li>
+<li>The shorter name reduces complexity and therefore errors. </li>
+<li>Less characters means lines don&#8217;t get too long</li>
+</ul>
+
+<p>Of these three the third is the only one I really buy though. Long variable names and too many characters on a line can push some stuff too far to the right potentially hiding errors or overly complex code; but it&#8217;s an edge case and there are other ways to solve the problem.</p>
+
+<p>While true that in a short minimalist method a variable <em>m</em> would be clear enough, a variable called <em>message</em> is equally clear. The shortening doesn&#8217;t gain anything in clarity. The argument for less characters reducing errors in the era of modern IDEs doesn&#8217;t wash with me either - My IDE tells me of I mistype a variable and auto completes them furthermore by typing actual words I actually improve the accuracy even more. </p>
+
+<p>Shorter names on the other hand can tend more towards a crowded namespace and can result in properly typing the wrong variable. This is especially a problem in a <a href="http://en.wikipedia.org/wiki/Programming_language#Weak_and_strong_typing">weakly typed language</a>.</p>
+
+<p>Consider the following:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>function sendInviteMessages(n) 
+    for i = 0 to n
+        Set m = Server.CreateObject(&quot;MimeMessage)
+        m.Body = &quot;Welcome to our fancy new site!&quot;
+        m.Send
+        Set n = Nothing
+    next
+end function</pre></div>
+</div>
+
+
+<p>What you see here is something that wouldn&#8217;t happen, or not as often with a variable name like <em>number</em> instead of <em>n</em> and <em>message</em> instead of <em>m</em>. Worse still, depending on the language and how it treats null variables it might even pass a quick test with a single address and appear to be working!</p>
+
+<p>The one place I totally disagree with the terse variable naming conventions though, is the method parameters. That actually makes life harder when working with code completion. Which is easier to follow?</p>
+
+[[posterous-content:eGAIahqgzytkaCBzAqDi]]
+[[posterous-content:BytBtkkrvcjwhyJbrGHq]]
+
+<p>There are plenty of other code completion and helpful shortcuts in a modern IDE where the parameter names are used to make our lives easier. All of which lost, with no real gain.</p>
+
+<p>I&#8217;m not arguing that variable names shouldn&#8217;t be terse and sensible. Going back to the first example the following is just stupid and is far worse than using just <em>m</em>, it&#8217;s practically illegible and very difficult to just eyeball the code to see what is going on.</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>public void sendMessage() {
+    MimeMessage theMessageToSend = new MimeMessage();
+    theMessageToSend.setBody(&quot;This is a test&quot;);
+    theMessageToSend.send();
+}</pre></div>
+</div>
+
+
+<p>Other times I go the opposite way and have adopted conventions for making some variables extremely terse. <em>InputStream</em> and <em>OutputStream</em> variables for example I always call <em>is</em> and <em>os</em>. So I do try and be as terse as possible, but never terseness at the expense of obviousness of intent.</p>
+
+<p>While I agree with most of the practices and like Jeff was nodding along as I read about Spartan Programming, there are a few I don&#8217;t fully follow and some I&#8217;m against. In the end though I tend to agree with his assertion that <em>Minimalism isn&#8217;t always the right choice, but it&#8217;s rarely the <i>wrong</i> choice</em> as long as it&#8217;s not at the expense of clarity of intent.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/07/09/release-early-release-often/">Release Early - Release Often</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-07-09T00:00:00+01:00" pubdate data-updated="true">Jul 9<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Agile methodologies have recently been getting something of a bad name, it&#8217;s not unwarranted but it is unfortunate. The problem isn&#8217;t actually the process, an agile process will work very well - if the infrastructure supporting it is capable of of being agile as well. By supporting infrastructure for a process here I don&#8217;t mean servers and software I mean the people and the organisational foundations. The organisation trying to use an agile process must it&#8217;s self be agile, quick to react to change. Agile processes that work have one thing in common, they encourage features to be released early and released often. </p>
+
+<p>A pretty basic overview of our process goes something like this: </p>
+
+<h1>Big Bag of Features</h1>
+
+<p>Our projects and releases go through a number of stages, the first we call <em>The Big Bag of Features</em>. When a project is really just an idea, it&#8217;s something we might want to build and we basically rough out some ideas and start to grow them into all sorts of crazy future versions, we talk about all the features we&#8217;ll need to achieve them and how we&#8217;ll go about it. </p>
+
+<h1>Minimum Stable Feature-set</h1>
+
+<p>From the <em>BBoF</em> we usually end up with at least one, more often than not a number of possible outcomes and development paths. By talking through all of the options, all the features and all the future versions we&#8217;d like to be able to build leads us naturally to something we can build; a vision for a product. </p>
+
+<blockquote><p><a href="http://citrusapp.com">Citrus</a> is a good example of this practice, we&#8217;re at the stage where we&#8217;ve decided the vision for the project, have a big bag of features we&#8217;d like to implement and are now in the process of creating our MSF</p></blockquote>
+
+<p> From the vision we decide what we need to make a product work; less is definitely more at this stage. We normally take each feature we&#8217;ve decided would be nice to have and try to think about who would use it and why. If we can&#8217;t come up with a compelling argument for most of our users using it, we normally chuck it back into the bag to worry about later. We refer to the result as the<em>Minimum Stable Feature-set (MSF)</em> or <em>Minimum Launch Feature Set</em>.The bare minimum we need to launch a working product. </p>
+
+<p>The MSF becomes the next iteration, and once it&#8217;s set we don&#8217;t alter it. Nothing is added or taken away. On the surface this might seem either silly or a bit high and mighty, but we can do it because we put the work in ahead of time. We&#8217;ve discussed how we envision the product being used and we make sure we&#8217;ve covered all the bases. New great ideas just aren&#8217;t important enough to include, no matter how good they are. We leave them for another iteration and another day. </p>
+
+<p>These ideas can be politically disastrous in some organisations, it&#8217;s downright heresy to tell the boss, or the sales director or a colleague  what amounts to: their newest great idea just isn&#8217;t good enough. It&#8217;s important for an organisation to have focus though, this is where the MSF and short iterations come into their own. Releasing early and often means that you&#8217;re quickly on to the next round of updates and those great ideas can be looked at objectively alongside anything else in the Big Bag of Features.</p>
+
+<h2>Getting started</h2>
+
+<p>Finally we start coding the interfaces first, then backend to meet our MSF. In the case of a new project partial interim releases are made for testing. We try to work out an entire area of the project first then release that to our testing audience for feedback. As the iterations contiune towards release we add all the features from our MSF. </p>
+
+<h2>Updates</h2>
+
+<p>When it comes to updating projects we <em>throw away the Big Bag of Features</em> and start all over again.You heard it right, throw them away, gone. A long time ago I learned that feature lists just cause trouble. You can&#8217;t help but schedule them, the schedules are very loose and they&#8217;re never met but still promises are made based on them. In the end they start to read more like a list of failures, things your application doesn&#8217;t do. More importantly, things your application will more than likely never do. So we throw them away and start again with a new Big Bag of Features, the most important features will bubble to the top of your memory anyway and will end up right back in this new BBoF.</p>
+
+<p>For an update our MSF is usually a single feature, or small feature set if they work best that way. The aim is to keep the releases small and concise, targeting one area of functionality. This doesn&#8217;t mean that we don&#8217;t set milestones or visions for the future development of the product, we normally make a milestone accomplish some greater goal or vision for the product. But we try not to roll a list of disparate fixes to various parts of the application into a single release, we break them up into many smaller releases. </p>
+
+<h1>Rinse and Repeat</h1>
+
+<p>We continue in this way for the life of the project releasing features to users early and often so bugs are spotted quicker and we never go too far down a dead end, creating something users won&#8217;t use. It&#8217;s during this stage that we really work hard to measure how an application is being used, or not used so we can focus our energy only on the most important parts. We never try to be everything to everyone, we&#8217;re not afraid to disappoint some people or to just say no. We want our application to be great at what it does, not mediocre at everything. </p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/07/07/get-your-development-under-control-all-about-version-control/">Get Your Development Under Control - All About Version Control</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-07-07T00:00:00+01:00" pubdate data-updated="true">Jul 7<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The key to any successful development team, far more than any other tool, is version control. No matter how many team members you have, if you&#8217;re dozens of people spread across the globe or one lone developer in a basement you need version control.</p>
+
+<p>A number of free and paid for systems exist, largely they accomplish the same ends: the ability for multiple developers to collaborate on the same code, the ability to track changes and the ability to manage changes across concurrent versions of code.</p>  
+
+<h1>change management</h1>
+
+<p>This is potentially the biggest benefit of any source control system, the ability to manage changes in code. Most version control systems manage changes through a series of checkouts and commits by developers. </p>
+
+<p>You check the code you want to work on our of the repository creating a local copy, make changes to the code and commit your changes to the repository again. Any developers that are working on the code can update their local copies an the changes you&#8217;ve made will be merged in. </p>
+
+<p>This can be a massive boon, even if you&#8217;re working alone. Version controls systems will also let you roll changes back, so if you&#8217;ve made a mistake, deleted a file or need to see how something worked before you can go back to any previous version.</p>
+
+<h1>concurrent versioning</h1>
+
+<p>Concurrent versioning is a great benefit when you&#8217;ve released software or are developing more than one major feature at the same time. It&#8217;s the process of having two working versions of the code which can be edited independently. </p>
+
+<p>In the case of a released version of software this allows you to release a patch before new features still in development are ready to be released. You can patch the bug, release an update to users and then use the version control system to merge the change into the development code so that your next release with the new features gets the fix too. </p>
+
+<p>If you&#8217;re working on a major feature you might also want to branch your code temporarily. This would allow you to perform some pretty significant refactoring on areas of the code which would not affect developers working on the rest of the code, when you finished the work you could then merge your code into the main development branch prior to release. </p>
+
+
+<h1>what else</h1>
+
+<p>For more information about version control see the excellent <a href="http://betterexplained.com/articles/a-visual-guide-to-version-control/">Visual guide to version control</a> at <a href="http://betterexplained.com">betterexplained.com</a>. </p>
+
+<h1>How to get started </h1>
+
+<p>There are a number of choices and a number of web based version control systems. Opensource <a href="subversion.tirgis.org">subversion</a> and <a href="http://git.or.cz/">git</a> are used by a large number of people and compete on features with most commercial offerings. If you don&#8217;t want to set up your own server to host a repository <a href="http://code.google.com/">Google code</a>, <a href="beanstalkapp.com">beanstalk</a> and <a href="lighthouseapp.com">lighthouse</a> are just a few web based services that can host version control environments for you. <a href="http://code.google.com/">Google code</a> is free, but you&#8217;ll need to be developing an opensource project the other two are subscription services. </p>
+
+<p>I personally use subversion and love it but with any version control system, commercial or free the most important thing is to pick and fit a system into your development environment. Don&#8217;t pick one that is going to force you to change the way you work. Try a couple if you can and pick the one that works best for you.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/07/03/minimum-stable-feature-set/">Minimum Stable Feature-set</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-07-03T00:00:00+01:00" pubdate data-updated="true">Jul 3<span>rd</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>From time to time this blog will reflect a decision we take as a company, this is one of those times. We&#8217;re currently working on a product called <a href="citrusapp.com">Citrus</a>, a better way for agents to sell property online because frankly existing stuff sucks, scheduled for launch in the autumn. </p>
+
+<p>One of the key decisions we&#8217;ve taken is not to implement everything on our feature list. We&#8217;d rather build <a href="http://gettingreal.37signals.com/ch05_Half_Not_Half_Assed.php">half an app than a half assed one</a>. As flippant as that sounds, it&#8217;s true- we could spend years analysing all the competition, ensure that we&#8217;ve not only bested them at the key features we know we need to implement, but at everything else as well and some day in the distant future launch a product. Or we can look at our feature list, choose the killer features we know our application needs to have to achieve everything 80% of our potential customers need from our app and forget the rest. </p>
+
+<p>We&#8217;ve chosen the latter. It&#8217;s going to help us get to market faster, it&#8217;s going to help us get customers quicker and it will allow our customers actual use of the product drive our vision for it- not some paper list. Also if we&#8217;re totally wrong in assumption that a good product can gain traction in a poor market, we know and can move on sooner.</p>
+
+<p><i><b>UPDATED:</b> I renamed the title for consistency - we refer to the stage of development as either both the <b>Minimum Launch Feature-set</b> or the <b>Minimum Stable Feature-set</b> internally - the latter being the best really since it&#8217;s useful both for an initial launch and for discussing post launch updates.</i></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/07/01/never-rewrite-your-software/">Never Rewrite Your Software</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-07-01T00:00:00+01:00" pubdate data-updated="true">Jul 1<span>st</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>All software is a work in progress none is ever perfect. It will always have bugs, sometimes it might even seem that the software is nothing but bugs an it&#8217;s in these dark times when we normally say fuck it, let&#8217;s start over. Not always, some of the good excuses I hear for a rewrite are: 
+
+</p><ul>
+<li><p><em>New blood</em> Someone new comes along and the first thing they suggest is a complete rewrite - It&#8217;s alarming the number of times I hear this suggested. Sometimes it&#8217;s contractors, which is somewhat exusable - it&#8217;s more billable time for them. Other times it&#8217;s by people newly in charge or new to the team. </p></li>
+<li><p> <em>Team members have left</em> - rightly or wrongly they&#8217;ve been blamed for the code, and coding them out seems like a good idea</p></li>
+<li><p><em>Too many bugs</em> - An effort to hammer out the bugs feels like  it would take longer than to rewrite from the ground up</p></li>
+<li><p><em>New tools!</em> - A shiny new framework is out and you want to use it, it will solve all your problems and put all your spare cycles to work sorting out poverty and war.</p></li>
+</ul>
+
+<p>Common to all the above is the fact that everything seems like it would be easier if only you could get out from under the crushing weight of legacy. And it&#8217;s a very attractive fallacy; Bugs could be solved by reworking the architecture; Features would be easier if only the code wasn&#8217;t written that way; That new framework would fix the bugs we&#8217;re seeing because of the one we&#8217;re using. </p>
+
+<h1>resist the temptation</h1>
+
+<p>They sound like good reasons, but that&#8217;s the problem with attractive things that are bad for us - they&#8217;re attractive. It&#8217;s so much easier to believe that the grass would be greener if we re-turfed the lawn than to work out how to fix those brown patches.</p> 
+
+<h2>it almost always takes longer than you expect</h2>
+
+<p>A complete from the ground up rewrite will take longer than you think. It will probably take almost as long as it took you to get where you are now.  It&#8217;s tempting to believe that you don&#8217;t need planning meetings to work out what has to be done. It&#8217;s right there a spec in the current implantation, just get started! So you&#8217;re initial estimate is just a stab in the dark anyway.</p>
+
+<p>Add to this the further false belief that since you implemented the features once already, you&#8217;ll be able to do it faster this time around. You won&#8217;t, well you might - but you won&#8217;t implement them as optimistically quick as you think you will.</p>
+
+<p>Throughout the process you&#8217;ll also be further from a releasable product than you think you are - much further. In a rewrite you have to rewrite every feature all those &#8220;all we have left in component x to do is&#8230;&#8221; bullet points add up. </p>
+
+<p>All of this leads to one last problem with timescales for rewrites - in order to get anyone else to buy into them they have to be wildly optimistic about the schedule. So just when you need everyone most motivated and excited, as you&#8217;re gearing up for a release, you&#8217;ve set them up to be demoralised by missing an increasing number of deadlines.</p>
+
+<h2>you&#8217;re reinventing the [buggy] wheel</h2>
+
+<p>Programmers are people, people are creatures of habit. You&#8217;ll inevitably end up implementing part of your radical new system in a very similar way to your existing system. Then you&#8217;ll be forced to make the same compromises as you&#8217;ve made before and you&#8217;ll undoubtedly introduce some bug that&#8217;s already been patched in your existing software.</p>
+
+<p>Some of your old code will also be good code, at best you might cut and paste it into the new code base but for the most part though trying to hammer it into place and wire it up is going to be as long and as buggy a process as rewriting it. So instead you follow the rewrite it all logic and rewrite it all. </p>
+
+<h2>you&#8217;re standing still</h2>
+<p>When you&#8217;re rewriting your software you&#8217;re stainding still in almost every way possible. If you&#8217;re rewriting everything, you&#8217;re spending an awful amount of time not moving your application or business forward. Personally and professionally you&#8217;re not learning much new (unless a new framework is your excuse). </p>
+
+<p>Even if you&#8217;re squeezing some features into your rewrite, probably because it&#8217;s been so long since a release you&#8217;d be lynched by a mob if you refused, it&#8217;s so long before the users are actually going to see them that you might as well not be. The perception of your software isn&#8217;t going to be sometimes shaky, but getting better all the time - it&#8217;s going to that it&#8217;s buggy and the bugs are never fixed.</p> 
+
+<h2>you&#8217;ll probably end up no better off</h2>
+<p>The sad and somewhat painful truth is if a team can&#8217;t fix something - getting them to make a new one is probably not going to fare much better. Your new version is probably going to be no better than the old, will certainly be worse than an itteratively developed and incrementally improved version of what you had could have accomplished in the same time.</p>
+
+<p>Also problems you&#8217;re having with a framework or tool probably aren&#8217;t going to be magically solved by using a new one. Most of the these arguments are born out of a naive belief that because the framework isn&#8217;t doing what the developer is expecting, the framework has bugs, changing frameworks should then solve the bugs. The problem is of course developer expectation versus reality and more often than not due to some underlying misunderstanding of the platform the framework or tool is abstracting - a reality that a new framework cannot change.</p>
+
+
+<h1>how to sensibly go about a whole rewrite of your software</h1>
+
+<p>While it&#8217;s not sensible to start a full rewrite of your software, it&#8217;s also ludicrous to decide that nothing written should be changed. Software development is a process not an event. If it&#8217;s not working fix it; if it&#8217;s complicated and bug prone, refactor it; if it&#8217;s shit, code it out. Just don&#8217;t throw the good out with the bad. </p>
+
+<h2>Start where it hurts</h2>
+<p>In the case of bug riddled software start with an area that is causing the most trouble. Patch the big bugs first. It can be a painful process, I won&#8217;t lie.  It&#8217;s demoralising to everyone to have buggy software and it&#8217;s not exciting or glamorous to fix it. </p>
+
+<p>Bug fixes are  one of the most thankless tasks developers are asked to perform, so make sure you break it up with some of more challenging and interesting tasks, throw a few features into each iteration.</p>
+
+<h2>if I could do it all over I&#8217;d change&#8230;</h2>
+<p>These are the generally the things that are hurting the developers rather than the user. Some of them are far reaching, architectural or framework choices. They can all be fixed though, and you don&#8217;t need to rewrite the whole application to get there.</p> 
+<p>Again, start with the ones that hurt the most, if it&#8217;s part of the architecture refactor it. If it&#8217;s a framework you&#8217;d like to integrate to solve problems, try it out on part of the code and work to roll it out incrementally. </p>
+
+<p>I promise it will be quicker, a lot quicker to go down the incremental route than it will be to rewrite the whole thing in one go.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/06/30/building-an-application-targeting-estate-agents/">Building an Application Targeting Estate Agents</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-06-30T00:00:00+01:00" pubdate data-updated="true">Jun 30<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>By all accounts the property market is in free fall and we&#8217;re taking the possibly bold decision to launch a product with estate agents as our primary market. </p><p>The product is called <a href="http://citrusapp.com">Citrus</a> and it&#8217;s better way for agents to sell property online because frankly the existing solutions are all pretty lame. We got here through our work with a good friend Colin and his spanish property business <a href="http://www.spiritofgranada.com">Spirit of Granada</a>. In developing the website for his business we realised that the existing solutions weren&#8217;t easy for a small company or sole trader to work with, they involved lengthy contract terms, high costs and confusing feature sets and options. We want to change all that and think that our insider knowledge of how these smaller agents operate will allow us to build an application for the market that doesn&#8217;t suck. </p><p>Stay tuned to find out. </p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/06/27/it-s-not-working-again-/">It&#8217;s Not Working! Again!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-06-27T00:00:00+01:00" pubdate data-updated="true">Jun 27<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Bugs, in an awful lot of organisations they&#8217;re a four letter word, they just shouldn&#8217;t happen. But unfortunately despite the shouting and stomping, they still will. </p><h1>your software has bugs</h1><p>Your software has bugs, go ahead, say it, try it on. Does it scare you? It doesn&#8217;t scare me. I know mine does, this isn&#8217;t a shock, revelation or epiphany for me. I had that years ago:</p><p><i>One dark stormy night with a start I sat bolt upright and realised I wasn&#8217;t perfect, that I couldn&#8217;t write perfect code. I sat through the rain and the thunder awake and frightened, but as the sun broke the next morning it a clear new day dawned on a world washed free of it&#8217;s sins. I felt renewed, rejuvenated; I bounded to the office, spearheaded an overhaul of our development process, got a more agile workflow implemented with fast iterations and complete management support.</i></p><p>Ok, it wasn&#8217;t quite like that. I was actually up all night because someone somewhere had been freaking out about yet another bug the day before. It was affecting one user, and it would only be a matter of time before it would be affecting others - then like dominoes all of them; soon they&#8217;d be the rats leaving our sinking ship upstream and they&#8217;d take the paddles with them - in short: DOOM! </p><p>It&#8217;s very easy to find a bug, say it&#8217;s obvious and should have been tested, it&#8217;s quite another to test all the functionality and find all of the bugs before launch.  My software has bugs, so does yours and everyone else too. </p><h1>get over it and stop blaming others for your problems</h1><p>Bugs are a result of code, written by programmers- but it&#8217;s not always just the programmers who are to blame. Organisational pressures leading to scope and feature creep, poor design and processes or a lack of any sort of roadmap will all contribute to the problem. </p><p>So many times I&#8217;ve been working to a deadline (beginning, middle or end - it doesn&#8217;t really matter once a timeline is fixed any changes will incur a cost), then someone comes along and starts a sentence with &#8220;What about&#8230;&#8221; and totally blows the schedule. The problem is people rarely take into account the very simple fact that the schedule wasn&#8217;t set to include this new task, or the next next one.</p><p>This schedule pressure then leads to rushing either the design, the testing, the coding or all of them - this more or less ensures there will be more bugs. </p><p>Common excuses I hear for this are: </p><ul>
+<li><p><em>It&#8217;s obvious, and should have been thought of.</em> Sometimes this is a valid comment, but I have never been part of a team where the obvious was actually missed. In my experience this has almost always been used as some rhetorical comment to excuse someone for not mentioning a feature until launch or later.</p></li>
+<li><p><em>If we don&#8217;t have that for Friday&#8217;s launch, we won&#8217;t get customer X</em></p></li>
+<li>
+<p><em>Adding <i></i> would mean getting so many more customers</em> This is such a great trap for a business- so good I&#8217;ll be writing much more about it in the future. Oftentimes it&#8217;s political or the result of an organisation without any clear goal setting or planning.</p> </li>
+</ul><p>Schedule pressure is often further exacerbated by not making any allowances for bugs. If you don&#8217;t make allowances for fixing them post launch, you&#8217;ve already missed your next deadline. </p><h1>what can we actually do about them?</h1><p>There are a few things we can do organisationally and individually to lessen their impact. Start by not being afraid of them, accept they&#8217;re a fact of life and get over it. Shit happens, and it piles up - get a shovel or get out of the way. Look to the processes and people and streamline the development workflow. Everyone involved needs to think things through. Finally once you&#8217;ve accepted bugs, worked to minimised them in development deal with them calmly and rationally, if at all. </p><h2>deal with the workflow issues</h2><p>If your development processes seem to be creating a lot of bugs, they&#8217;re the fist place to look. These are going to be the hardest to change, but they&#8217;ll also give you the biggest returns. A few of simple steps to take: </p><ul>
+<li><p><em>Design the interfaces first</em> Changes to desgin mid-stream cost at any stage of the cycle, but the earlier they&#8217;re discovered the less of an impact it will have. At least wireframing your interfaces means everyone gets a good look at them before development starts, and can say &#8220;what about&#8230;&#8221; early.</p></li>
+<li><p><em>Remember changes cost</em> When someone asks for a change, make sure you point out that changes will affect delivery. Ask them why it wasn&#8217;t thought of earlier. Don&#8217;t take anything as read and make sure nobody else does either.</p></li>
+<li><p><em>Iterate often</em> Small quick iterations mean features go into use quickly and mean less changed code and less places for bugs to hide. This also allows bugs to form part of the next iterations work.</p></li>
+</ul><h2>all bugs are not created equal</h2><p>Not all bugs will affect people equally. Minor display issues are not as important as an issue where user data is randomly disappearing. An issue where the front page of your website is full of gibberish is far more important that a newsletter not being sent on time. </p><p>All bugs should enter a triage system, where the scope of the problem is analysed and a prioritisation decision is taken. There is no room for rhetoric, blame or politics in this process and clear descriptions of the problems are key. The title of this post is verbatim the subject line from quite a few emails I&#8217;ve seen in my life, the body is usually not much more helpful and generally descends into politics and conflict. A minor display issue affecting some users is hardly &#8220;irreparably damaging&#8221;, &#8220;actionable&#8221;, cause for anyone to &#8220;seek any and all legal recourses for reimbursement or compensation&#8221; or cause to run off and offer the person our most heart felt and abject apologies for the inconvenience. </p><p>We need to step back, look at the extent of the problem and respond appropriately. Going off on one while a wild wacky tale to tell alter, isn&#8217;t really professional or productive. </p><p>Which leads us to&#8230;</p><h2>not all bugs need to be fixed immediately, or even at all</h2><p>In a perfect world, we&#8217;d fix every bug as soon as it was reported. Then again, the world wouldn&#8217;t be so perfect because we&#8217;ve got a bug in our code&#8230; in a slightly more perfect, yet undeniably imperfect world we&#8217;d like to fix bugs as soon as they happen. This isn&#8217;t always going to be possible and for various reasons it may not make sense to fix a bug immediately. </p><p>Take for example the following completely hypothetical situation. You&#8217;ve got a bug in some obscure import routine written for one customer a year and a half ago. The sales team promised it was going to be the next big thing, would open the door on a whole raft of customers that used that package - it turned out to be just the one and they may or may not renew their contract in six months time. Politics aside, given certain situations the import fails and you might choose to just not fix the bug</p><ul>
+<li><p><em>They&#8217;re unlikely to renew and fixing it isn&#8217;t going to sway them or get you any new customers</em> Don&#8217;t fix it and just remove the whole broken import from a future iteration. Chalk it up to learning and plan new features better so you&#8217;re addressing the needs of your users</p></li>
+<li><p><em>A work around exists</em> Your time might be better spent elsewhere, especially if the problem only affects a single or small number of customers</p></li>
+<li><p><em>Planned developments will obsolete the feature</em> A reworking of the feature, section or other areas of your website, the integration of a new API or a new workflow or way of doing things may mean the bug just dissapears in a future revision. One caution with this, as with any bug fix the promise should be delivered to the cusqtomer on time</p></li>
+</ul>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/06/18/saying-no/">Saying No</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-06-18T00:00:00+01:00" pubdate data-updated="true">Jun 18<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>A friend of mine, Duncan is starting a new business and needs a website. He&#8217;s importing high end mountain bike components and I&#8217;m pretty excited about it. I know I shouldn&#8217;t be planning to spend money on a new bike frame - I should be saving it for important family things, but the frames look great, anyway I digress.</p><p>Duncan needs a website to promote the business and knowing us, we were an obvious choice. A few weeks ago he called me to chat about it and we arranged a meeting. He&#8217;s done a great job of setting the ground work, has taken some great action shots of the Zambi frames with a pro phtographer. All he needed was a great site to help him sell. </p><p>Simon [<a href="http://goroam.net/people.php">goroam cofounder</a>] and I had a discussion about where we were going, what we wanted to do and how we wanted to get there. Our conclusion was: we&#8217;re too busy to take on a the website in the next couple of weeks and give it our full attention. </p><h2>sorry duncan</h2><p>So we met up, bought him lunch and told Duncan straight that we were too busy. We talked about alternatives and suggested working with <a href="http://www.logoworks.com/">logoworks</a>.I didn&#8217;t like to dissapoint him by not taking on the work - but I think long term it would have been more disapointing all around if we had. Instead I&#8217;ve offered to give him a hand with any helpful advice he needs to get going and we opened the possibility of later working together to develop and promote both his website and online marketing strategies once the initial design work was done. </p><p>It&#8217;s hard to say no to work, and money when you&#8217;re a small company, but sometimes it&#8217;s for the best. We wouldn&#8217;t have been able to do as good a job as either we or Duncan wants if we did agree to take the work, and we wouldn&#8217;t have been able to deliver it in a timely fashion. </p><h2>check him out</h2><p>Duncan has already spoken to another designer and should get the site he wants soon. When it does go live, and if you&#8217;re looking for top of the line mtb gear give them a few days to sort the site out then check it out, <a href="http://www.allmountainimports.co.uk">All Mountain Imports</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2008/06/17/finding-my-voice/">Finding My Voice</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-06-17T00:00:00+01:00" pubdate data-updated="true">Jun 17<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Welcome to my new blog. I&#8217;ve tried a couple in the past and haven&#8217;t managed to find my voice and get them going, but I&#8217;m going to try again. I&#8217;ll basically be talking about bootstrapping our company, coding and other things I thing are interesting or relevant but I can&#8217;t promise any of it will be well written, or interesting to you, though I&#8217;ll try. You can help by letting me know what you think is good or more importantly what you think is bad in the comments.</p><p>The design is close to what I imagined, but I&#8217;m no designer. I can beat things into a rough shape approximation what I think would look good, but I can never get the smooth finish I&#8217;d like. As with the writing I&#8217;ll work to improve this as I go.</p><h2>the conversation</h2><p>This is a conversation, the comments are as important as the posts and it&#8217;s a fine line to tread. I&#8217;m not setting out to moderate the conversation in any great way; I don&#8217;t have the time or inclination. I&#8217;ll largely leave it alone and respect constructive criticism and comment. I won&#8217;t respect attacks personal or otherwise though and will delete any and all comments which set out to disrupt the conversation</p><h2>I&#8217;m a sell out</h2><p>There are no ads on here at the moment, but one day when there are pageviews I&#8217;ll probably put them on here. I reserve the right to sell out at any time - so it&#8217;s probably best if you just consider me a sell out from day one. You can quote me: </p><blockquote class="posterous_medium_quote"><p>Andrew McCall is a sell out, he uses his blog for personal financial gain and to shamelessly plug businesses, products and other things which will either directly profit him or people he knows.</p></blockquote><p>So there you have it, my latest effort is launched - please stick around, hopefully enjoy and hit the comments to let me know how I can make it better.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/10/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/octopress/">Octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/11/customer-support-what-a-joke-/">Customer support, what a joke.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/23/validation-1-0-0-released-/">Validation 1.0.0 released.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/16/oembed/">oEmbed</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/15/even-more-secure-passwords-/">Even more secure passwords.</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/andrewmccall">@andrewmccall</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'andrewmccall',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("andrewmccall", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/andrewmccall" class="twitter-follow-button" data-show-count="false">Follow @andrewmccall</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Andrew McCall -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
