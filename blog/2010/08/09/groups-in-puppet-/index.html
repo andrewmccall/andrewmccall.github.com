@@ -1,0 +1,336 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Groups in puppet. - andrewmccall.com</title>
+  <meta name="author" content="Andrew McCall">
+
+  
+  <meta name="description" content="Last time I ended up not being able to create my user because I didn&#8217;t have a group for it and ran out of time before I needed to call it a &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://andrewmccall.com/blog/2010/08/09/groups-in-puppet-/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="andrewmccall.com" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">andrewmccall.com</a></h1>
+  
+    <h2>My stie</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:andrewmccall.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Groups in Puppet.</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-09T00:00:00+01:00" pubdate data-updated="true">Aug 9<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><a href="http://andrewmccall.com/2010/08/setting-up-users-and-securing-my-server/">Last time</a> I ended up not being able to create my user because I didn&#8217;t have a group for it and ran out of time before I needed to call it a night. So I&#8217;ll start tonight by creating a group for my user. 
+
+Go to the puppet config dir:
+<div class="CodeRay">
+  <div class="code"><pre># cd /etc/puppet</pre></div>
+</div>
+
+
+Then edit the virtual file we created in our users module last time and add a group, like this:
+<em><div class="CodeRay">
+  <div class="code"><pre>users/manifests/virtual.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre>class user::virtual {
+    @user { &quot;andrewmccall&quot;:
+        ensure  =&gt; &quot;present&quot;,
+        uid     =&gt; &quot;1001&quot;,
+        gid     =&gt; &quot;1001&quot;,
+        comment =&gt; &quot;Andrew McCall&quot;,
+        home    =&gt; &quot;/home/andrewmccall&quot;,
+        shell   =&gt; &quot;/bin/bash&quot;,
+        managehome =&gt; true,
+        require =&gt; [Group[&quot;andrewmccall&quot;]],
+    }
+
+    @group { &quot;andrewmccall&quot;:
+        ensure  =&gt; &quot;present&quot;,
+        gid     =&gt; &quot;1001&quot;, 
+    }
+
+}</pre></div>
+</div>
+
+
+Next in the unixadmins file we need to realize our new group, it should look like this:
+<em><div class="CodeRay">
+  <div class="code"><pre>users/manifests/virtual.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre>class user::unixadmins inherits user::virtual {
+    realize(
+        Group[&quot;andrewmccall&quot;],
+        User[&quot;andrewmccall&quot;]
+    )
+}</pre></div>
+</div>
+
+
+Run puppet on the local files and you&#8217;ll have a new user and a group for it. It should look something like this: 
+
+<div class="CodeRay">
+  <div class="code"><pre># puppet -v --modulepath=/etc/puppet/modules /etc/puppet/manifests/site.pp
+info: Autoloaded module sudo
+info: Autoloaded module user
+info: Applying configuration version '1281368198'
+notice: //user::virtual/Group[andrewmccall]/ensure: created
+notice: //user::virtual/User[andrewmccall]/ensure: created</pre></div>
+</div>
+
+
+ Don&#8217;t forget to commit the changes to the git repo. 
+
+<div class="CodeRay">
+  <div class="code"><pre># git add .
+# git commit -a -m &quot;Added a users module to manage users&quot;</pre></div>
+</div>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew McCall</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-08-09T00:00:00+01:00" pubdate data-updated="true">Aug 9<span>th</span>, 2010</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://andrewmccall.com/blog/2010/08/09/groups-in-puppet-/" data-via="andrewmccall" data-counturl="http://andrewmccall.com/blog/2010/08/09/groups-in-puppet-/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2010/08/05/setting-up-users-and-securing-my-server-/" title="Previous Post: Setting up users and securing my server. ">&laquo; Setting up users and securing my server. </a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2010/08/10/restrict-access-in-puppet-part-1/" title="Next Post: Restrict access in Puppet - part 1">Restrict access in Puppet - part 1 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/octopress/">Octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/11/customer-support-what-a-joke-/">Customer support, what a joke.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/23/validation-1-0-0-released-/">Validation 1.0.0 released.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/16/oembed/">oEmbed</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/15/even-more-secure-passwords-/">Even more secure passwords.</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/andrewmccall">@andrewmccall</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'andrewmccall',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("andrewmccall", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/andrewmccall" class="twitter-follow-button" data-show-count="false">Follow @andrewmccall</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Andrew McCall -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Hbase for storing Users? - andrewmccall.com</title>
+  <meta name="author" content="Andrew McCall">
+
+  
+  <meta name="description" content="We had a meeting last night about the state of the Sproozi project, where we wanted to be and the results of a few tests we&#8217;d run. We more or &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://andrewmccall.com/blog/2009/06/26/hbase-for-storing-users-/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="andrewmccall.com" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">andrewmccall.com</a></h1>
+  
+    <h2>My stie</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:andrewmccall.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Hbase for Storing Users?</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-26T00:00:00+01:00" pubdate data-updated="true">Jun 26<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content">We had a meeting last night about the state of the Sproozi project, where we wanted to be and the results of a few tests we&#8217;d run. We more or less came to the conclusion that we&#8217;re going to need to push on with the social aspect of the site sooner rather than later. We&#8217;re still trying to figure out what that means in terms of funding, if we need to raise any and how we go about it if we decide we do. It does start to pose some interesting questions the first and biggest is how we&#8217;re going to store user data.
+
+We&#8217;re already running Hbase and storing lots of data in there and I&#8217;d like the application to scale as easily as possible. The idea of running another framework or service just to store user data seems overkill and seems like one more system to worry about. So I&#8217;m going to run a little experiment in storing users in Hbase.
+
+The downside to Hbase is that it&#8217;s not easy to search for things when you only want one of them by something other than the id. It&#8217;s easy to pick a row by it&#8217;s id and even to scan the table in order from there or to start and the beginning and go all the way through, but it&#8217;s not very easy to quickly pick out a random row by the value of one of it&#8217;s other fields. You&#8217;d have to start a map reduce task and start crunching the data until you found what you were looking for.
+
+Given the simple example of a user with a long id an email address, a username and a password it would be easy to get the user by it&#8217;s id, but not very easy to get the user by the email address or username.&nbsp;So I&#8217;m toying with how to get it to work, probably by creating some additional tables to store keys for columns I want to search that link back to the correct user. Sort of like making my own indices.
+
+Once I get some code written and tested I&#8217;ll probably throw up another post with some more details on whether or not it worked.
+
+Any thoughts?
+
+<em>Update: Check out this Vitamin </em><a href="http://thinkvitamin.com/dev/should-you-go-beyond-relational-databases/"><em>article</em></a>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew McCall</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-26T00:00:00+01:00" pubdate data-updated="true">Jun 26<span>th</span>, 2009</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://andrewmccall.com/blog/2009/06/26/hbase-for-storing-users-/" data-via="andrewmccall" data-counturl="http://andrewmccall.com/blog/2009/06/26/hbase-for-storing-users-/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2009/06/24/scaling-up-vs-scaling-out/" title="Previous Post: Scaling up vs scaling out">&laquo; Scaling up vs scaling out</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2009/07/07/i-ve-made-a-little-jsr303-annotation-library/" title="Next Post: I've made a little JSR303 annotation library">I've made a little JSR303 annotation library &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/octopress/">Octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/11/customer-support-what-a-joke-/">Customer support, what a joke.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/23/validation-1-0-0-released-/">Validation 1.0.0 released.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/16/oembed/">oEmbed</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/15/even-more-secure-passwords-/">Even more secure passwords.</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/andrewmccall">@andrewmccall</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'andrewmccall',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("andrewmccall", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/andrewmccall" class="twitter-follow-button" data-show-count="false">Follow @andrewmccall</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Andrew McCall -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

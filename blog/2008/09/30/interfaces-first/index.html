@@ -1,0 +1,312 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Interfaces first - andrewmccall.com</title>
+  <meta name="author" content="Andrew McCall">
+
+  
+  <meta name="description" content="Don&#8217;t write spec documents, throw away any you have near you, they&#8217;re next to useless anyway. It might seem like a hearsay to some but it &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://andrewmccall.com/blog/2008/09/30/interfaces-first/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="andrewmccall.com" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">andrewmccall.com</a></h1>
+  
+    <h2>My stie</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:andrewmccall.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Interfaces First</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-30T00:00:00+01:00" pubdate data-updated="true">Sep 30<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content">Don&#8217;t write spec documents, throw away any you have near you, they&#8217;re next to useless anyway. It might seem like a hearsay to some but it&#8217;s true and deep down even the most most anal planner in all of us knows it. Two of the biggest reasons for this are: 
+
+<ul>
+	<li>
+<strong>size and scope</strong>: In order to address every aspect of your project a full specification document has to, well address every aspect of your project and it&#8217;s going to be huge as a result. </li>
+	<li>
+<strong>lack of vision</strong>: For most people relating what&#8217;s written on paper to a vision of a design in their heads is difficult if not impossible.  </li>
+</ul>
+
+Loose documents don&#8217;t work well either, because leaving the obvious unsaid just leads to problems, chiefly not everything is obvious to everyone. The devil is in the details and avoiding them until the end of a project is just going to cause trouble. 
+
+<em>&#8220;Why haven&#8217;t we implemented x, that should have been obvious!&#8221;</em>
+
+<h1>create the interfaces</h1>
+
+Prototype the interfaces and use them as your spec. Working this way has so many benefits, try it once and I promise you&#8217;ll be converted. Before you write a single line of backend code, sit down and  work out your interfaces. Build each screen, put all the buttons, fields and elements on the page
+
+I normally start with index cards and write a few simple requirements for each screen or page - just a few simple sentences listing what the page is expected to achieve. 
+
+My next step is to turn those requirements into interfaces. 
+
+<h2>in HTML, not photoshop</h2>
+
+Photoshop is great, but let&#8217;s face it it&#8217;s no better for trying to work out a functional interface prototype than some paper and a pencil. It&#8217;s very easy to focus on making things look pretty over making them functional and you risk missing something important out. 
+
+The best way to avoid both of these traps is to write your interfaces in HTML, mark them up semantically as they will be marked up in the release and use them as your working spec. 
+
+<h3>I know good design but I&#8217;m no designer</h3>
+
+Another benefit of coding up your interfaces in HTML before you start writing code is you can hand them off to designers so they can make them look pretty as you&#8217;re working on making them work. I have a pretty basic idea of design principals and the tools - but I find it hard work. So with interface first development I don&#8217;t have to think about it. 
+
+<h3>let the testing begin</h3>
+
+Another thing which is made infinitely easier with interface first development is functional testing, because your testers don&#8217;t have to wait for a release before they can start developing a test suite. <i>You are using an automated test suite aren&#8217;t you?</i> By generating interfaces as developers add functionality testers can already have been through the interfaces and written a whole series of failing tests. 
+
+<h2>updating later</h2>
+
+<p>The great thing about using HTML as your design and communication tool is that when it comes to making a change to a page you have the most up to date working copy there ready to modify in the form of your site. Just save the page, add the change to the HTML and you&#8217;ve got your interfaces ready for discussion and later implementation. What could be easier, faster or more clear for everyone?</p>
+
+<h1>it&#8217;s not a panacea</h1>
+
+There have been times when I&#8217;ve been working with notoriously difficult individuals where nothing was going to satisfy. An exmaple that springs to mind is a multi month project where we produced an interface design early in the project. The design was a set of PDF images not HTML (see above), but the delivered product was a pixel perfect implementation of it. Only once the project was delivered was there any input on the design or functioning of the project - I&#8217;m not just talking things that a PDF can&#8217;t show you like what clicking a link looks like. I&#8217;m taking basic things like colours, layout and the size of elements! 
+
+Would a HTML mock up have made any difference, I actually doubt it. I take blame for miscommunication and resulting mistakes when it&#8217;s my fault but in this case even after the site was fully developed and deployed to a staging area for testing none of these issues were highlighted. It was only after the site was put into production that these &#8220;critical issues&#8221; were discovered.
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Andrew McCall</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-30T00:00:00+01:00" pubdate data-updated="true">Sep 30<span>th</span>, 2008</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://andrewmccall.com/blog/2008/09/30/interfaces-first/" data-via="andrewmccall" data-counturl="http://andrewmccall.com/blog/2008/09/30/interfaces-first/" >Tweet</a>
+  
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2008/09/29/is-it-better-/" title="Previous Post: Is it better?">&laquo; Is it better?</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2008/10/01/up-in-the-downturn/" title="Next Post: Up in the downturn">Up in the downturn &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/octopress/">Octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/11/customer-support-what-a-joke-/">Customer support, what a joke.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/23/validation-1-0-0-released-/">Validation 1.0.0 released.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/16/oembed/">oEmbed</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/15/even-more-secure-passwords-/">Even more secure passwords.</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/andrewmccall">@andrewmccall</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'andrewmccall',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("andrewmccall", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/andrewmccall" class="twitter-follow-button" data-show-count="false">Follow @andrewmccall</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Andrew McCall -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

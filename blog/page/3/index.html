@@ -1,0 +1,691 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>andrewmccall.com</title>
+  <meta name="author" content="Andrew McCall">
+
+  
+  <meta name="description" content="I&#8217;ve been updating my OAuth library to support OAuth 2.0 mostly so I can add Facebook to Announce.ly and Sproozi, but more on that later. OAuth &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://andrewmccall.com/blog/page/3/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="andrewmccall.com" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">andrewmccall.com</a></h1>
+  
+    <h2>My stie</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:andrewmccall.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/05/20/oauth-2-0/">OAuth 2.0</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-05-20T00:00:00+01:00" pubdate data-updated="true">May 20<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">I&#8217;ve been updating my OAuth library to support OAuth 2.0 mostly so I can add Facebook to Announce.ly and Sproozi, but more on that later. OAuth 2.0 is similar to 1.0 but changes a few key things fundamentally and isn&#8217;t backwards compatible.
+
+<strong>What&#8217;s wrong with 1.0, doesn&#8217;t it work?</strong>
+
+It does, but probably the biggest issue is the fact that you have to sign the message knowing all it&#8217;s content beforehand. This works well if the data is on the querystring in a GET request or for simple operations but isn&#8217;t optimal if your data is part of the POST body. It also means you have to construct your requests in a certain way, which is a bad thing.
+
+Take photo, audio or video data - to post that you&#8217;ll need to sign the whole request and it&#8217;s not clear how it should work with multipart data. There are several extensions to the spec that deal with some of these issues, but the fact that there are non standard extensions to do something pretty standard kinda says it all.
+
+Even if you&#8217;re not dealing with these issues you still have to work with your requests as units where you know the whole content beforehand.
+
+<strong>What&#8217;s new in OAuth 2?</strong>
+
+OAuth 2.0 in it&#8217;s simplest form works over HTTPS connections and simply asks for a token - the security and trust are built in to the protocol. It&#8217;s that easy.
+
+OAuth 2.0 sill lets users sign messages to transmit them over insecure channels, plain HTTP, but the signing methods are much easier to implement. Gone is the complicated parameter normalisation algorithm and in it&#8217;s place is a much simpler version that doesn&#8217;t require POST data in the signature. So even with multipart submissions it should just work.
+
+At the moment I&#8217;m cleaning things up and preparing the oauth library to work with oauth 2.0 and changing the way it works to reflect the simpler way oauth 2.0 does. You can check it out on GitHub [<a href="http://github.com/andrewmccall/oauth">http://github.com/andrewmccall/oauth</a>]
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/04/13/apache-falls-victim-to-jira-xss-exploit/">Apache Falls Victim to JIRA XSS Exploit</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-13T00:00:00+01:00" pubdate data-updated="true">Apr 13<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">Anyone with an issues.apache.org account is probably already aware there is an exploit out there for JIRA. Apache and Atlassian have both had servers compromised.
+
+More info:&nbsp;<a href="https://blogs.apache.org/infra/entry/apache_org_04_09_2010">https://blogs.apache.org/infra/entry/apache_org_04_09_2010</a>
+
+If you&#8217;ve signed up for a public JIRA server (or run one) and it wasn&#8217;t a password you only used for that, you should probably think about proactively changing it anywhere else you use it.
+
+The passwords are hashed, but JIRA uses a random site wide salt, so it&#8217;ll take time but eventually they <em>could</em> figure them all out.
+
+It&#8217;s actually could have been a pretty clever exploit, go after developers who are more likely to have accounts with one of the cloud providers. Use the accounts to launch instances and use the instances to generate password tables, compromise more accounts, launch more instances&#8230;.
+
+I&#8217;m lazy and the password I used on the Apache JIRA was one I used a few other places. I knew it was a bad idea, but I did it anyway. I&#8217;ve learned my lesson and spent the whole night changing my passwords and getting them all in <a href="https://agilewebsolutions.com/">1password</a> on my mac on iphone.
+
+There&#8217;s no reason to believe that my password has been compromised yet, but it&#8217;s better to be safe than sorry. Now my passwords are all randomly generated, really long with letters, numbers and symbols.
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/04/05/another-open-source-library-/">Another Open Source Library.</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-05T00:00:00+01:00" pubdate data-updated="true">Apr 5<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">I&#8217;m having a bit of a clear out, taking a look at some of the code I&#8217;ve written and I&#8217;ve been pushing some of the stuff I&#8217;m currently using up to <a href="http://github.com/andrewmccall">GitHub</a> under and Apache 2 licence. I&#8217;ve used things in <a href="http://announce.ly">Announce.ly</a>, <a href="http://sproozi.com">Sproozi</a> and some other small projects and figure they may be useful to someone else. My only criteria has been to ask If I&#8217;m using it now in a project, if so I&#8217;m actively supporting it and I&#8217;ve started pushing that stuff to <a href="http://github.com/andrewmccall">GitHub</a>, everything else is dormant and I don&#8217;t want to release something I&#8217;m not actively supporting- it also occurs to me that if even I&#8217;m not using it, it can&#8217;t be all that worthwhile.
+
+I&#8217;ve just pushed <a href="http://github.com/andrewmccall/accounts">some code </a>I&#8217;ve been testing for a few months in a couple of projects to <a href="http://github.com/andrewmccall">GitHub</a>. It&#8217;s an accounts package written for <a href="http://springframework.org">Spring</a>, that ties my <a href="http://github.com/andrewmccall/oauth">oAuth</a> library and <a href="http://twitter.com">Twitter</a> together with either <a href="http://hibernate.org">Hibernate</a> or <a href="http://hadoop.apache.org/hbase">Hbase</a> as backend storage. In it&#8217;s simplest form when you login with twitter it creates you a new user and persists it and the oAuth access tokens you need to act on behalf of that user.
+
+I&#8217;ll write some more about it, better documentation and probably throw a little more code up on <a href="http://github.com/andrewmccall">GitHub</a> over the course of the next couple of weeks as and when I get a chance.
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/03/19/my-new-open-source-java-oauth-library/">My New Open Source Java OAuth Library</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-19T00:00:00+00:00" pubdate data-updated="true">Mar 19<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">I&#8217;ve just pushed out a new open source java OAuth library because I couldn&#8217;t find one that did what I needed. My key requirement was simplicity. I didn&#8217;t like the idea of using the library for HTTP stuff and there is no reason I should. Once I&#8217;ve obtained the Access Token all I&#8217;m doing with oAuth is signing my requests.
+
+I want to use HttpClient directly and only use the oAuth library to sign the message for various reasons not the least of which being that I already have a HttpClient object setup in my IoC container.
+
+The closest I found was <a href="http://github.com/kaeppler/signpost">signpost</a> but it wasn&#8217;t very IoC friendly or thread-safe which meant every time I wanted to make a call I&#8217;d have to create new objects, or at the very least call a bunch of methods to set them up which highlights the third problem, there were no clear objects that I could store for later.
+
+The library I&#8217;ve just release is a fork of the signpost code, that&#8217;s now thread-safe and should be more IoC friendly. You create your method calls as you would normally, and just before you call <code>HttpClient.execute(HttpMethod)</code> simply call <code>OAuthConsumer.sign(HttpMethod, AccessToken);</code>.
+
+I&#8217;ve added a few new objects that handle most of the work. Service, RequestToken and AccessToken are all beans that you pass to a consumer depending on what you want to do. Starting with a Service you call
+
+<div class="CodeRay">
+  <div class="code"><pre>Service service = new Service();
+service.setRequestTokenUrl(&quot;http://twitter.com/oauth/request_token&quot;);
+service.setAccessTokenUrl(&quot;http://twitter.com/oauth/access_token&quot;);
+
+service.setConsumerKey(&quot;b8sA385mBBNqOTD6Omlsw&quot;);
+service.setSharedSecret(&quot;MD4Sve6AdaDasjdvOAsbpAJsA87S8s64e5rE4&quot;);
+
+service.setMessageSigner(new PlainTextMessageSigner());
+service.setSigningStrategy(new AuthorizationHeaderSigningStrategy());
+
+RequestToken requestToken = oAuthConsumer.getRequestToken(twitter);</pre></div>
+</div>
+
+
+You&#8217;ll have to send the user off to twitter to check their credentials. When they come back
+they&#8217;ll be given a verifier set it and trade the request token for an access token
+<div class="CodeRay">
+  <div class="code"><pre>requestToken.setVerifier(verifier):
+AccessToken accessToken = oAuthConsumer.getAccessToken(requestToken);</pre></div>
+</div>
+
+Now you can store the accessToken to use later, when you want to simply setup your http method as you would normally.   
+
+<div class="CodeRay">
+  <div class="code"><pre>HttpUriRequest request...
+// do your HttpClient stuff here
+
+oAuthConsumer.sign(request, accessToken);
+HttpResponse response = httpClient.execute(request);</pre></div>
+</div>
+
+There is also code in there for the Jetty HttpClient, but it&#8217;s a bit rough and I haven&#8217;t used it. Have  play with it and let me know what you think. 
+
+UPDATE: Forgot to link to it&#8230; Dumb. <a href="http://github.com/andrewmccall/oauth">It&#8217;s on GitHub here</a>.
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/03/09/announcing-announce-ly/">Announcing Announce.ly</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-09T00:00:00+00:00" pubdate data-updated="true">Mar 9<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">[[posterous-content:ByqskufswwnprelCChrJ]]
+
+I Released <a href="http://announce.ly">Announce.ly</a> last night, it&#8217;s a side project I put together with some of the code that I built for <a href="http://sproozi.com">Sproozi</a>.
+
+<strong>What&#8217;s it good for?</strong>
+
+<strong><span style="font-weight: normal;"><a href="http://announce.ly">Announce.ly makes it easy to make announcements through twitter</a>. </span></strong>
+
+<strong><span style="font-weight: normal;">People have lots of questions about how to use twitter for their business. Should you create an account in the name of the business and use that to communicate, use some of the tools out there to share access to the account.&nbsp;Or you could create an account as a personality to represent the business, many company CEOs do this.</span></strong>
+
+Either way works and there are lots of companies out there following both models successfully but there is another way.
+
+I want to be myself on twitter, I want to make announcements for the projects I&#8217;m involved in and I want the project accounts to retweet me when I use hashtags associated with the projects. I don&#8217;t want to have to manage accounts for every project.
+
+For example if I tweet an announcement about Announce.ly - &#8220;Announce.ly is live! #announcely&#8221; then I want the <a href="http://twitter.com/announcely">Announce.ly twitter</a> account to retweet it automatically
+
+And that&#8217;s what <a href="http://announce.ly">announce.ly</a> does, check it out now to start your free trial then head on over to the <a href="http://blog.announce.ly">Announce.ly blo</a>g&nbsp;where we&#8217;ll highlight use cases and feature some of our most interesting users.
+<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">
+[[posterous-content:qAkFBcnFmkJDyGlICsDj]]<span class="zem-script more-related pretty-attribution"></span>
+</div>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/03/02/some-progress-on-continuous-deployment/">Some Progress on Continuous Deployment</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-02T00:00:00+00:00" pubdate data-updated="true">Mar 2<span>nd</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">As I <a href="http://andrewmccall.com/2010/02/continuous-deployment/">posted</a> a couple of weeks ago I&#8217;m working on working a continuous deployment setup so that I can push changes live quicker and easier for the projects I&#8217;m working on.
+
+I&#8217;ve installed and configured <a href="hudson.dev.java.net">Hudson</a>, which was a good first step. It&#8217;s shown me that my builds are a bit fragile, they&#8217;re heavily based on packages that I&#8217;ve compiled and installed into my local <a href="http://maven.apache.org/">Maven</a> repository. To solve the problem and to make my build a little more sensible I&#8217;m getting <a href="http://www.jfrog.org/">Artifactory</a> working.
+
+At this stage I&#8217;m just trying to get a very basic system in place so that I have an idea of how long a deployment will take. It&#8217;s a little more complicated because I&#8217;m using Java and the WARs contain all the libraries. I could just use the defaults and push a deployment directly to the target servers, but that doesn&#8217;t work. First wars are big, they can easily weigh in at 20Mb.
+
+There are a couple of things I could do here. Ideally I could unroll all the jar libs and only include the classes I need. That would drastically reduce the size, as a bonus I could probably also have it give me a warning that I&#8217;m including an unused jar, even better if I could work out the path to the maven dependency. But there&#8217;s the whole problem of resources, the fact that using Springframework means most of the classes aren&#8217;t being explicitly called and the fact that since I don&#8217;t know anything that does all of this this, I&#8217;d have to write it all.
+
+So I&#8217;ve written that whole idea off, and added a shorter to-do item to make sure I&#8217;m only including jars I need. Instead I&#8217;ve gone for a far easier solution: deploy exploded wars, and use rsync so I can push only changes to the server.
+
+The next step is to get trigger a Hudson build with a commit-hook and use a successful Hudson build to trigger a script that does the rsync. Then I&#8217;ll have very basic continuous deployments up and running albeit without any automatic roll backs of a failed deployment which ultimately is a must, but it&#8217;s a start.
+
+[[posterous-content:qwszooAFbmqCtBttyFDB]]
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/02/24/geekup-hebden-bridge-tonight/">GeekUp Hebden Bridge Tonight</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-24T00:00:00+00:00" pubdate data-updated="true">Feb 24<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><strong>When: Wednesday February 24th @ 7:00pm</strong>
+<strong>Where: Hole in&rsquo;t Wall, Hebden Bridge (</strong><a href="http://maps.google.co.uk/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Hole+in't+Wall,+hebden+bridge&amp;sll=53.7421,-2.012268&amp;sspn=0.003135,0.009409&amp;ie=UTF8&amp;hq=Hole+in't+wall,&amp;hnear=Hebden+Bridge,+UK&amp;ll=53.742265,-2.013545&amp;spn=0.006269,0.018818&amp;z=16&amp;iwloc=A&amp;cid=9649925289155905514"><strong>map</strong></a><strong>)</strong>
+
+Read more about Geek Ups in general at&nbsp;<a href="http://geekup.org/">Geek Up</a>. Questions, comments etc direct them at me here, on twitter&nbsp;<a href="http://twitter.com/andrewmccall">@andrewmccall</a> or&nbsp;<a href="mailto:andrew@andrewmccall.com">email</a>.
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/02/23/continuous-deployment/">Continuous Deployment</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-23T00:00:00+00:00" pubdate data-updated="true">Feb 23<span>rd</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">I&#8217;ve been working lately trying to implement some of the things <a href="http://www.startuplessonslearned.com/">Eric Ries</a> talks about. Primarily the idea of con<a href="http://www.startuplessonslearned.com/search/label/continuous%20deployment">tinuous deployments</a> for lean startups and getting away from the fear of release.
+
+On the surface and looking back on some of the disastrous releases I&#8217;ve seen (deployed) it&#8217;s a frightening concept. The problem with most of those releases though hasn&#8217;t so much been that there was a bug or a problem, it was there was no fall back position - the release was made and there was no way to unmake it. Also working in Java releasing WARs has been a pretty big issue - you have to upload the whole release to fix even a small bug like a typo. One bug in these cases can mean you&#8217;re 15-20 minutes from uploading a fix.
+
+It&#8217;s a very bad place to be and I want to avoid it at all costs in the future, both the problems and as a result the fear of a release.
+
+With that in mind I&#8217;ve been fashioning a system for <a href="http://sproozi.com">Sproozi</a> where a release is made as an exploded war using <a href="https://hudson.dev.java.net/">Hudson</a>. On commit it&#8217;s tested, deployed to a single server in the cluster and tested some more. The server joins the main cluster and it&#8217;s monitored as the release is pushed to the rest of the servers to make sure it&#8217;s stable.
+
+The only problem I&#8217;m having conceptually is how do I treat a commit that comes in before a release is finished - I guess I have to sit on it, but what if the release fails and I have to lock the repository? What about if the release is a success but in the meantime I have 2, 3 or even more commits that I&#8217;m sitting on? Do I deploy them one at a time until they&#8217;re either all successful or one fails?
+
+How has anyone else practising dealt with these issues?
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/01/26/2nd-hebden-bridge-geek-up/">2nd Hebden Bridge Geek Up</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-01-26T00:00:00+00:00" pubdate data-updated="true">Jan 26<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><strong>When: Wednesday January 27th @ 7:00pm</strong>
+<strong> Where: Hole in&rsquo;t Wall, Hebden Bridge (</strong><a href="http://maps.google.co.uk/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Hole+in't+Wall,+hebden+bridge&amp;sll=53.7421,-2.012268&amp;sspn=0.003135,0.009409&amp;ie=UTF8&amp;hq=Hole+in't+wall,&amp;hnear=Hebden+Bridge,+UK&amp;ll=53.742265,-2.013545&amp;spn=0.006269,0.018818&amp;z=16&amp;iwloc=A&amp;cid=9649925289155905514"><strong>map</strong></a><strong>)</strong>
+
+Tomorrow night we&#8217;re hosting the second Hebden Bridge Geekup, we skipped December because it fell on the 30th.
+
+The first was a success we had a good turn out. As with the last one, we&#8217;re still finding our feet so there is no formal agenda or presentations planned. Of course if anyone has anything they want to present or a project they want to talk about drop me a line if you do and we&#8217;ll sort something out.
+
+Read more about Geek Ups in general at&nbsp;<a href="http://geekup.org/">Geek Up</a>. Questions, comments etc direct them at me here, on twitter&nbsp;<a href="http://twitter.com/andrewmccall">@andrewmccall</a> or&nbsp;<a href="mailto:andrew@andrewmccall.com">email</a>.
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2009/12/14/ec2-spot-instances/">EC2 Spot Instances</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-14T00:00:00+00:00" pubdate data-updated="true">Dec 14<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">The thing I really like about Amazon&#8217;s cloud stuff is they&#8217;re constantly undermining themselves with new innovations - <a href="http://aws.amazon.com/ec2/spot-instances/">spot instances </a>are another great example. Taking the utility metaphor a step further you can now rent their services when nobody else is for cheaper, like buying electricity at night.
+
+A lot of the tasks I&#8217;m envisioning for <a href="http://sproozi.com">Sproozi</a> aren&#8217;t really time dependent. While it&#8217;s important to show you a page in a timely manner, crawl and index a brand new website you add quickly and basically be interactive there is also a lot I have to do in the background. The huge and growing list of URLs people add all need to be re-crawled and re-indexed regularly is just one of many examples of processing vast amounts of data. These tasks are always running, always in the background.
+
+<a href="http://aws.amazon.com/ec2/spot-instances/">Spot instances</a> are a perfect fit - I can bid the price I want on extra capacity spin up some extra instances to join the cluster when they&#8217;re cheap. Over the next few weeks I&#8217;ll probably try to add some spot instances to my <a href="http://hadoop.apache.org/">Hadoop</a> dev cluster and see what happens.
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/4/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/2/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/octopress/">Octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/11/customer-support-what-a-joke-/">Customer support, what a joke.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/23/validation-1-0-0-released-/">Validation 1.0.0 released.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/16/oembed/">oEmbed</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/15/even-more-secure-passwords-/">Even more secure passwords.</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/andrewmccall">@andrewmccall</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'andrewmccall',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("andrewmccall", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/andrewmccall" class="twitter-follow-button" data-show-count="false">Follow @andrewmccall</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Andrew McCall -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
