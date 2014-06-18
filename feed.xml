@@ -24,7 +24,7 @@
 
 &lt;p&gt;This creates a new folder called JDK8, in there you’ll find a file called &lt;code&gt;Distribution&lt;/code&gt;. Open it in your favourite text editor. At about line 36 you’ll find the following code: &lt;/p&gt;
 
-&lt;p&gt;’'’js start:36
+&lt;p&gt;```js start:36
 // Check is current MAC OS X version less than supportedVersion
 function checkForMacOSX(supportedVersion) {
     try {
@@ -59,7 +59,7 @@ function checkForMacOSX(supportedVersion) {
 return (true); }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;’’’&lt;/p&gt;
+&lt;p&gt;```&lt;/p&gt;
 
 &lt;p&gt;The error happens on line 45 above, the version check is comparing strings and failing because 10.10 is less than 10.7 lexicographically. If I was fixing the pkg I would rewrite the function to properly check, but I’m not and I just want the JDK to install. So I took everything out except the final &lt;code&gt;return(true);&lt;/code&gt; so that the whole method looks like this: &lt;/p&gt;
 
