@@ -7,13 +7,12 @@
     <title>Installing Java 8 on OS X 10.10 Yosimite</title>
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="Andrew's Website woot!">
-    <link rel="canonical" href="http://andrewmccall.com/java/java%208/2014/06/12/installing-java-8-on-os-x-10-dot-10-yosimite/">
+    <link rel="canonical" href="http://andrewmccall.com/2014/06/12/installing-java-8-on-os-x-10-dot-10-yosimite/">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/main.css">
 
 </head>
-
 
     <body>
 
@@ -50,7 +49,6 @@
 
 </header>
 
-
     <div class="page-content">
       <div class="wrap">
       <div class="post">
@@ -71,12 +69,13 @@
 
 <p>First expand the pkg into a directory so you can get at the contents: </p>
 
-<p><code>sh linenos:false%
-	pkgutil --expand JDK\ 8\ Update\ 05.pkg JDK8
-</code></p>
+<p>’'’sh linenos:false
+	pkgutil –expand JDK\ 8\ Update\ 05.pkg JDK8
+‘’’</p>
 
-<p>This creates a new folder called JDK8, in there you’ll find a file called <code>Distribution</code>. Open it in your favourite text editor. At about line 36 you’ll find the following code: 
-``` js start:36
+<p>This creates a new folder called JDK8, in there you’ll find a file called <code>Distribution</code>. Open it in your favourite text editor. At about line 36 you’ll find the following code: </p>
+
+<p>’'’js start:36
 // Check is current MAC OS X version less than supportedVersion
 function checkForMacOSX(supportedVersion) {
     try {
@@ -108,25 +107,26 @@ function checkForMacOSX(supportedVersion) {
     return (false);
 }
 // return true
-return (true); } ```
+return (true); }
 </code></pre>
+
+<p>’’’</p>
 
 <p>The error happens on line 45 above, the version check is comparing strings and failing because 10.10 is less than 10.7 lexicographically. If I was fixing the pkg I would rewrite the function to properly check, but I’m not and I just want the JDK to install. So I took everything out except the final <code>return(true);</code> so that the whole method looks like this: </p>
 
-<p>```js start:36
+<p>’'’js start:36 
 // Check is current MAC OS X version less than supportedVersion
 function checkForMacOSX(supportedVersion) {
     // return true
     return (true);
-}</p>
-
-<p>```</p>
+}
+‘’’</p>
 
 <p>Finally package it back up with the <code>pkgutils</code> command and the check won’t fail and Java 8 will install.</p>
 
-<p><code>sh linenos:false 
-	pkgutil --flatten JDK8 JDK8.pkg
-</code></p>
+<p>’'’sh linenos:false 
+	pkgutil –flatten JDK8 JDK8.pkg
+‘’’</p>
 
 <p>Double click the new pkg and the installer will run without the error message.</p>
 
@@ -202,7 +202,6 @@ function checkForMacOSX(supportedVersion) {
   </div>
 
 </footer>
-
 
     </body>
 </html>
