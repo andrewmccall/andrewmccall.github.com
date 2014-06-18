@@ -69,9 +69,7 @@
 
 <p>First expand the pkg into a directory so you can get at the contents: </p>
 
-<p>’'’sh linenos:false
-	pkgutil –expand JDK\ 8\ Update\ 05.pkg JDK8
-‘’’</p>
+<figure class="code-highlight-figure"><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="1" class="code-highlight-row unnumbered"><div class="code-highlight-line">\ 8<span class="se">\ </span>Update<span class="se">\ </span>05.pkg JDK8</div></div></pre></div></figure>
 
 <p>This creates a new folder called JDK8, in there you’ll find a file called <code>Distribution</code>. Open it in your favourite text editor. At about line 36 you’ll find the following code: </p>
 
@@ -108,26 +106,26 @@
 
 <p>The error happens on line 45 above, the version check is comparing strings and failing because 10.10 is less than 10.7 lexicographically. If I was fixing the pkg I would rewrite the function to properly check, but I’m not and I just want the JDK to install. So I took everything out except the final <code>return(true);</code> so that the whole method looks like this: </p>
 
-<p>’'’js start:36 
-// Check is current MAC OS X version less than supportedVersion
-function checkForMacOSX(supportedVersion) {
-    // return true
-    return (true);
-}
-‘’’</p>
+<figure class="code-highlight-figure"><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="36" class="code-highlight-row numbered"><div class="code-highlight-line">// Check is current MAC OS X version less than supportedVersion
+</div></div><div data-line="37" class="code-highlight-row numbered"><div class="code-highlight-line"><span class="kd">function</span> <span class="nx">checkForMacOSX</span><span class="p">(</span><span class="nx">supportedVersion</span><span class="p">)</span> <span class="p">{</span>
+</div></div><div data-line="38" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="c1">// return true</span>
+</div></div><div data-line="39" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="k">return</span> <span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+</div></div><div data-line="40" class="code-highlight-row numbered"><div class="code-highlight-line"><span class="p">}</span></div></div></pre></div></figure>
 
 <p>Finally package it back up with the <code>pkgutils</code> command and the check won’t fail and Java 8 will install.</p>
 
-<p>’'’sh linenos:false 
-	pkgutil –flatten JDK8 JDK8.pkg
-‘’’</p>
+<figure class="code-highlight-figure"><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="1" class="code-highlight-row unnumbered"><div class="code-highlight-line"><div class="highlight"><pre>	pkgutil --flatten JDK8 JDK8.pkg
+<div data-line="2" class="code-highlight-row unnumbered"><div class="code-highlight-line"></div></div></pre></div>
+`
 
-<p>Double click the new pkg and the installer will run without the error message.</p>
+Double click the new pkg and the installer will run without the error message.
 
-<p><img src="/images/post_images/java8u05-osx-10.10-install-success.png" alt="Success" /></p>
+![Success](/images/post_images/java8u05-osx-10.10-install-success.png)
 
-<p>All done, Java 8 JDK installed!</p>
+All done, Java 8 JDK installed!
 
+
+</div></div></pre></div></figure>
 
   </article>
 

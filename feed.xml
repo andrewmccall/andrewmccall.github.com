@@ -18,9 +18,7 @@
 
 &lt;p&gt;First expand the pkg into a directory so you can get at the contents: &lt;/p&gt;
 
-&lt;p&gt;’'’sh linenos:false
-	pkgutil –expand JDK\ 8\ Update\ 05.pkg JDK8
-‘’’&lt;/p&gt;
+&lt;figure class=&quot;code-highlight-figure&quot;&gt;&lt;div class=&quot;code-highlight&quot;&gt;&lt;pre class=&quot;code-highlight-pre&quot;&gt;&lt;div data-line=&quot;1&quot; class=&quot;code-highlight-row unnumbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;\ 8&lt;span class=&quot;se&quot;&gt;\ &lt;/span&gt;Update&lt;span class=&quot;se&quot;&gt;\ &lt;/span&gt;05.pkg JDK8&lt;/div&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/figure&gt;
 
 &lt;p&gt;This creates a new folder called JDK8, in there you’ll find a file called &lt;code&gt;Distribution&lt;/code&gt;. Open it in your favourite text editor. At about line 36 you’ll find the following code: &lt;/p&gt;
 
@@ -57,26 +55,26 @@
 
 &lt;p&gt;The error happens on line 45 above, the version check is comparing strings and failing because 10.10 is less than 10.7 lexicographically. If I was fixing the pkg I would rewrite the function to properly check, but I’m not and I just want the JDK to install. So I took everything out except the final &lt;code&gt;return(true);&lt;/code&gt; so that the whole method looks like this: &lt;/p&gt;
 
-&lt;p&gt;’'’js start:36 
-// Check is current MAC OS X version less than supportedVersion
-function checkForMacOSX(supportedVersion) {
-    // return true
-    return (true);
-}
-‘’’&lt;/p&gt;
+&lt;figure class=&quot;code-highlight-figure&quot;&gt;&lt;div class=&quot;code-highlight&quot;&gt;&lt;pre class=&quot;code-highlight-pre&quot;&gt;&lt;div data-line=&quot;36&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;// Check is current MAC OS X version less than supportedVersion
+&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;37&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;checkForMacOSX&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;supportedVersion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;38&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;    &lt;span class=&quot;c1&quot;&gt;// return true&lt;/span&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;39&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;40&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/figure&gt;
 
 &lt;p&gt;Finally package it back up with the &lt;code&gt;pkgutils&lt;/code&gt; command and the check won’t fail and Java 8 will install.&lt;/p&gt;
 
-&lt;p&gt;’'’sh linenos:false 
-	pkgutil –flatten JDK8 JDK8.pkg
-‘’’&lt;/p&gt;
+&lt;figure class=&quot;code-highlight-figure&quot;&gt;&lt;div class=&quot;code-highlight&quot;&gt;&lt;pre class=&quot;code-highlight-pre&quot;&gt;&lt;div data-line=&quot;1&quot; class=&quot;code-highlight-row unnumbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;	pkgutil --flatten JDK8 JDK8.pkg
+&lt;div data-line=&quot;2&quot; class=&quot;code-highlight-row unnumbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/div&gt;
+`
 
-&lt;p&gt;Double click the new pkg and the installer will run without the error message.&lt;/p&gt;
+Double click the new pkg and the installer will run without the error message.
 
-&lt;p&gt;&lt;img src=&quot;/images/post_images/java8u05-osx-10.10-install-success.png&quot; alt=&quot;Success&quot; /&gt;&lt;/p&gt;
+![Success](/images/post_images/java8u05-osx-10.10-install-success.png)
 
-&lt;p&gt;All done, Java 8 JDK installed!&lt;/p&gt;
+All done, Java 8 JDK installed!
 
+
+&lt;/div&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/figure&gt;
 </description>
         <pubDate>Thu, 12 Jun 2014 21:36:55 +0100</pubDate>
         <link>http://andrewmccall.com/2014/06/12/installing-java-8-on-os-x-10-dot-10-yosimite/</link>
