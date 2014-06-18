@@ -102,7 +102,6 @@
 </div></div><div data-line="66" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="c1">// return true</span>
 </div></div><div data-line="67" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="k">return</span> <span class="p">(</span><span class="kc">true</span><span class="p">);</span>
 </div></div><div data-line="68" class="code-highlight-row numbered"><div class="code-highlight-line"><span class="p">}</span></div></div></pre></div></figure>
-<p>`</p>
 
 <p>The error happens on line 45 above, the version check is comparing strings and failing because 10.10 is less than 10.7 lexicographically. If I was fixing the pkg I would rewrite the function to properly check, but I’m not and I just want the JDK to install. So I took everything out except the final <code>return(true);</code> so that the whole method looks like this: </p>
 
@@ -116,7 +115,7 @@
 
 <figure class="code-highlight-figure"><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="1" class="code-highlight-row unnumbered"><div class="code-highlight-line"><div class="highlight"><pre>	pkgutil --flatten JDK8 JDK8.pkg
 <div data-line="2" class="code-highlight-row unnumbered"><div class="code-highlight-line"></div></div></pre></div>
-`
+
 
 Double click the new pkg and the installer will run without the error message.
 

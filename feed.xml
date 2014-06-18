@@ -51,7 +51,6 @@
 &lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;66&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;    &lt;span class=&quot;c1&quot;&gt;// return true&lt;/span&gt;
 &lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;67&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;68&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/figure&gt;
-&lt;p&gt;`&lt;/p&gt;
 
 &lt;p&gt;The error happens on line 45 above, the version check is comparing strings and failing because 10.10 is less than 10.7 lexicographically. If I was fixing the pkg I would rewrite the function to properly check, but I’m not and I just want the JDK to install. So I took everything out except the final &lt;code&gt;return(true);&lt;/code&gt; so that the whole method looks like this: &lt;/p&gt;
 
@@ -65,7 +64,7 @@
 
 &lt;figure class=&quot;code-highlight-figure&quot;&gt;&lt;div class=&quot;code-highlight&quot;&gt;&lt;pre class=&quot;code-highlight-pre&quot;&gt;&lt;div data-line=&quot;1&quot; class=&quot;code-highlight-row unnumbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;	pkgutil --flatten JDK8 JDK8.pkg
 &lt;div data-line=&quot;2&quot; class=&quot;code-highlight-row unnumbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/div&gt;
-`
+
 
 Double click the new pkg and the installer will run without the error message.
 
