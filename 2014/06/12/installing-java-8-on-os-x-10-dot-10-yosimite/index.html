@@ -75,42 +75,36 @@
 
 <p>This creates a new folder called JDK8, in there you’ll find a file called <code>Distribution</code>. Open it in your favourite text editor. At about line 36 you’ll find the following code: </p>
 
-<p>```js start:36
-// Check is current MAC OS X version less than supportedVersion
-function checkForMacOSX(supportedVersion) {
-    try {
-        // Get current ProductVersion
-        var tProductVersion = system.version.ProductVersion;
-        // Get current ProductName
-        var tProductName = system.version.ProductName;</p>
-
-<pre><code>    // Check if current version is less than supportedVersion, if yes Set the result type to Fatal, and give correct message to user
-
-    if(tProductVersion &amp;lt; supportedVersion)
-    {
-        // Set result values
-        var osCheckTitle = system.localizedStringWithFormat('OSCHECK_TITLE');
-        osCheckTitle = osCheckTitle.replace("%1$@", tProductName);
-        osCheckTitle = osCheckTitle.replace("%2$@", supportedVersion);
-
-        var osCheckMessage = system.localizedStringWithFormat('OSCHECK_MESSAGE');
-        osCheckMessage = osCheckMessage.replace("%1$@", tProductName);
-        osCheckMessage = osCheckMessage.replace("%2$@", tProductVersion);
-        osCheckMessage = osCheckMessage.replace("%3$@", supportedVersion);
-
-        my.result.title = osCheckTitle;
-        my.result.message = osCheckMessage;
-        my.result.type = 'Fatal';
-    }
-} catch (e) {
-    // an exception just occurred
-    return (false);
-}
-// return true
-return (true); }
-</code></pre>
-
-<p>```</p>
+<figure class="code-highlight-figure"><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="36" class="code-highlight-row numbered"><div class="code-highlight-line">// Check is current MAC OS X version less than supportedVersion
+</div></div><div data-line="37" class="code-highlight-row numbered"><div class="code-highlight-line"><span class="kd">function</span> <span class="nx">checkForMacOSX</span><span class="p">(</span><span class="nx">supportedVersion</span><span class="p">)</span> <span class="p">{</span>
+</div></div><div data-line="38" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="k">try</span> <span class="p">{</span>
+</div></div><div data-line="39" class="code-highlight-row numbered"><div class="code-highlight-line">        <span class="c1">// Get current ProductVersion</span>
+</div></div><div data-line="40" class="code-highlight-row numbered"><div class="code-highlight-line">        <span class="kd">var</span> <span class="nx">tProductVersion</span> <span class="o">=</span> <span class="nx">system</span><span class="p">.</span><span class="nx">version</span><span class="p">.</span><span class="nx">ProductVersion</span><span class="p">;</span>
+</div></div><div data-line="41" class="code-highlight-row numbered"><div class="code-highlight-line">        <span class="c1">// Get current ProductName</span>
+</div></div><div data-line="42" class="code-highlight-row numbered"><div class="code-highlight-line">        <span class="kd">var</span> <span class="nx">tProductName</span> <span class="o">=</span> <span class="nx">system</span><span class="p">.</span><span class="nx">version</span><span class="p">.</span><span class="nx">ProductName</span><span class="p">;</span>
+</div></div><div data-line="43" class="code-highlight-row numbered"><div class="code-highlight-line"> </div></div><div data-line="44" class="code-highlight-row numbered"><div class="code-highlight-line">        <span class="c1">// Check if current version is less than supportedVersion, if yes Set the result type to Fatal, and give correct message to user</span>
+</div></div><div data-line="45" class="code-highlight-row numbered"><div class="code-highlight-line"> </div></div><div data-line="46" class="code-highlight-row numbered"><div class="code-highlight-line">        <span class="k">if</span><span class="p">(</span><span class="nx">tProductVersion</span> <span class="o">&amp;</span><span class="nx">lt</span><span class="p">;</span> <span class="nx">supportedVersion</span><span class="p">)</span>
+</div></div><div data-line="47" class="code-highlight-row numbered"><div class="code-highlight-line">        <span class="p">{</span>
+</div></div><div data-line="48" class="code-highlight-row numbered"><div class="code-highlight-line">            <span class="c1">// Set result values</span>
+</div></div><div data-line="49" class="code-highlight-row numbered"><div class="code-highlight-line">            <span class="kd">var</span> <span class="nx">osCheckTitle</span> <span class="o">=</span> <span class="nx">system</span><span class="p">.</span><span class="nx">localizedStringWithFormat</span><span class="p">(</span><span class="s1">&#39;OSCHECK_TITLE&#39;</span><span class="p">);</span>
+</div></div><div data-line="50" class="code-highlight-row numbered"><div class="code-highlight-line">            <span class="nx">osCheckTitle</span> <span class="o">=</span> <span class="nx">osCheckTitle</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s2">&quot;%1$@&quot;</span><span class="p">,</span> <span class="nx">tProductName</span><span class="p">);</span>
+</div></div><div data-line="51" class="code-highlight-row numbered"><div class="code-highlight-line">            <span class="nx">osCheckTitle</span> <span class="o">=</span> <span class="nx">osCheckTitle</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s2">&quot;%2$@&quot;</span><span class="p">,</span> <span class="nx">supportedVersion</span><span class="p">);</span>
+</div></div><div data-line="52" class="code-highlight-row numbered"><div class="code-highlight-line"> </div></div><div data-line="53" class="code-highlight-row numbered"><div class="code-highlight-line">            <span class="kd">var</span> <span class="nx">osCheckMessage</span> <span class="o">=</span> <span class="nx">system</span><span class="p">.</span><span class="nx">localizedStringWithFormat</span><span class="p">(</span><span class="s1">&#39;OSCHECK_MESSAGE&#39;</span><span class="p">);</span>
+</div></div><div data-line="54" class="code-highlight-row numbered"><div class="code-highlight-line">            <span class="nx">osCheckMessage</span> <span class="o">=</span> <span class="nx">osCheckMessage</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s2">&quot;%1$@&quot;</span><span class="p">,</span> <span class="nx">tProductName</span><span class="p">);</span>
+</div></div><div data-line="55" class="code-highlight-row numbered"><div class="code-highlight-line">            <span class="nx">osCheckMessage</span> <span class="o">=</span> <span class="nx">osCheckMessage</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s2">&quot;%2$@&quot;</span><span class="p">,</span> <span class="nx">tProductVersion</span><span class="p">);</span>
+</div></div><div data-line="56" class="code-highlight-row numbered"><div class="code-highlight-line">            <span class="nx">osCheckMessage</span> <span class="o">=</span> <span class="nx">osCheckMessage</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s2">&quot;%3$@&quot;</span><span class="p">,</span> <span class="nx">supportedVersion</span><span class="p">);</span>
+</div></div><div data-line="57" class="code-highlight-row numbered"><div class="code-highlight-line"> </div></div><div data-line="58" class="code-highlight-row numbered"><div class="code-highlight-line">            <span class="nx">my</span><span class="p">.</span><span class="nx">result</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">osCheckTitle</span><span class="p">;</span>
+</div></div><div data-line="59" class="code-highlight-row numbered"><div class="code-highlight-line">            <span class="nx">my</span><span class="p">.</span><span class="nx">result</span><span class="p">.</span><span class="nx">message</span> <span class="o">=</span> <span class="nx">osCheckMessage</span><span class="p">;</span>
+</div></div><div data-line="60" class="code-highlight-row numbered"><div class="code-highlight-line">            <span class="nx">my</span><span class="p">.</span><span class="nx">result</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s1">&#39;Fatal&#39;</span><span class="p">;</span>
+</div></div><div data-line="61" class="code-highlight-row numbered"><div class="code-highlight-line">        <span class="p">}</span>
+</div></div><div data-line="62" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+</div></div><div data-line="63" class="code-highlight-row numbered"><div class="code-highlight-line">        <span class="c1">// an exception just occurred</span>
+</div></div><div data-line="64" class="code-highlight-row numbered"><div class="code-highlight-line">        <span class="k">return</span> <span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+</div></div><div data-line="65" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="p">}</span>
+</div></div><div data-line="66" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="c1">// return true</span>
+</div></div><div data-line="67" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="k">return</span> <span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+</div></div><div data-line="68" class="code-highlight-row numbered"><div class="code-highlight-line"><span class="p">}</span></div></div></pre></div></figure>
+<p>`</p>
 
 <p>The error happens on line 45 above, the version check is comparing strings and failing because 10.10 is less than 10.7 lexicographically. If I was fixing the pkg I would rewrite the function to properly check, but I’m not and I just want the JDK to install. So I took everything out except the final <code>return(true);</code> so that the whole method looks like this: </p>
 
