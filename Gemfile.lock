@@ -13,6 +13,7 @@ GEM
       execjs
     coffee-script-source (1.7.0)
     colorator (0.1)
+    commonjs (0.2.7)
     execjs (2.2.0)
     fast-stemmer (1.0.2)
     ffi (1.9.3)
@@ -31,12 +32,18 @@ GEM
       toml (~> 0.1.0)
     jekyll-coffeescript (1.0.0)
       coffee-script (~> 2.2)
+    jekyll-less (0.0.4)
+      jekyll (>= 0.10.0)
+      less (>= 2.0.5)
     jekyll-page-hooks (1.2.0)
       jekyll (>= 2.0.0)
     jekyll-sass-converter (1.0.0)
       sass (~> 3.2)
     json (1.8.1)
     kramdown (1.4.0)
+    less (2.6.0)
+      commonjs (~> 0.2.7)
+    libv8 (3.16.14.3)
     liquid (2.5.5)
     listen (2.7.8)
       celluloid (>= 0.15.2)
@@ -62,9 +69,12 @@ GEM
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
     redcarpet (3.1.2)
-    rouge (1.4.0)
+    ref (1.0.5)
     safe_yaml (1.0.3)
     sass (3.3.8)
+    therubyracer (0.12.1)
+      libv8 (~> 3.16.14.0)
+      ref
     timers (1.1.0)
     toml (0.1.1)
       parslet (~> 1.5.0)
@@ -77,7 +87,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  octopress-code-highlighter
+  jekyll-less
   octopress-codefence
   octopress-ink
-  rouge
+  therubyracer

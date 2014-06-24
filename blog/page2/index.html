@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="en">
+  	<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>andrewmccall.com</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Andrew's Website woot!">
+    <link rel="canonical" href="http://andrewmccall.com/blog/page2/">
+
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+
+
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+    <!-- Custom CSS -->
+	<link rel="stylesheet" href="/css/main.css">
+	<link rel="stylesheet" href="/css/code.css">
+	
+	
+</head>
+    <body>
+    <header class="site-header">
+	<div class="container-fluid">
+		<div class="navbar-default navbar-fixed-top" role="navigation">
+			<a class="navbar-brand" href="/">andrewmccall.com</a>
+		</div>
+		<div class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				<li class="page-link"><a href="/about/">About</a></li>
+			</ul>
+			<form class="navbar-form navbar-left" role="search">
+				<div class="form-group">
+					<input type="text" class="form-control" placeholder="Search">
+		        </div>
+		        <button type="submit" class="btn btn-default">Submit</button>
+			</form>
+		</div>
+	</div>
+</header>
+
+
+    <div class="container-fluid">
+		<div class="row">
+		  <div class="col-xs-12 col-md-8 page-content"><div class="home">
+
+    
+	<div class="post">
+
+		<div class="page-header">
+			<h1>
+				<a class="post-link" href="/2010/09/21/giving-posterous-a-shot-/">Giving Posterous a Shot.</a> 			
+				<small class="pull-right">Sep 21, 2010</small>
+	        </h1>
+        </div>
+		<div class="content">
+		    I've been using wordpress for a few years on&nbsp;<a href="http://andrewmccall.com">andrewmccall.com</a>&nbsp;and it's served me well but I hear good things about &nbsp;<a href="https://posterous.com">posterous</a>&nbsp;and decided to give it a try.&nbsp;<p /><div>This is that try, and so far I like it. Think I'll repoint the domain.&nbsp;</div>
+
+		</div>
+	</div>
+    
+	<div class="post">
+
+		<div class="page-header">
+			<h1>
+				<a class="post-link" href="/2010/08/17/multiple-users-same-key-in-puppet-/">Multiple Users, Same Key in Puppet.</a> 			
+				<small class="pull-right">Aug 17, 2010</small>
+	        </h1>
+        </div>
+		<div class="content">
+		    I've been a bit quiet on the server front and to be honest a bit stuck. I'm new to Puppet and it took me a while to figure out how to get users working the way I wanted them to. Sleeping on it and reading some more and eventually I got there. I also have a day job to hold down and a family to entertain on the weekend, so as much as I really wanted to get this done life got in the way. 
+
+My goal now is to get my repositories back online and to create a new one and start committing this Puppet config I've been building somewhere. I decided I'd go with Git for my main projects, the ones that had graduated out of the sandbox but that the sandbox would keep running subversion. I've also planned to run them both via SSH to lower the ports I open and to stick with the same key infrastructure I was building to access everything else. 
+
+The only problem I had was that I couldn't figure out how to use the same key in multiple places with the otherwise good <a href="http://projects.reductivelabs.com/projects/puppet/wiki/Module_Ssh_Auth_Patterns">ssh::auth</a> module from the Puppet patterns wiki. And I wasn't the only one, even the module author thought it was a good idea but difficult to implement. After working on it a few evenings I eventually learned enough about puppet to have a crack at it myself- it may no be the most elegant solution, but it seems to work. 
+
+<em>I allowed root to login via ssh and turned password authentication on while I did this - I didn't want to lock myself out of my server if I made a mistake. You may want to do the same, or you may not. It's up to you. If you do undo the <a href="http://andrewmccall.com/2010/08/restrict-access-in-puppet-%E2%80%93-part-2/">edits you made to your sshd_config</a> a few days ago</em>
+
+In the most simple terms I added a parameter $key throughout ssh::auth which when present indicated you're using a different key, not the one normally used in title. 
+
+<em><div class="CodeRay">
+  <div class="code"><pre>modules/user/manifests/auth.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre># =========                                                 
+# ssh::auth                                                 
+# =========                                                 
+#                                                           
+# The latest official release and documentation for ssh::auth can always
+# be found at http://reductivelabs.com/trac/puppet/wiki/Recipes/ModuleSSHAuth .
+#                                                                              
+# Version:          0.3.2                                                      
+# Release date:     2009-12-29                                                 
+
+class ssh::auth {
+
+$keymaster_storage = &quot;/var/lib/keys&quot; 
+
+Exec { path =&gt; &quot;/usr/bin:/usr/sbin:/bin:/sbin&quot; }
+Notify { withpath =&gt; false }                    
+
+
+##########################################################################
+
+
+# ssh::auth::key 
+
+# Declare keys.  The approach here is just to define a bunch of
+# virtual resources, representing key files on the keymaster, client,
+# and server.  The virtual keys are then realized by                 
+# ssh::auth::{keymaster,client,server}, respectively.  The reason for
+# doing things that way is that it makes ssh::auth::key into a &quot;one  
+# stop shop&quot; where users can declare their keys with all of their    
+# parameters, whether those parameters apply to the keymaster, server,
+# or client.  The real work of creating, installing, and removing keys
+# is done in the private definitions called by the virtual resources: 
+# ssh_auth_key_{master,server,client}.                                
+
+define key ($ensure = &quot;present&quot;, $filename = &quot;&quot;, $force = false, $group = &quot;puppet&quot;, $home = &quot;&quot;, $keytype = &quot;rsa&quot;, $length = 2048, $maxdays = &quot;&quot;, $mindate = &quot;&quot;, $options = &quot;&quot;, $user = &quot;&quot;, $key = &quot;&quot;) {                                                                                                                                                    
+
+  ssh_auth_key_namecheck { &quot;${title}-title&quot;: parm =&gt; &quot;title&quot;, value =&gt; $title }
+
+  # apply defaults
+  $_filename = $filename ? { &quot;&quot; =&gt; &quot;id_${keytype}&quot;, default =&gt; $filename }
+  $_length = $keytype ? { &quot;rsa&quot; =&gt; $length, &quot;dsa&quot; =&gt; 1024 }               
+  $_user = $user ? {                                                      
+    &quot;&quot;      =&gt; regsubst($title, '^([^@]*)@?.*$', '\1'),                   
+    default =&gt; $user,                                                     
+  }                                                                       
+  $_home = $home ? { &quot;&quot; =&gt; &quot;/home/$_user&quot;,  default =&gt; $home }            
+
+  ssh_auth_key_namecheck { &quot;${title}-filename&quot;: parm =&gt; &quot;filename&quot;, value =&gt; $_filename }
+
+  @ssh_auth_key_master { $title:
+    ensure  =&gt; $ensure,         
+    force   =&gt; $force,          
+    keytype =&gt; $keytype,        
+    length  =&gt; $_length,        
+    maxdays =&gt; $maxdays,        
+    mindate =&gt; $mindate,        
+  }                             
+  @ssh_auth_key_client { $title:
+    ensure   =&gt; $ensure,        
+    filename =&gt; $_filename,     
+    group    =&gt; $group,         
+    home     =&gt; $_home,         
+    user     =&gt; $_user,         
+  }                             
+  @ssh_auth_key_server { $title:
+    ensure  =&gt; $ensure,         
+    group   =&gt; $group,          
+    home    =&gt; $_home,          
+    options =&gt; $options,        
+    user    =&gt; $_user,  
+    key                =&gt; $key,        
+  }                             
+}                               
+
+
+##########################################################################
+
+
+# ssh::auth::keymaster
+#                     
+# Keymaster host:     
+# Create key storage; create, regenerate, and remove key pairs
+
+class keymaster {
+
+  # Set up key storage
+
+  file { $ssh::auth::keymaster_storage:
+    ensure =&gt; directory,               
+    owner  =&gt; puppet,                  
+    group  =&gt; puppet,                  
+    mode   =&gt; 644,                     
+  }                                    
+                                       
+  # Realize all virtual master keys    
+  Ssh_auth_key_master             
+
+} # class keymaster
+
+
+##########################################################################
+
+
+# ssh::auth::client
+#                  
+# Install generated key pairs onto clients
+
+define client ($ensure = &quot;&quot;, $filename = &quot;&quot;, $group = &quot;&quot;, $home = &quot;&quot;, $user = &quot;&quot;) {
+
+  # Realize the virtual client keys.
+  # Override the defaults set in ssh::auth::key, as needed.
+  if $ensure   { Ssh_auth_key_client  { ensure   =&gt; $ensure   } }
+  if $filename { Ssh_auth_key_client  { filename =&gt; $filename } }
+  if $group    { Ssh_auth_key_client  { group    =&gt; $group    } }
+
+  if $user { Ssh_auth_key_client  { user =&gt; $user, home =&gt; &quot;/home/$user&quot; } }
+  if $home { Ssh_auth_key_client  { home =&gt; $home } }                       
+  if $key { Ssh_auth_key_client  { key =&gt; $key } }
+
+  realize Ssh_auth_key_client[$title]
+
+} # define client
+
+
+##########################################################################
+
+
+# ssh::auth::server
+#                  
+# Install public keys onto clients
+
+define server ($ensure = &quot;&quot;, $group = &quot;&quot;, $home = &quot;&quot;, $options = &quot;&quot;, $user = &quot;&quot;, $key=&quot;&quot;) {
+
+  # Realize the virtual server keys.
+  # Override the defaults set in ssh::auth::key, as needed.
+  if $ensure  { Ssh_auth_key_server  { ensure  =&gt; $ensure  } }
+  if $group   { Ssh_auth_key_server  { group   =&gt; $group   } }
+  if $options { Ssh_auth_key_server  { options =&gt; $options } }
+
+  if $user { Ssh_auth_key_server  { user =&gt; $user, home =&gt; &quot;/home/$user&quot; } }
+  if $home { Ssh_auth_key_server  { home =&gt; $home } }  
+  if $key  { Ssh_auth_key_server  { key =&gt; $key } }
+                       
+
+  realize Ssh_auth_key_server[$title]
+
+} # define server
+
+} # class ssh::auth
+
+
+##########################################################################
+
+
+# ssh_auth_key_master
+#                    
+# Create/regenerate/remove a key pair on the keymaster.
+# This definition is private, i.e. it is not intended to be called directly by users.
+# ssh::auth::key calls it to create virtual keys, which are realized in ssh::auth::keymaster.
+
+define ssh_auth_key_master ($ensure, $force, $keytype, $length, $maxdays, $mindate) {
+
+  Exec { path =&gt; &quot;/usr/bin:/usr/sbin:/bin:/sbin&quot; }
+  File {                                          
+    owner =&gt; puppet,                              
+    group =&gt; puppet,                              
+    mode  =&gt; 600,                                 
+  }                                               
+
+  $keydir = &quot;${ssh::auth::keymaster_storage}/${title}&quot;
+  $keyfile = &quot;${keydir}/key&quot;                          
+
+  file { 
+    &quot;$keydir&quot;:
+      ensure =&gt; directory,
+      mode   =&gt; 644;      
+    &quot;$keyfile&quot;:           
+      ensure =&gt; $ensure;  
+    &quot;${keyfile}.pub&quot;:     
+      ensure =&gt; $ensure,  
+      mode   =&gt; 644;      
+  }                       
+
+  if $ensure == &quot;present&quot; {
+
+    # Remove the existing key pair, if
+    # * $force is true, or            
+    # * $maxdays or $mindate criteria aren't met, or
+    # * $keytype or $length have changed            
+
+    $keycontent = file(&quot;${keyfile}.pub&quot;, &quot;/dev/null&quot;)
+    if $keycontent {                                 
+
+      if $force {
+        $reason = &quot;force=true&quot;
+      }                       
+      if !$reason and $mindate and generate(&quot;/usr/bin/find&quot;, $keyfile, &quot;!&quot;, &quot;-newermt&quot;, &quot;${mindate}&quot;) {
+        $reason = &quot;created before ${mindate}&quot;                                                          
+      }                                                                                                
+      if !$reason and $maxdays and generate(&quot;/usr/bin/find&quot;, $keyfile, &quot;-mtime&quot;, &quot;+${maxdays}&quot;) {      
+        $reason = &quot;older than ${maxdays} days&quot;                                                         
+      }                                                                                                
+      if !$reason and $keycontent =~ /^ssh-... [^ ]+ (...) (\d+)$/ {                                   
+        if       $keytype != $1 { $reason = &quot;keytype changed: $1 -&gt; $keytype&quot; }                        
+        else { if $length != $2 { $reason = &quot;length changed: $2 -&gt; $length&quot; } }                        
+      }                                                                                                
+      if $reason {                                                                                     
+        exec { &quot;Revoke previous key ${title}: ${reason}&quot;:                                              
+          command =&gt; &quot;rm $keyfile ${keyfile}.pub&quot;,                                                     
+          before  =&gt; Exec[&quot;Create key $title: $keytype, $length bits&quot;],                                
+        }                                                                                              
+      }                                                                                                
+    }                                                                                                  
+
+    # Create the key pair.
+    # We &quot;repurpose&quot; the comment field in public keys on the keymaster to
+    # store data about the key, i.e. $keytype and $length.  This avoids  
+    # having to rerun ssh-keygen -l on every key at every run to determine
+    # the key length.                                                     
+    exec { &quot;Create key $title: $keytype, $length bits&quot;:                   
+      command =&gt; &quot;ssh-keygen -t ${keytype} -b ${length} -f ${keyfile} -C \&quot;${keytype} ${length}\&quot; -N \&quot;\&quot;&quot;,
+      user    =&gt; &quot;puppet&quot;,                                                                                 
+      group   =&gt; &quot;puppet&quot;,                                                                                 
+      creates =&gt; $keyfile,                                                                                 
+      require =&gt; File[$keydir],                                                                            
+      before  =&gt; File[$keyfile, &quot;${keyfile}.pub&quot;],                                                         
+    }                                                                                                      
+
+  } # if $ensure  == &quot;present&quot;
+
+} # define ssh_auth_key_master
+
+
+##########################################################################
+
+
+# ssh_auth_key_client
+#                    
+# Install a key pair into a user's account.
+# This definition is private, i.e. it is not intended to be called directly by users.
+
+define ssh_auth_key_client ($ensure, $filename, $group, $home, $user) {
+
+  File {
+    owner   =&gt; $user,
+    group   =&gt; $group,
+    mode    =&gt; 600,   
+    require =&gt; [ User[$user], File[$home]],
+  }                                                    
+
+  $key_src_file = &quot;${ssh::auth::keymaster_storage}/${title}/key&quot; # on the keymaster
+  $key_tgt_file = &quot;${home}/.ssh/${filename}&quot; # on the client                       
+
+  $key_src_content_pub = file(&quot;${key_src_file}.pub&quot;, &quot;/dev/null&quot;)
+  if $ensure == &quot;absent&quot; or $key_src_content_pub =~ /^(ssh-...) ([^ ]+)/ {
+    $keytype = $1                                                         
+    $modulus = $2                                                         
+    file {                                                                
+      $key_tgt_file:                                                      
+        ensure  =&gt; $ensure,                                               
+        content =&gt; file($key_src_file, &quot;/dev/null&quot;);                      
+      &quot;${key_tgt_file}.pub&quot;:                                              
+        ensure  =&gt; $ensure,                                               
+        content =&gt; &quot;$keytype $modulus $title\n&quot;,                          
+        mode    =&gt; 644;                                                   
+    }                                                                     
+  } else {                                                                
+    notify { &quot;Private key file $key_src_file for key $title not found on keymaster; skipping ensure =&gt; present&quot;: }
+  }                                                                                                               
+
+} # define ssh_auth_key_client
+
+
+##########################################################################
+
+
+# ssh_auth_key_server
+#                    
+# Install a public key into a server user's authorized_keys(5) file.
+# This definition is private, i.e. it is not intended to be called directly by users.
+
+define ssh_auth_key_server ($ensure, $group, $home, $options, $user, $key) {
+
+  # on the keymaster:
+  $key_src_dir = &quot;${ssh::auth::keymaster_storage}/${key}&quot;
+  $key_src_file = &quot;${key_src_dir}/key.pub&quot;                 
+  # on the server:                                         
+  $key_tgt_file = &quot;${home}/.ssh/authorized_keys&quot;           
+                                                           
+  File {                                                   
+    owner   =&gt; $user,                                      
+    group   =&gt; $group,                                     
+    require =&gt; User[$user],                                
+    mode    =&gt; 600,                                        
+  }                                                        
+  Ssh_authorized_key {                                     
+    user   =&gt; $user,                                       
+    target =&gt; $key_tgt_file,                               
+  }                                                        
+
+  if $ensure == &quot;absent&quot; {
+    ssh_authorized_key { $title: ensure =&gt; &quot;absent&quot; }
+  }                                                  
+  else {
+    $key_src_content = file($key_src_file, &quot;/dev/null&quot;)
+    if ! $key_src_content {
+      notify { &quot;Public key file $key_src_file for key $_key not found on keymaster; skipping ensure =&gt; present&quot;: }
+    } else { if $ensure == &quot;present&quot; and $key_src_content !~ /^(ssh-...) ([^ ]*)/ {
+      err(&quot;Can't parse public key file $key_src_file&quot;)
+      notify { &quot;Can't parse public key file $key_src_file for key $_key on the keymaster: skipping ensure =&gt; $ensure&quot;: }
+    } else {
+      $keytype = $1
+      $modulus = $2
+      ssh_authorized_key { $title:
+        ensure  =&gt; &quot;present&quot;,
+        type    =&gt; $keytype,
+        key     =&gt; $modulus,
+        options =&gt; $options ? { &quot;&quot; =&gt; undef, default =&gt; $options },
+      }
+    }} # if ... else ... else
+  } # if ... else
+
+} # define ssh_auth_key_server
+
+
+##########################################################################
+
+
+# ssh_auth_key_namecheck
+#
+# Check a name (e.g. key title or filename) for the allowed form
+
+define ssh_auth_key_namecheck ($parm, $value) {
+  if $value !~ /^[A-Za-z0-9]/ {
+    fail(&quot;ssh::auth::key: $parm '$value' not allowed: must begin with a letter or digit&quot;)
+  }
+  if $value !~ /^[A-Za-z0-9_.:@-]+$/ {
+    fail(&quot;ssh::auth::key: $parm '$value' not allowed: may only contain the characters A-Za-z0-9_.:@-&quot;)
+  }
+} # define namecheck</pre></div>
+</div>
+
+
+I won't go through all the changes line by line, the important things to note are that I added the variable $key and limited the ssh_auth_key_master automatic realisation to only calls that have not provided a key. Basically if you give it a key you're trying to use an exisiting key, otherwise you're looking to create a new key for a user. 
+
+<h2>Usage</h2>
+
+Using the new calls is easy. Assuming you've cerated your user addding the following lines will allow the previously created andrewmccall key to login as root:
+
+<em><div class="CodeRay">
+  <div class="code"><pre>manifests/nodes.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre>node build {
+    include sudo, user, sshd, ssh::auth, user::keystore, repos
+    user::create{&quot;andrewmccall&quot;: groups =&gt; &quot;sudo&quot;}
+    user::client_key{&quot;andrewmccall&quot;:}
+    user::server_key{&quot;andrewmccall&quot;:}
+
+    ssh::auth::key{&quot;andrewmccall-root&quot;: key=&gt;&quot;andrewmccall&quot;}
+    ssh::auth::server{&quot;andrewmccall-root&quot;: key=&gt;&quot;andrewmccall&quot;, user=&gt;&quot;root&quot;, home=&gt;&quot;/root&quot;}
+}</pre></div>
+</div>
+
+
+In lines 7 &amp; 8 you can see I use the andrewmccall key to allow logins as root. 
+
+Apologies for the brevity of the post, I guess you can probably tell I'm sick of looking at this code. If you do have any questions or there is any interest in it I'll elaborate in the comments or a future post.
+
+		</div>
+	</div>
+    
+	<div class="post">
+
+		<div class="page-header">
+			<h1>
+				<a class="post-link" href="/2010/08/11/restrict-access-in-puppet-part-2/">Restrict Access in Puppet – Part 2</a> 			
+				<small class="pull-right">Aug 11, 2010</small>
+	        </h1>
+        </div>
+		<div class="content">
+		    Yesterday we got the key creation working, today we'll lock the server down properly by preventing root login and adding a user to the sudoers file. 
+
+Let's start with the latter. 
+
+<h2>Sudoers</h2>
+
+First we need a group of administrators, for the sake of ease and self-documentation I called it sudo. Well ubuntu called it sudo, but we still need to ensure it exists, because it won't on all operating systems.
+
+<em><div class="CodeRay">
+  <div class="code"><pre>modules/sudo/manifests/init.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre>import &quot;*&quot;
+class sudo {
+    include sudo::install, sudo::sudoers
+    group{&quot;sudo&quot;: ensure =&gt; &quot;present&quot;}
+}</pre></div>
+</div>
+
+
+All we did here was very simply ensure that the puppet group existed. Next we need to update our sudoers file to allow members of the sudo group to sudo. 
+<em><div class="CodeRay">
+  <div class="code"><pre>modules/sudo/files/sudoers</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre># /etc/sudoers
+#
+# This file MUST be edited with the 'visudo' command as root.
+#
+# See the man page for details on how to write a sudoers file.
+#
+
+Defaults        env_reset
+
+# Uncomment to allow members of group sudo to not need a password
+# %sudo ALL=NOPASSWD: ALL
+
+# Host alias specification
+
+# User alias specification
+
+# Cmnd alias specification
+
+# User privilege specification
+root        ALL=(ALL) ALL
+%sudo   ALL=(ALL) ALL</pre></div>
+</div>
+
+
+All we did here was add the last line which allows members of the sudo group to do everything. We do require a user's password. 
+
+The next and final step is to ensure our user module allows us to specify additional groups. 
+
+<em><div class="CodeRay">
+  <div class="code"><pre>modules/user/manifests/init.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre>import &quot;*&quot;
+class user {
+
+    define create ($groups = &quot;&quot;) {
+        group{$title: ensure =&gt; &quot;present&quot;}         
+        user { &quot;$title&quot;:
+            ensure  =&gt; &quot;present&quot;,
+            gid   =&gt; &quot;$title&quot;,
+            groups =&gt; $groups,
+            home    =&gt; &quot;/home/$title&quot;,
+            shell   =&gt; &quot;/bin/bash&quot;,
+            managehome =&gt; true,
+            require =&gt; [Group[&quot;$title&quot;]],
+        }
+        file { &quot;/home/$title&quot;:
+            ensure =&gt; &quot;directory&quot;,
+            mode   =&gt; 700,
+            owner  =&gt; &quot;$title&quot;,
+            group  =&gt; &quot;$title&quot;,
+        }
+        file { &quot;/home/$title/.ssh&quot;:
+            ensure =&gt; &quot;directory&quot;,
+            mode   =&gt; 600,
+            owner  =&gt; &quot;$title&quot;,
+            group  =&gt; &quot;$title&quot;,
+        }
+        ssh::auth::key{&quot;$title&quot;:}
+    }
+    define client_key ($ensure = &quot;&quot;, $filename = &quot;&quot;) {
+        ssh::auth::client{&quot;$title&quot;: ensure=&gt;$ensure, filename=&gt;$filename}
+    }
+    define server_key ($ensure = &quot;&quot;, $user = &quot;&quot;) {
+        ssh::auth::server{&quot;$title&quot;: ensure=&gt;$ensure, user=&gt;$user}
+    }
+}</pre></div>
+</div>
+
+
+On line 4 I added  a parameter $groups which defaults to empty and on line 9 I pass that parameter into the user creation step. 
+
+There you have it, run puppet and your user will get added to the sudo group and should be able to <a href="http://xkcd.com/149/">sudo themselves up a sandwich</a>.
+
+<h2>sshd</h2>
+
+The next step in securing our server is to prevent logins with passwords and prevent root logins. 
+
+<em>I can't stress enough how important it is here that you test you can login with your key and that you can sudo or at least you know your root password. If you go ahead without being able to do these things you may be left unable to login to your machine.</em>
+
+Our sshd module is a lot like the original sudoers module. We're simply copying a file into /etc. 
+
+Start by creating our module directories
+
+<div class="CodeRay">
+  <div class="code"><pre># mkdir -p modules/sshd/files modules/sshd/manifests</pre></div>
+</div>
+
+
+Next we create the init.pp file for the ssh module. I've taken inspiration from the <a href="http://projects.puppetlabs.com/projects/1/wiki/Puppet_Common_Modules_Ssh">example on the puppet wiki</a> 
+
+<em><div class="CodeRay">
+  <div class="code"><pre>modules/sshd/manifests/init.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre>class sshd {
+
+   package {&quot;openssh-server&quot;: ensure=&gt; &quot;installed&quot;}
+
+    file { &quot;/etc/ssh/sshd_config&quot;:
+        owner =&gt; &quot;root&quot;,
+        mode =&gt; 644,
+        notify =&gt; Service[&quot;ssh&quot;],
+        require =&gt; Package[&quot;openssh-server&quot;],
+        source =&gt; 
+            &quot;puppet:///modules/sshd/sshd_config&quot;
+    }
+
+    service { &quot;ssh&quot;:
+        enable =&gt; true,
+        ensure =&gt; running,
+        require =&gt; [
+            File[&quot;/etc/ssh/sshd_config&quot;],
+            Package[&quot;openssh-server&quot;]
+        ]
+    }
+}</pre></div>
+</div>
+
+
+Next copy your current sshd_config into the files directory of your module
+
+<div class="CodeRay">
+  <div class="code"><pre># cp /etc/ssh/sshd_config modules/sshd/files</pre></div>
+</div>
+
+
+Then I edited the following lines to deny root logins and password authentication:
+
+<em><div class="CodeRay">
+  <div class="code"><pre>modules/sshd/files/sshd_config</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre>PermitRootLogin no
+...
+PasswordAuthentication no</pre></div>
+</div>
+
+
+Finally I updated my node.pp to include the new module
+
+<em><div class="CodeRay">
+  <div class="code"><pre>manifests/nodes.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre>node build {
+    include sudo, user, sshd, ssh::auth, user::keystore
+    user::create{&quot;andrewmccall&quot;: groups =&gt; &quot;sudo&quot;}
+    user::client_key{&quot;andrewmccall&quot;:}
+    user::server_key{&quot;andrewmccall&quot;:}
+}</pre></div>
+</div>
+
+
+Execute puppet and your sshd_config should now be properly set.
+
+		</div>
+	</div>
+    
+	<div class="post">
+
+		<div class="page-header">
+			<h1>
+				<a class="post-link" href="/2010/08/10/restrict-access-in-puppet-part-1/">Restrict Access in Puppet - Part 1</a> 			
+				<small class="pull-right">Aug 10, 2010</small>
+	        </h1>
+        </div>
+		<div class="content">
+		    This time we're going to lock the server down a bit with Puppet. Now that we have our own user, let's force login using a public key we'll create for the user.
+
+Eventually I also want to create a self signed certificate for the user to use with their public key to access resources via HTTPS with client certificates wrap the whole certificate up in a pkcs12 file and email it to them. I won't get into that yet.
+
+I was going to write the framework myself, even had a skeleton all laid out - I'd decided on two classes, the keystore which would handle creating, storing and revoking keys and later certificates and a user class for creating users.
+
+<ul>
+<li>
+<em>create &lt;user&gt;</em> creates a new user with the given username.</li>
+<li>
+<em>clientkey &lt;user&gt; [filename]</em> installs the key for a given user, optionally set a filename. I already have some keys</li>
+<li>
+<em>serverkey &lt;user&gt; [login_as]</em> installs the key into the authorized_keys allowing users to login to this server. Defaults to logging in as the same user as the key 'owner' if the. I also need to use my key to login as another user, the git and svn users for example. </li>
+</ul>
+
+Then I found the <a href="http://projects.reductivelabs.com/projects/puppet/wiki/Module_Ssh_Auth_Patterns">ssh::auth</a> from the puppet wiki. it's released under the GPL, while everything else I write is Apache 2 compatible - if that's a problem you may want to stop here and look for another solution. If you find one that's Apache 2 compatible, I'd love to know about it. For what I'm doing it doesn't really matter, I went with my skeleton package as a thin wrapper around it and downloaded the module into my users package.
+
+<div class="CodeRay">
+  <div class="code"><pre># wget http://projects.reductivelabs.com/attachments/download/935/auth.pp -O ./modules/user/manifests/auth.pp</pre></div>
+</div>
+
+
+The first thing I did was create a new keystore.pp file, the ssh::auth package made that pretty easy: 
+
+<em><div class="CodeRay">
+  <div class="code"><pre>modules/user/manifests/keystore.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre>class user::keystore {
+    include ssh::auth::keymaster
+}</pre></div>
+</div>
+
+
+Then I needed to do was create a keystore. The keystore is just the host you nominate to control all your client and server keys.  To do that in nodes.pp I properly named my only node and stopped using the default and added a couple of new includes.
+
+<em><div class="CodeRay">
+  <div class="code"><pre>manifests/nodes.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre>node build {
+    include sudo, user, ssh::auth, user::keystore
+}</pre></div>
+</div>
+
+
+Run puppet and you should end up with a directory <em><div class="CodeRay">
+  <div class="code"><pre>/var/lib/keys</pre></div>
+</div>
+</em> ready to store keys.
+
+<div class="CodeRay">
+  <div class="code"><pre># puppet -v --modulepath=/etc/puppet/modules /etc/puppet/manifests/site.pp</pre></div>
+</div>
+
+
+I decided I'd update my user package by removing some files and putting the user class into the init.pp file. I had too many files in there that just didn't seem to be doing anything. 
+
+<div class="CodeRay">
+  <div class="code"><pre># rm modules/user/manifests/virtual.pp
+# rm modules/user/manifests/unixadmins.pp</pre></div>
+</div>
+
+
+Then I added a create method in the user class in my init.pp file: 
+
+<em><div class="CodeRay">
+  <div class="code"><pre>modules/users/manifests/init.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre>import &quot;*&quot;
+class user {
+
+    define create {
+            @user { &quot;$title&quot;:
+            ensure  =&gt; &quot;present&quot;,
+            gid   =&gt; &quot;$title&quot;,
+            home    =&gt; &quot;/home/$title&quot;,
+            shell   =&gt; &quot;/bin/bash&quot;,
+            managehome =&gt; true,
+            require =&gt; [Group[&quot;$title&quot;]],
+        }
+        @file { &quot;/home/$title&quot;:
+            ensure =&gt; &quot;directory&quot;,
+            mode   =&gt; 700,
+            owner  =&gt; &quot;$title&quot;,
+            group  =&gt; &quot;$title&quot;,
+        }
+        @file { &quot;/home/$title/.ssh&quot;:
+            ensure =&gt; &quot;directory&quot;,
+            mode   =&gt; 600,
+            owner  =&gt; &quot;$title&quot;,
+            group  =&gt; &quot;$title&quot;,
+        }
+        @group { &quot;$title&quot;:
+            ensure  =&gt; &quot;present&quot;,
+        }
+
+        realize User[$title]
+        realize Group[$title]
+        realize File[&quot;/home/$title&quot;]
+        realize File[&quot;/home/$title/.ssh&quot;]
+        ssh::auth::key{&quot;$title&quot;:}
+    }
+    define client_key ($ensure = &quot;&quot;, $filename = &quot;&quot;) {
+        ssh::auth::client{&quot;$title&quot;: ensure=&gt;$ensure, filename=&gt;$filename}
+    }
+    define server_key ($ensure = &quot;&quot;, $user = &quot;&quot;) {
+        ssh::auth::server{&quot;$title&quot;: ensure=&gt;$ensure, user=&gt;$user}
+    }
+}</pre></div>
+</div>
+
+
+This code defines a new method called create, and realises all the required resources, finally it generates a new key for the user. 
+
+Now we need to update our node to create ourselves a user using this new method
+
+<em><div class="CodeRay">
+  <div class="code"><pre>manifests/nodes.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre>node my-server {
+    include sudo, ssh::auth, ssh::auth::keymaster, user
+    user::create{&quot;andrewmccall&quot;:}
+    user::client_key{&quot;andrewmccall&quot;:}
+    user::server_key{&quot;andrewmccall&quot;:}
+}</pre></div>
+</div>
+
+
+The last step is to copy the private and public key down to a machine.
+
+<em>It's important that you test ssh logins to this host using the new keys. Otherwise you risk locking yourself out for good!</em> 
+
+I think that's probably a good place for me to call it a night - tomorrow I'll be locking down sshd so that only users with keys can login.
+
+		</div>
+	</div>
+    
+	<div class="post">
+
+		<div class="page-header">
+			<h1>
+				<a class="post-link" href="/2010/08/09/groups-in-puppet-/">Groups in Puppet.</a> 			
+				<small class="pull-right">Aug 9, 2010</small>
+	        </h1>
+        </div>
+		<div class="content">
+		    <a href="http://andrewmccall.com/2010/08/setting-up-users-and-securing-my-server/">Last time</a> I ended up not being able to create my user because I didn't have a group for it and ran out of time before I needed to call it a night. So I'll start tonight by creating a group for my user. 
+
+Go to the puppet config dir:
+<div class="CodeRay">
+  <div class="code"><pre># cd /etc/puppet</pre></div>
+</div>
+
+
+Then edit the virtual file we created in our users module last time and add a group, like this:
+<em><div class="CodeRay">
+  <div class="code"><pre>users/manifests/virtual.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre>class user::virtual {
+    @user { &quot;andrewmccall&quot;:
+        ensure  =&gt; &quot;present&quot;,
+        uid     =&gt; &quot;1001&quot;,
+        gid     =&gt; &quot;1001&quot;,
+        comment =&gt; &quot;Andrew McCall&quot;,
+        home    =&gt; &quot;/home/andrewmccall&quot;,
+        shell   =&gt; &quot;/bin/bash&quot;,
+        managehome =&gt; true,
+        require =&gt; [Group[&quot;andrewmccall&quot;]],
+    }
+
+    @group { &quot;andrewmccall&quot;:
+        ensure  =&gt; &quot;present&quot;,
+        gid     =&gt; &quot;1001&quot;, 
+    }
+
+}</pre></div>
+</div>
+
+
+Next in the unixadmins file we need to realize our new group, it should look like this:
+<em><div class="CodeRay">
+  <div class="code"><pre>users/manifests/virtual.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre>class user::unixadmins inherits user::virtual {
+    realize(
+        Group[&quot;andrewmccall&quot;],
+        User[&quot;andrewmccall&quot;]
+    )
+}</pre></div>
+</div>
+
+
+Run puppet on the local files and you'll have a new user and a group for it. It should look something like this: 
+
+<div class="CodeRay">
+  <div class="code"><pre># puppet -v --modulepath=/etc/puppet/modules /etc/puppet/manifests/site.pp
+info: Autoloaded module sudo
+info: Autoloaded module user
+info: Applying configuration version '1281368198'
+notice: //user::virtual/Group[andrewmccall]/ensure: created
+notice: //user::virtual/User[andrewmccall]/ensure: created</pre></div>
+</div>
+
+
+ Don't forget to commit the changes to the git repo. 
+
+<div class="CodeRay">
+  <div class="code"><pre># git add .
+# git commit -a -m &quot;Added a users module to manage users&quot;</pre></div>
+</div>
+
+		</div>
+	</div>
+    
+	<div class="post">
+
+		<div class="page-header">
+			<h1>
+				<a class="post-link" href="/2010/08/05/setting-up-users-and-securing-my-server-/">Setting Up Users and Securing My Server.</a> 			
+				<small class="pull-right">Aug 5, 2010</small>
+	        </h1>
+        </div>
+		<div class="content">
+		    Last night I got the server upgraded to ububtu 10.04 and installed puppet. The first and only recipe we've got is one to make sure our sudoers file has the proper permissions. Tonight I'm hoping to:
+<ul>
+	<li>Add myself a user</li>
+	<li>Automatically create me ssh key</li>
+	<li>Prevent root from logging in via ssh</li>
+	<li>Prevent users from logging in other than with a key.</li>
+	<li>It would be nice to be able to email me my key since I don't run puppet on my mac, though I may be convinced to go down that route if it proves too difficult.</li>
+</ul>
+Longer term I'm hoping to extend this same process to create user certificates for https client certificate authentication and it would be nice to use the same key, certificates and revocation process to issue new credential to users or to even lock them out. Bearing that all in mind, but not getting too hung up on stuff I'm doing later, off we go.
+
+<h3>Create the users module</h3>
+
+We're going to do this pretty much straight out of the puppet best practice guide, the first thing we'll do is flesh out our users module.
+
+<div class="CodeRay">
+  <div class="code"><pre># cd /etc/puppet
+# mkdir -p modules/user/manifests</pre></div>
+</div>
+
+
+Then create a virtual users file:
+
+<em><div class="CodeRay">
+  <div class="code"><pre>modules/user/manifests/virtual.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre># virtual.pp
+#
+# People accounts of interest as virtual resources
+class user::virtual {
+    @user { &quot;andrewmccall&quot;:
+        ensure  =&gt; &quot;present&quot;,
+        uid     =&gt; &quot;1001&quot;,
+        gid     =&gt; &quot;1001&quot;,
+        comment =&gt; &quot;Andrew McCall&quot;,
+        home    =&gt; &quot;/home/andrewmccall&quot;,
+        shell   =&gt; &quot;/bin/bash&quot;,
+    }
+}</pre></div>
+</div>
+
+
+Next let's move me from a virtual user to an actual user
+
+<em><div class="CodeRay">
+  <div class="code"><pre>modules/users/manifests/unixadmins.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre># unixadmins.pp
+#
+# Realize the members of the Unix team and include any contractors
+
+class user::unixadmins inherits user::virtual {
+    # Realize our team members
+    realize(
+        User[&quot;andrewmccall&quot;]
+    )
+}</pre></div>
+</div>
+
+
+Next we need to create an init.pp for the module.
+
+<em><div class="CodeRay">
+  <div class="code"><pre>modules/users/manifests/init.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre>import &quot;*&quot;
+class user {
+    include user::virtual, user::unixadmins
+}</pre></div>
+</div>
+
+
+Now we need to go back and update the site.pp - at this stage I also add a node.pp below to manage individual hosts. 
+
+<em><div class="CodeRay">
+  <div class="code"><pre>manifests/site.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre># site.pp
+
+import &quot;nodes&quot;
+
+Exec { path =&gt; &quot;/usr/bin:/usr/sbin/:/bin:/sbin&quot; }</pre></div>
+</div>
+
+
+<em><div class="CodeRay">
+  <div class="code"><pre>manifests/site.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre># node.pp
+
+node default {
+  include sudo, user
+}</pre></div>
+</div>
+
+
+Once I got that all setup I ran puppet from the command line:
+
+<div class="CodeRay">
+  <div class="code"><pre># puppet -v --modulepath=/etc/puppet/modules /etc/puppet/manifests/site.pp</pre></div>
+</div>
+
+
+And I got an error: 
+
+<div class="CodeRay">
+  <div class="code"><pre>info: Autoloaded module sudo
+info: Autoloaded module user
+info: Applying configuration version '1281041300'
+err: //user::virtual/User[andrewmccall]/ensure: change from absent to present failed: Could not create user andrewmccall: Execution of '/usr/sbin/useradd -u 1001 -g 1001 -s /bin/bash -c Andrew McCall -d /home/andrewmccall andrewmccall' returned 6: useradd: group '1001' does not exist</pre></div>
+</div>
+
+
+Unfortunately I'm going to have to leave it at that for the night, see you tomorrow.
+
+		</div>
+	</div>
+    
+	<div class="post">
+
+		<div class="page-header">
+			<h1>
+				<a class="post-link" href="/2010/08/04/upgrading-my-server-and-installing-puppet/">Upgrading My Server and Installing Puppet</a> 			
+				<small class="pull-right">Aug 4, 2010</small>
+	        </h1>
+        </div>
+		<div class="content">
+		    I woke up this morning to a fresh install of Ubuntu 8.04 I was just itching to configure, but I had to work. So it wasn't until after the kids got fed and put to bed I could get started. What I'm aiming to accomplish tonight it to get the server configured and upgraded.
+
+The first thing I did was trim the install, I don't really want a LAMP server. I want to cut everything I don't need. The only daemon process I want is SSH at the moment so I went into aptitude and selectively removed packages I didn't want.
+
+It's worth noting here that if you're removing packages that you've no intention of installing again, make sure you do an apt-get purge or equivalent so you lose the config as well.
+
+You could probably do this with puppet and I want to automate as much of this process as I can, but I can't figure out how I can automate the upgrade, unfortunately, so I'm not going to bother with anything until I get 10.04 installed.
+
+The next step was to run the upgrade by installing the upgrade manager, and launching the process.
+
+<div class="CodeRay">
+  <div class="code"><pre># apt-get install update-manager-core
+# do-release-upgrade -p -m server</pre></div>
+</div>
+
+
+You'll be asked a few questions, I went for all the defaults except when asked about the grub menu. I chose to throw away the existing config and go with the package maintainer's - it's the only one that worked for me. Eventually you'll be told the upgrade is complete and asked if you want to reboot.
+
+You and I now have an Ubuntu 10.04 LTS server, next stop puppet.
+
+<h2>Puppet</h2>
+The first big question I started having about my infrastructure was how I wanted to send the config to the servers. It wasn't such a big deal with this install, since it was just the one box.
+
+There are two main ways of managing config with puppet, the first is to use the bundled puppetmaster server. There is one puppetmaster, each client machine contacts at regular intervals and asks it if there are any changes and applies the ones that it needs. Out of the box they say it's good to 20-30 machines, you can tweak a few things to get a little more out of it or run it in a more powerful web process. 
+
+The second way of running it is as a more or less standalone system. You update the config however you choose on each node, then execute the puppet command to apply it. The real benefit here is you control when the config is applied. One simple way of doing that is with post-recieve or post-update hooks in git and there is an <a href="http://bitfieldconsulting.com/scaling-puppet-with-distributed-version-control">excellent article</a> from Bitfield Consulting about doing just that.
+
+I'm leaning towards manging the Hadoop cluster I'm looking to manage with puppet after this initial install in a very similar manner. I want to either make a change and have the change pushed immediately across the cluster or control the deployment of a change - it wouldn't do for the whole cluster to suddenly go down to update some software at exactly the same time. Part of the point of using puppet on top of hudson and the other tools I'll be getting into over the coming weeks and months is to allow me to push changes across the cluster, but more importantly roll back the bad ones.  
+
+Let's get the packages
+
+<div class="CodeRay">
+  <div class="code"><pre># apt-get install puppet git-core</pre></div>
+</div>
+
+
+By default puppet won't be configured to start puppetd, which is fine - we'll be triggering it manually. 
+
+<h3>Chicken or the egg</h3>
+
+We want to store all of our configuration in git, but we also need puppet to manage and ensure there is a git repository on the server that's storing the config. With git it's actually pretty easy, we can create a repo in place, commit to it, then add the actual remote repo later. 
+
+<div class="CodeRay">
+  <div class="code"><pre># cd /etc/puppet
+# mkdir modules
+# git init .</pre></div>
+</div>
+
+
+That's our repository created, the only change we want to make is we need to ignore the puppet.conf file - we'll be managing that with puppet as well. 
+
+Create the file <em><div class="CodeRay">
+  <div class="code"><pre>/etc/puppet/.gitignore</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre>puppet.conf</pre></div>
+</div>
+
+
+Basically once we've set the repository up, managing a machine with puppet should be as simple as cloning the repository and running puppet. 
+
+So let's get there - Now that everything seems to be setup properly, let's create a simple puppet recipe, as is the standard, let's enforce some permissions on /etc/sudoers, just to make sure it all works. This is a bit of an extension to the standard first recipe, but we'll be extending it later. 
+
+<h3>Sudoers module</h3>
+
+First let's create the package, this is a pretty standard layout most modules will follow. 
+
+<div class="CodeRay">
+  <div class="code"><pre># cd /etc/puppet/modules
+# mkdir -p sudo/files sudo/manifests</pre></div>
+</div>
+
+
+Create the following files: 
+
+<em><div class="CodeRay">
+  <div class="code"><pre>sudo/manifests/init.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre>import &quot;*&quot;
+class sudo {
+    include sudo::install, sudo::service
+}</pre></div>
+</div>
+
+
+<em><div class="CodeRay">
+  <div class="code"><pre>sudo/manifests/install.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre>class sudo::install {
+  package{ &quot;sudo&quot;: ensure =&gt; installed,}
+}</pre></div>
+</div>
+
+
+<em><div class="CodeRay">
+  <div class="code"><pre>sudo/manifests/sudoers.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre>class sudo::sudoers {
+
+  file { &quot;/tmp/sudoers&quot;:
+    mode =&gt; 440,
+    source =&gt; &quot;puppet:///modules/sudo/sudoers&quot;,
+    notify =&gt; Exec[&quot;check-sudoers&quot;],
+  }
+
+  exec { &quot;check-sudoers&quot;:
+    command =&gt; &quot;/usr/sbin/visudo -cf /tmp/sudoers &amp;&amp; cp /tmp/sudoers /etc/sudoers&quot;,
+    refreshonly =&gt; true,
+  }
+
+}</pre></div>
+</div>
+
+
+<h3>Set the rest of puppet up to call the module</h3>
+
+Finally we need to set up puppet to call the module we've just created. We need to create a site.pp, everything else is loaded from there. In our installation we could call the file anything we like, but to keep things 'standard' we'll keep it as site.pp.
+
+Create the file <em><div class="CodeRay">
+  <div class="code"><pre>/etc/puppet/manifests/site.pp</pre></div>
+</div>
+</em> 
+
+<div class="CodeRay">
+  <div class="code"><pre>import &quot;sudo&quot;
+
+node default {
+  include sudo::install
+  include sudo::sudoers
+}</pre></div>
+</div>
+
+
+That's it, puppet should now be up and running - test your configuration by executing the command: 
+
+<div class="CodeRay">
+  <div class="code"><pre># puppet -v --modulepath=/etc/puppet/modules /etc/puppet/manifests/site.pp</pre></div>
+</div>
+
+
+<h3>Finished for the day. </h3>
+
+That's about all I can manage tonight. Tomorrow I'll continue with the puppet configuration, get it creating users and lock the server down a bit. After that I'll finally be able to start installing the software I need on the box.
+
+		</div>
+	</div>
+    
+	<div class="post">
+
+		<div class="page-header">
+			<h1>
+				<a class="post-link" href="/2010/08/03/let-s-use-puppet-instead-/">Let's Use Puppet Instead.</a> 			
+				<small class="pull-right">Aug 3, 2010</small>
+	        </h1>
+        </div>
+		<div class="content">
+		    So I've just trashed a perfectly good, working server install. That's right, I threw it all away, and for what you ask? For you gentle reader... and because I found a new toy that I wanted to play with, puppet.
+
+Puppet is a configuration management tool, Adobe use it to manage their hadoop cluster and it was something I knew I wanted to look at when it came time to start to manage mine. It wasn't really until I came to the process of writing down all the steps I took setting my server up, so I could reproduce the process if necessary that it occurred to me puppet was something I could&nbsp;should use.
+
+The previous post I'd partly written&nbsp;for today &nbsp;was about the process of getting my server, updating it to Ubuntu 10.04 and generally getting started. Basically I was breaking the steps I took setting my server up into bite sized chunks and them writing down, from memory.
+
+For general background see <a href="http://andrewmccall.com/2010/08/new-development-server/">yesterday's post,</a> most of that still applies. Also reading the <a href="http://confluence.atlassian.com/display/ATLAS/Here+Be+Dragons">Atlassian Dragon Quest</a> is useful background, the biggest difference between that and my install is probably that I'm using MySQL instead of Postgress. There isn't any real reason except I'm familiar with it and so tend to prefer it. I'll also be using hudson, not bamboo - I don't have anything against Bamboo specifically, but 10 plans wont be enough for me and I'm not willing to splash the extra cash to get more when hudson is free and in some respects better suits my needs.
+
+On top of the Atlassian stuff I'm also installing nexus, putting everything behind nginx so that it shows up neatly as a single host and locking most of the site away behind client SSL certificates. With a few holes poked through for public services.
+
+I also assume you've got a domain and that it's properly pointed at the server. I'll be using dev.andrewmccall.com throughout - which coincidentally, is mine.
+
+<em>So, without further ado, let's get going.</em>
+
+<h2>The Server</h2>
+
+I had a look around at the cost of servers, thought about hosting things at amazon, rackspace or elsewhere in the cloud but in the end settled on a hosted server at Server4You. It was recommended by a friend as fairly cheap and reliable, the server is in the EU so it's quicker for me to access than going across the atlantic.
+
+The signup process was fairly painless, I even got a phone call from a real person welcoming me and telling me my server would be online soon. After a few hours I got an email telling me it was online and ready to go. I just had to log in and select my OS.
+
+I logged in and was unsurprised to find that Server4You, like most most hosting companies, seem to only offer Ubuntu 8.10 LTS, so I installed the Ubuntu 8.04 LTS - LAMP - 64bit image. The same image I'm in the process of overwriting my fully setup server with right now. 
+
+It can take up to 2 hours, so I'm going to call it a night at that and I'll carry on tomorrow.
+
+		</div>
+	</div>
+    
+	<div class="post">
+
+		<div class="page-header">
+			<h1>
+				<a class="post-link" href="/2010/08/02/new-development-server/">New Development Server</a> 			
+				<small class="pull-right">Aug 2, 2010</small>
+	        </h1>
+        </div>
+		<div class="content">
+		    Things around here have stalled a bit I've not had much free time what with a new job and travelling. The time I have had I've spent getting a build server setup. Replacing my ageing <a href="http://trac.edgewall.org/">trac</a>/<a href="http://subversion.apache.org/" class="zem_slink" title="Subversion (software)" rel="homepage">subversion</a> install is something I've meant to do for a while and just never got around to.
+
+Ultimately I'm working on a continuous deployment solution for Sproozi, but while I do that I'm also keen to get my other public and private projects into a <a href="http://en.wikipedia.org/wiki/Continuous_integration" class="zem_slink" title="Continuous integration" rel="wikipedia">CI</a> build cycle and get my maven artifacts deployed so they're useful. The other major goal was to move all my main projects out of trac/svn and into <a href="http://www.atlassian.com/software/jira/">JIRA</a>/<a href="http://www.atlassian.com/software/confluence/">Confluence</a>/<a href="http://www.atlassian.com/software/fisheye/">Fisheye</a>/<a href="http://git-scm.com/" class="zem_slink" title="Git (software)" rel="homepage">Git</a>.
+
+Trac and subversion are fine tools, and they've worked well for me for many years, but trac suffers when it's running more than one project; you either need to work around the tool or have separate installs per project and I can get JIRA, Fisheye and Confluence for $10 each which is a great deal.&nbsp;I have no real complaints about svn, except I've started using git as my preferred client and I'm sick of typing 'git svn <em>command</em>' whenever I want to do anything.
+
+Also my subversion repository holds a fair bit of code from a few projects both new, old and dormant as it grows checking out gets irritating.&nbsp;I'm happy with the move to <a href="http://github.com/andrewmccall" title="GitHub" rel="homepage">GitHub</a> and public hosting of my other <a href="http://andrewmccall.com/projects">projects</a>, I like git and I liked the idea of promoting projects into repositories of their own and git lets me take the history with the project.
+
+So I've decided I'll keep my subversion repository, use it as I do now as a sandbox to keep code I'm working on in, for code I don't think is quite ready to be promoted into a project of it's own.&nbsp;When a project is ready I'll move it (and all of it's history) out of subversion and into a git repository of it's own.&nbsp;My public projects are all in <a href="http://github.com/andrewmccall">GitHub</a> and I don't see any point in using my local tools to manage them in anyway. So I'll keep them all over there. Any new ones will get promoted over there too.
+
+Over the course of the next few days/weeks I'll document what I did here, partly in case anyone else cares, partly so I can do it again if I ever need to. I'm not sure how many posts it will take me because I'm not quite finished the process yet.
+<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">
+[[posterous-content:buJaCmlHkdBCeaeucyyo]]<span class="zem-script more-related pretty-attribution"></span>
+</div>
+
+		</div>
+	</div>
+    
+	<div class="post">
+
+		<div class="page-header">
+			<h1>
+				<a class="post-link" href="/2010/06/02/getting-along-with-eclipse-/">Getting Along With Eclipse</a> 			
+				<small class="pull-right">Jun 2, 2010</small>
+	        </h1>
+        </div>
+		<div class="content">
+		    It's been a week or so with a few good days coding in Eclipse, I even took IDEA off my own machines and replaced it so that I'm only working in the one environment and it's going well. I'm pretty much using the default settings and only adding to them a little as I go. I'm resisting the urge to change the key bindings to the IDEA ones. 
+
+So far I've found a few things Eclipse does that I really like, it has some good highlighting features that make it easy to see where classes, variables, parameters etc are being used. Some IDEA does better - I miss the key bindings for generating code, a lot and it's about the only thing I've carried over and added myself. 
+
+One thing that really bothers me about Eclipse and that I'm going to see if I can spend some time sorting out tomorrow is the order of maven imports. They're in classpath order, which I suppose in some circumstances is good, but for browsing or trying to look at the imports it's frustrating. 9 times out of 10 I'm looking to see if something is there or looking into the dependencies themselves for something and trying to dig through that mess takes longer than it should. 
+
+In fact I have to say the whole 'project explorer' in Eclipse is a bit lacklustre. IDEA's is simpler without losing any of the functionality. I'm probably missing something and just need to find some options to make it work more like I'd like (or use a completely different view). Eclipse has a lot of preferences I've never looked at. 
+
+Aside from that it's all good. I'd have to say some bits of IDEA are more polished, but in other ways I prefer Eclipse. The choice to drop IDEA completely though because I need to use Eclipse at work was a good one - I don't think I'd be making the same progress if I was switching between the two yearning for IDEA all day at work.
+
+		</div>
+	</div>
+    
+
+<!-- Pagination links -->
+<div class="pagination">
+  
+    <a href="/blog/page1" class="previous">Previous</a>
+  
+  <span class="page_number ">Page: 2 of 11</span>
+  
+    <a href="/blog/page3" class="next">Next</a>
+  
+</div>
+
+  <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
+
+</div>
+</div>
+		  <div class="col-xs-6 col-md-4 page-sidebar">
+				<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/2014/06/12/installing-java-8-on-os-x-10-dot-10-yosimite/">Installing Java 8 on OS X 10.10 Yosimite</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2013/02/24/octopress/">Octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2012/01/11/customer-support-what-a-joke-/">Customer Support, What a Joke.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2010/12/23/validation-1-0-0-released-/">Validation 1.0.0 Released.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/2010/12/16/oembed/">oEmbed</a>
+      </li>
+    
+  </ul>
+</section>
+		  </div>
+		</div>
+    </div>
+    <footer class="site-footer">
+
+
+    <h2 class="footer-heading">andrewmccall.com</h2>
+
+    <div class="footer-col-1 column">
+      <ul>
+        <li>andrewmccall.com</li>
+        <li><a href="mailto:andrew@andrewmccall.com">andrew@andrewmccall.com</a></li>
+      </ul>
+    </div>
+
+   
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    </body>
+	<!-- post body stuff here -->
+</html>
