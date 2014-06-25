@@ -53,6 +53,45 @@
 
 		<div class="page-header">
 			<h1>
+				<a class="post-link" href="/2009/06/08/open-source-for-business/">Open Source for Business</a> 			
+				<small class="pull-right">Jun 8, 2009</small>
+	        </h1>
+        </div>
+		<div class="content">
+		    <em>I didn't get this posted yesterday because the Internet crapped out in our area. Nothing but excuses, I know.</em>
+
+I've been working beyond the <a href="http://en.wikipedia.org/wiki/Bleeding_edge" class="zem_slink" title="Bleeding edge" rel="wikipedia">bleeding edge</a>, using a version of the <a href="http://lucene.apache.org/nutch/" class="zem_slink" title="Nutch" rel="homepage">Nutch</a> code that's not even made it into the Apache SVN for the project yet. To celebrate the fact that my contributions will make it in I figure its a good time to get into <a href="http://www.wikinvest.com/concept/Open_Source" class="zem_slink" title="Open Source" rel="wikinvest">open source</a> and business. 
+
+To put it briefly, and as you can probably guess, I'm pro open source. I use it extensively and I push back as much as I can. When it comes to the most of the code I write there really isn't much commercial benefit in keeping it hidden so it just makes sense to give back.
+
+There are two types of business on the web, one where you provide a software service and that is the product and others where you provide access to data. It's pretty easy to tell which camp you're in. 
+
+<a href="http://37signals.com/" class="zem_slink" title="37signals" rel="homepage">37 Signals</a> for example, they're in the first and their software probably isn't something they just want to let people download - unless they're incredibly brave. Doing that would mean that they'd be competing on margins for the cheapest hosting, users would flock to the cheaper services, have a poor experience and blame the software. 
+
+Sproozi on the other hand is the second type, our data is what users mostly care about and we're not planning to be precious about our code. I've already been pushing some of the changes I've made to Nutch back into the project and we're planning open source projects of our own in the coming months. 
+
+One of our plans we have is to build <a href="http://www.apple.com/iphone" class="zem_slink" title="iPhone" rel="homepage">iPhone</a>, Andriod and other phone based applications for our service and release them as open source projects. We're planning to write them (or have them written for us) and release 'official' versions. Then release that code as open source project to provide a framework for developers so that they can build great things from it and on our API. 
+
+If there are any experienced iPhone, <a href="http://code.google.com/android/" class="zem_slink" title="Android" rel="homepage">Android</a>, Blackberry, <a href="http://www.symbian.com" class="zem_slink" title="Symbian OS" rel="homepage">Symbian</a> or Pre developers out there that want to get involved, drop me a line were a ways off yet but would love to chat about it and get some very early feedback. <h6 class="zemanta-related-title" style="font-size: 1em;">Related articles by Zemanta</h6><ul class="zemanta-article-ul">
+<li class="zemanta-article-ul-li">
+<a href="http://oreilly.com/catalog/9780596521479/"> Android Application Development </a> (oreilly.com)</li>
+<li class="zemanta-article-ul-li">
+<a href="http://www.computerworld.com/action/article.do?command=viewArticleBasic&amp;articleId=9134087"> Palm Pre will debut with only a few apps available </a> (computerworld.com)</li>
+<li class="zemanta-article-ul-li">
+<a href="http://www.theregister.co.uk/2009/05/06/yahoo_and_pig/"> Yahoo! breeds Pig that talks elephant </a> (theregister.co.uk)</li>
+</ul>
+
+<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">
+[[posterous-content:kEkdiryHtuqdfbmFhxIB]]<span class="zem-script more-related pretty-attribution"></span>
+</div>
+
+		</div>
+	</div>
+    
+	<div class="post">
+
+		<div class="page-header">
+			<h1>
 				<a class="post-link" href="/2009/06/07/goroam-realaunch/">GoRoam Realaunch</a> 			
 				<small class="pull-right">Jun 7, 2009</small>
 	        </h1>
@@ -280,61 +319,13 @@ I've sent some emails and posted on the <a href="http://www.hebdenbridge.co.uk/f
 		</div>
 	</div>
     
-	<div class="post">
-
-		<div class="page-header">
-			<h1>
-				<a class="post-link" href="/2009/03/13/reverse-http-and-the-cloud-/">Reverse HTTP and the Cloud</a> 			
-				<small class="pull-right">Mar 13, 2009</small>
-	        </h1>
-        </div>
-		<div class="content">
-		    <div class="zemanta-img" style="margin: 1em; display: block;">
-<div><dl class="wp-caption alignright" style=""> <dt class="wp-caption-dt">[[posterous-content:GHwyoxsqqljiFuBuxaIF]]</dt> <dd class="wp-caption-dd zemanta-img-attribution" style="font-size: 0.8em;">Image via <a href="http://commons.wikipedia.org/wiki/Image:Network_Time_Protocol_servers_and_clients.svg">Wikipedia</a>
-</dd> </dl></div>
-</div>
-I recently read the <a href="http://tools.ietf.org/html/draft-lentczner-rhttp-00">IETF draft RFC for Reverse HTTP</a>, and it looks like a pretty simple and elegant solution to a number of problems I've seen, especially with the move to <a href="http://en.wikipedia.org/wiki/Cloud_computing" class="zem_slink" title="Cloud computing" rel="wikipedia">cloud computing</a>.
-
-The cloud brings with it some great possibilites but with them some great challenges. Computing on demand is great, if I need more power for a computationally intensive task I can just spin up a few instances for as long as I need them and shut them down when I'm done. Great in an ideal world, but&nbsp;RPC, <a href="http://en.wikipedia.org/wiki/Cluster_manager" class="zem_slink" title="Cluster manager" rel="wikipedia">cluster management</a> and many tasks you'd have to take to run nodes in the cloud can be troublesome.
-
-<a href="http://hadoop.apache.org/" class="zem_slink" title="Hadoop" rel="homepage">Apache Hadoop</a> for example, is a great, free, opensource Map/Reduce framework but it makes assumptions based on a traditional datacenter full of real hardware that is always there view of the world. One of the biggest and most troblesome for the cloud is the fact that a master needs to be aware of the slaves before they try to connect. Implementing access controls in a secure manner for nodes connection is no small task because the whole system, from end to end is based on a custom client/server model written specifically for the task.
-
-I'm not singling Hadoop out here, just using it as an example because it's well known and I'm familiar with it.
-
-Let's take a very simple API,&nbsp;imagine there is no cluster, just one node. A client submits a job to the server, the server processes it and returns the result. Now let's make it a little more complicated, let's make it a <a href="http://en.wikipedia.org/wiki/MapReduce" class="zem_slink" title="MapReduce" rel="wikipedia">Map/Reduce</a> job and add a few nodes to the cluster. As far as the client is concerned the same thing is happening. They're just submitting the jo to the server and it's handling everything else, it breaks the job down into work units, submits them to the nodes in the cluster, all the results are merged together and passed back to the client.
-
-In order to implement this you're going to need at least a basic client/server API between the master and each slave. You could do it using traditional HTTP but you'd run into a scalability issue, imagine you have 10,000 nodes in your cluster. The server is going to need to have 10,000 open HTTP connections and each of them is going to have to poll the server at fixed intervals just to ask "Any work boss?", "Nope, not at the&nbsp;moment. Take 5." Sure you could increase the interval between asking, but 10,000 nodes doing nothing for 30 seconds is almost 3 1/2 days of computing power wasted.
-
-To get around the problem you've got to design your architecture to push jobs to the nodes as soon as they come in. Which means writing your own client/server architecture and your own access control&nbsp;mechanisms&nbsp;amongst&nbsp;other things. If we flipped things around though, and the slave connected to the master over HTTP and then told the master it wanted to be the server we've&nbsp;achieved&nbsp;exactly what we wanted. The master knowing nothing about a slave, can now interact with the slave as if it were a client and it can submit a job as soon as it comes in.
-
-An added benefit, the master/slave API can be the same as the user/master! After all, the master would be doing almost the exact same thing on a slave as the user is doing connecting via HTTP and submitting a job. No more custom client/server and vastly&nbsp;simplified&nbsp;code.
-
-It would be easy to make it even more robust and allow for multiple tiers of masters and sub nodes. Just add a call to the API which asks the server how many slots it has free for jobs. Useful to a user from a management perspective, but also it would allow the master to partition the work into chunks based on the cluster size and based on the number of nodes served by any particular master. This would also be useful in terms of best use of resources given network topology issues - not all nodes are in the same rack or even datacentre.
-
-Add to this the&nbsp;simplicity&nbsp;and power of simply adding something like HTTP AUTH-DIGEST at the server end and you've got ready made access controls. One certificate for clients, one for slaves. Clients can submit jobs, slaves get the work and there is no real need to know of anything about a slave before the first time it connects.
-
-Why this is better than something like <a href="http://en.wikipedia.org/wiki/Extensible_Messaging_and_Presence_Protocol" class="zem_slink" title="Extensible Messaging and Presence Protocol" rel="wikipedia">XMPP</a> I can hear you asking. It's not better. Not for any real reason, and yes it has some cross over in functionality with other technologies that are already out there. In the right situations though, it gives developers the option to simply things, and that's never a bad thing.
-<h6 class="zemanta-related-title" style="font-size: 1em;">Related articles by Zemanta</h6>
-<ul class="zemanta-article-ul">
-	<li class="zemanta-article-ul-li">
-<a href="http://clubtroppo.com.au/2009/01/14/a-new-http-header-that-might-be-useful/">A new HTTP header that might be useful</a> (clubtroppo.com.au)</li>
-	<li class="zemanta-article-ul-li">
-<a href="http://news.cnet.com/8301-13846_3-10128773-62.html?part=rss&amp;subj=news">Cloud platforms of the future: Hadoop and Eucalyptus</a> (news.cnet.com)</li>
-</ul>
-<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">
-[[posterous-content:vhGFzmuAwrDhpDzrdwhz]]<span class="zem-script more-related"></span>
-</div>
-
-		</div>
-	</div>
-    
 
 <!-- Pagination links -->
 <div class="pagination">
   
     <a href="/blog/page5" class="previous">Previous</a>
   
-  <span class="page_number ">Page: 6 of 11</span>
+  <span class="page_number ">Page: 6 of 12</span>
   
     <a href="/blog/page7" class="next">Next</a>
   
@@ -350,6 +341,10 @@ Why this is better than something like <a href="http://en.wikipedia.org/wiki/Ext
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/2014/06/24/new-site-again/">New Site, Again</a>
+      </li>
+    
+      <li class="post">
         <a href="/2014/06/12/installing-java-8-on-os-x-10-dot-10-yosimite/">Installing Java 8 on OS X 10.10 Yosimite</a>
       </li>
     
@@ -363,10 +358,6 @@ Why this is better than something like <a href="http://en.wikipedia.org/wiki/Ext
     
       <li class="post">
         <a href="/2010/12/23/validation-1-0-0-released-/">Validation 1.0.0 Released.</a>
-      </li>
-    
-      <li class="post">
-        <a href="/2010/12/16/oembed/">oEmbed</a>
       </li>
     
   </ul>
@@ -392,5 +383,14 @@ Why this is better than something like <a href="http://en.wikipedia.org/wiki/Ext
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     </body>
-	<!-- post body stuff here -->
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52254722-1', 'andrewmccall.com');
+  ga('send', 'pageview');
+
+</script>
 </html>
