@@ -58,17 +58,8 @@
 	        </h1>
         </div>
 		<div class="content">
-		    <p>I’ve just renewed my domain for another 10 years and figured it was time I put something on the website. It’s been pointing to a github pages 404 page for some time. </p>
+		    <p>I&#8217;ve just renewed my domain for another 10 years and figured it was time I put something on the website. It&#8217;s been pointing to a github pages 404 page for some time. </p>
 
-<p>I’ve rebuilt the whole thing, it should for the most part work, though older posts might have funny markup and the formatting may be a bit different. I’ll have a look at fixing them over time I guess. </p>
-
-<p>I’ve gone with Octopress again, 3.0 this time. I’ve looked more into what Octopress and Jykell do and I’m not sure that I get much <em>more</em> with octopress, so I may one day soon go with a pure Jykell site. </p>
-
-<p>The design, as it is, isn’t much but a work in progress for now - hopefully over time I’ll be able to get that working a bit better. </p>
-
-<p>Also once I’ve figured out what I’ve done, what I want to do and all that I’ll do my best to document some of it here. </p>
-
-<p>For now, that’s about it. </p>
 
 		</div>
 	</div>
@@ -82,67 +73,7 @@
 	        </h1>
         </div>
 		<div class="content">
-		    <p>So I’ve been running OS X 10.10 for a while and tonight decided I’d try to install the Java 8 JDK (JDK8u05)  and have a play for a project I’ve been messing around with. Unfortunately I got this: </p>
-
-<p><img src="/images/post_images/java8u05-osx-10.10-install-fail.png" alt="Fail" /></p>
-
-<p>A quick google search and the best I could come up with was to install the latest beta of OpenJDK, which apparently fixes the problem. I didn’t really want a beta version of the JDK so I had a dig around in the pkg to see if I could force the installations. </p>
-
-<p>The checks for versions are just in a text file within the package, so it’s not hard to remove the check and force the installation.</p>
-
-<p>First expand the pkg into a directory so you can get at the contents: </p>
-
-<p><code>$ pkgutil --expand JDK\ 8\ Update\ 05.pkg JDK8</code></p>
-
-<p>This creates a new folder called JDK8, in there you’ll find a file called <code>Distribution</code>. Open it in your favourite text editor. At about line 36 you’ll find the following code: </p>
-
-<figure class="code-highlight-figure"><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="36" class="code-highlight-row numbered"><div class="code-highlight-line">// Check is current MAC OS X version less than supportedVersion
-</div></div><div data-line="37" class="code-highlight-row numbered"><div class="code-highlight-line"><span class="kd">function</span> <span class="nx">checkForMacOSX</span><span class="p">(</span><span class="nx">supportedVersion</span><span class="p">)</span> <span class="p">{</span>
-</div></div><div data-line="38" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="k">try</span> <span class="p">{</span>
-</div></div><div data-line="39" class="code-highlight-row numbered"><div class="code-highlight-line">        <span class="c1">// Get current ProductVersion</span>
-</div></div><div data-line="40" class="code-highlight-row numbered"><div class="code-highlight-line">        <span class="kd">var</span> <span class="nx">tProductVersion</span> <span class="o">=</span> <span class="nx">system</span><span class="p">.</span><span class="nx">version</span><span class="p">.</span><span class="nx">ProductVersion</span><span class="p">;</span>
-</div></div><div data-line="41" class="code-highlight-row numbered"><div class="code-highlight-line">        <span class="c1">// Get current ProductName</span>
-</div></div><div data-line="42" class="code-highlight-row numbered"><div class="code-highlight-line">        <span class="kd">var</span> <span class="nx">tProductName</span> <span class="o">=</span> <span class="nx">system</span><span class="p">.</span><span class="nx">version</span><span class="p">.</span><span class="nx">ProductName</span><span class="p">;</span>
-</div></div><div data-line="43" class="code-highlight-row numbered"><div class="code-highlight-line"> </div></div><div data-line="44" class="code-highlight-row numbered"><div class="code-highlight-line">        <span class="c1">// Check if current version is less than supportedVersion, if yes Set the result type to Fatal, and give correct message to user</span>
-</div></div><div data-line="45" class="code-highlight-row numbered"><div class="code-highlight-line"> </div></div><div data-line="46" class="code-highlight-row numbered"><div class="code-highlight-line">        <span class="k">if</span><span class="p">(</span><span class="nx">tProductVersion</span> <span class="o">&amp;</span><span class="nx">lt</span><span class="p">;</span> <span class="nx">supportedVersion</span><span class="p">)</span>
-</div></div><div data-line="47" class="code-highlight-row numbered"><div class="code-highlight-line">        <span class="p">{</span>
-</div></div><div data-line="48" class="code-highlight-row numbered"><div class="code-highlight-line">            <span class="c1">// Set result values</span>
-</div></div><div data-line="49" class="code-highlight-row numbered"><div class="code-highlight-line">            <span class="kd">var</span> <span class="nx">osCheckTitle</span> <span class="o">=</span> <span class="nx">system</span><span class="p">.</span><span class="nx">localizedStringWithFormat</span><span class="p">(</span><span class="s1">&#39;OSCHECK_TITLE&#39;</span><span class="p">);</span>
-</div></div><div data-line="50" class="code-highlight-row numbered"><div class="code-highlight-line">            <span class="nx">osCheckTitle</span> <span class="o">=</span> <span class="nx">osCheckTitle</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s2">&quot;%1$@&quot;</span><span class="p">,</span> <span class="nx">tProductName</span><span class="p">);</span>
-</div></div><div data-line="51" class="code-highlight-row numbered"><div class="code-highlight-line">            <span class="nx">osCheckTitle</span> <span class="o">=</span> <span class="nx">osCheckTitle</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s2">&quot;%2$@&quot;</span><span class="p">,</span> <span class="nx">supportedVersion</span><span class="p">);</span>
-</div></div><div data-line="52" class="code-highlight-row numbered"><div class="code-highlight-line"> </div></div><div data-line="53" class="code-highlight-row numbered"><div class="code-highlight-line">            <span class="kd">var</span> <span class="nx">osCheckMessage</span> <span class="o">=</span> <span class="nx">system</span><span class="p">.</span><span class="nx">localizedStringWithFormat</span><span class="p">(</span><span class="s1">&#39;OSCHECK_MESSAGE&#39;</span><span class="p">);</span>
-</div></div><div data-line="54" class="code-highlight-row numbered"><div class="code-highlight-line">            <span class="nx">osCheckMessage</span> <span class="o">=</span> <span class="nx">osCheckMessage</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s2">&quot;%1$@&quot;</span><span class="p">,</span> <span class="nx">tProductName</span><span class="p">);</span>
-</div></div><div data-line="55" class="code-highlight-row numbered"><div class="code-highlight-line">            <span class="nx">osCheckMessage</span> <span class="o">=</span> <span class="nx">osCheckMessage</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s2">&quot;%2$@&quot;</span><span class="p">,</span> <span class="nx">tProductVersion</span><span class="p">);</span>
-</div></div><div data-line="56" class="code-highlight-row numbered"><div class="code-highlight-line">            <span class="nx">osCheckMessage</span> <span class="o">=</span> <span class="nx">osCheckMessage</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s2">&quot;%3$@&quot;</span><span class="p">,</span> <span class="nx">supportedVersion</span><span class="p">);</span>
-</div></div><div data-line="57" class="code-highlight-row numbered"><div class="code-highlight-line"> </div></div><div data-line="58" class="code-highlight-row numbered"><div class="code-highlight-line">            <span class="nx">my</span><span class="p">.</span><span class="nx">result</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">osCheckTitle</span><span class="p">;</span>
-</div></div><div data-line="59" class="code-highlight-row numbered"><div class="code-highlight-line">            <span class="nx">my</span><span class="p">.</span><span class="nx">result</span><span class="p">.</span><span class="nx">message</span> <span class="o">=</span> <span class="nx">osCheckMessage</span><span class="p">;</span>
-</div></div><div data-line="60" class="code-highlight-row numbered"><div class="code-highlight-line">            <span class="nx">my</span><span class="p">.</span><span class="nx">result</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s1">&#39;Fatal&#39;</span><span class="p">;</span>
-</div></div><div data-line="61" class="code-highlight-row numbered"><div class="code-highlight-line">        <span class="p">}</span>
-</div></div><div data-line="62" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-</div></div><div data-line="63" class="code-highlight-row numbered"><div class="code-highlight-line">        <span class="c1">// an exception just occurred</span>
-</div></div><div data-line="64" class="code-highlight-row numbered"><div class="code-highlight-line">        <span class="k">return</span> <span class="p">(</span><span class="kc">false</span><span class="p">);</span>
-</div></div><div data-line="65" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="p">}</span>
-</div></div><div data-line="66" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="c1">// return true</span>
-</div></div><div data-line="67" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="k">return</span> <span class="p">(</span><span class="kc">true</span><span class="p">);</span>
-</div></div><div data-line="68" class="code-highlight-row numbered"><div class="code-highlight-line"><span class="p">}</span></div></div></pre></div></figure>
-
-<p>The error happens on line 45 above, the version check is comparing strings and failing because 10.10 is less than 10.7 lexicographically. If I was fixing the pkg I would rewrite the function to properly check, but I’m not and I just want the JDK to install. So I took everything out except the final <code>return(true);</code> so that the whole method looks like this: </p>
-
-<figure class="code-highlight-figure"><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="36" class="code-highlight-row numbered"><div class="code-highlight-line">// Check is current MAC OS X version less than supportedVersion
-</div></div><div data-line="37" class="code-highlight-row numbered"><div class="code-highlight-line"><span class="kd">function</span> <span class="nx">checkForMacOSX</span><span class="p">(</span><span class="nx">supportedVersion</span><span class="p">)</span> <span class="p">{</span>
-</div></div><div data-line="38" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="c1">// return true</span>
-</div></div><div data-line="39" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="k">return</span> <span class="p">(</span><span class="kc">true</span><span class="p">);</span>
-</div></div><div data-line="40" class="code-highlight-row numbered"><div class="code-highlight-line"><span class="p">}</span></div></div></pre></div></figure>
-
-<p>Finally package it back up with the <code>pkgutils</code> command and the check won’t fail and Java 8 will install.</p>
-
-<p><code>$ pkgutil --flatten JDK8 JDK8.pkg</code></p>
-
-<p>Double click the new pkg and the installer will run without the error message.</p>
-
-<p><img src="/images/post_images/java8u05-osx-10.10-install-success.png" alt="Success" /></p>
-
-<p>All done, Java 8 JDK installed!</p>
+		    <p>So I&#8217;ve been running OS X 10.10 for a while and tonight decided I&#8217;d try to install the Java 8 JDK (JDK8u05)  and have a play for a project I&#8217;ve been messing around with. Unfortunately I got this: </p>
 
 
 		</div>
@@ -159,6 +90,7 @@
 		<div class="content">
 		    <p>Does this work?</p>
 
+
 		</div>
 	</div>
     
@@ -172,6 +104,8 @@
         </div>
 		<div class="content">
 		    <div>Sainsbury's online grocery site was broken last night; it kept giving me 404 errors when I tried to pay for my order. There was one slot left that would get here before I had to pick the kids up, I'd booked it and wanted to keep it,&nbsp;&nbsp;so I emailed their customer support. I was hoping maybe they'd tell me when it would be fixed, reserve the slot for me or something.&nbsp;</div><p /><div>I kept checking my email and trying their site and eventually later in the evening it worked, so I forgot about the whole thing until this morning when I got this:&nbsp;<br /><p /><blockquote type="cite"><div style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;"><span style=""><b>From: </b></span><span style="font-family: Helvetica; font-size: medium;">"Sainsbury's Online " &lt;<a href="mailto:sainsburys@mailuk.custhelp.com">sainsburys@mailuk.custhelp.com</a>&gt;<br /></span></div><div style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;"><span style=""><b>Subject: </b></span><span style="font-family: Helvetica; font-size: medium;"><b>Shopping online [Reference: 120110-00XXXX]</b><br /></span></div><div style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;"><span style=""><b>Date: </b></span><span style="font-family: Helvetica; font-size: medium;">11 January 2012 09:54:42 GMT<br /></span></div><div style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;"><span style=""><b>To: </b></span><span style="font-family: Helvetica; font-size: medium;"><a href="mailto:andrew@andrewmccall.com">andrew@andrewmccall.com</a><br /></span></div><div style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;"><span style=""><b>Reply-To: </b></span><span style="font-family: Helvetica; font-size: medium;">"Sainsbury's Online " &lt;<a href="mailto:sainsburys@mailuk.custhelp.com">sainsburys@mailuk.custhelp.com</a>&gt;<br /></span></div><br /><div style=""><div><p /><table border="0" style="" width="100%"><tr><td class="text" style="padding-left: 4px; padding-right: 4px;" colspan="2">Dear Mr McCall<p />Thank you for your email about our website. I'm sorry you've been having problems on our website due to an error 404 message. I understand this must be frustrating.<p />I've spoke to our Customer Support Team and they have told me that Microsoft have been experiencing issues accessing the Sainsbury's servers that our website is based upon. They suggest that you search Google for "Error 404 Fix" and a Microsoft Tool will be available for download. Once downloaded this tool will fix the error and you'll be able to use our website again.<p />If you need any further help please contact us on 0800 328 1700. One of my colleagues will be happy to assist you.<p />We appreciate you taking the time to contact us and hope this issue is resolved for you soon.<p />Kind regards<p />&lt;Name Removed&gt;<br />Customer Manager<br />Sainsbury's Online<br /><a href="mailto:onlineservice@sainsburys.co.uk">onlineservice@sainsburys.co.uk</a></td></tr></table></div></div></blockquote></div><br /><div>I don't know what I can add to that.&nbsp;</div>
+
+
 
 		</div>
 	</div>
@@ -187,6 +121,8 @@
 		<div class="content">
 		    I just pushed my little JSR-303 validation lib out as a 1.0.0 release. The JSR-303 is not 1.0 so it&nbsp;seemed like a good idea.&nbsp;<p />The biggest changes are probably the ones needed to support those. If you were using the&nbsp;library you won't notice any difference, the changes are all internal and the actual annotations&nbsp;haven't changed.&nbsp;<p />I've also removed the springframework package. JSR-303 is now supported in spring 3 and&nbsp;their support is better.<p />Finally I've added some static methods to&nbsp;AbstractAnnotationTest, assertValid and&nbsp;assertViolation; I've found them useful testing annotated classes and figure someone else may&nbsp;too.&nbsp;<p />Check it out and let me know what you think.&nbsp;<p /><a href="http://github.com/andrewmccall/validation">http://github.com/andrewmccall/validation</a>
 
+
+
 		</div>
 	</div>
     
@@ -200,6 +136,8 @@
         </div>
 		<div class="content">
 		    I came across&nbsp;<a href="http://www.oembed.com/">oEmbed</a>&nbsp;the other day, completely by accident. <p />I've been working on a couple of projects in my free time and in a few of them I really wanted to be able to embed better information about a URL, if it existed. I'd been working up my own rough JSON schema that was in many ways similar to&nbsp;<a href="http://www.oembed.com/">oEmbed</a>.<p /><div>Then I came across a tweet that mentioned&nbsp;<a href="http://embed.ly">embed.ly</a>&nbsp;and&nbsp;<a href="http://www.oembed.com/">oEmbed</a>&nbsp;and&nbsp;<a href="http://embed.ly">embed.ly</a>&nbsp;are the perfect solution. Instead of rolling my own service I'm integrating theirs.<br /></div><p /><div>At it's most basic it's a standard way of getting more than just a link you can embed in your site and provides a standard interface for doing it across the web.&nbsp;</div><p /><div>If you're looking to embed things in your website, take a look. There are plugins available for wordpress and others as well as a jQuery plugin you can use pretty much anywhere.&nbsp;</div>
+
+
 
 		</div>
 	</div>
@@ -229,6 +167,8 @@
 <p />
 <div>Which is better? I have no idea, both are widely used and it really depends on your environment. I'd love to hear what others think though.</div>
 
+
+
 		</div>
 	</div>
     
@@ -242,6 +182,8 @@
         </div>
 		<div class="content">
 		    I don't think Chrome OS is going to be a success. <p /> It's perfect for Google, shows that all you really need is a browser and does it in a compelling way. But it's not going to be a success and I'll cast my lot in with those that predict that it'll get rolled into Android. <br />The reason I don't see it working is that Google won't use it. Google is a company of engineers, developers and hackers - what do they want with a computer they can't use to do that? <br />The Chrome OS team is designing and building a product for someone else. Taking things away is a great thing, look at Apple, but if you take so much away that it becomes a product for someone else and you're no longer eating your own dog food. That doesn't usually work out well. <p /> I may be wrong, maybe the team is great and maybe they can overcome the obstacles, but I'll put my money on the best that will come of Chrome OS is that it's evolved into another product or as many are predicting, rolled into Android.
+
+
 
 		</div>
 	</div>
@@ -278,6 +220,8 @@
 <div><strong>UPDATE: <em>I've added a new post with some more thoughts, clarifications and corrections <a href="http://andrewmccall.com/even-more-secure-passwords">here</a></em></strong></div>
 </div>
 
+
+
 		</div>
 	</div>
     
@@ -291,6 +235,8 @@
         </div>
 		<div class="content">
 		    I've been using a self-signed client certificate on my development server.&nbsp;Today working on my OAuth lib I started getting problems connecting to twitter, failed SSH handshakes. With a message something like:&nbsp;<p /><div><span style="font-family: monospace;">Connection has been shutdown: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target</span></div><p /><div>It's because in my maven command I'm using a custom truststore which doesn't have any of the default root certificates in it, just mine. Running this command imported the default roots into the truststore I've been using with maven:&nbsp;</div><p /><div><div>[code] keytool -importkeystore -srckeystore $JAVA_HOME/lib/security/cacerts -destkeystore ./trust.jks [/code]</div></div><p /><div>I got a long list of &nbsp;<span style="font-family: monospace;">Entry for alias keychainrootca-xx successfully imported </span>and now everything works as it should.&nbsp;</div><p /><div>Hope it helps.&nbsp;</div>
+
+
 
 		</div>
 	</div>

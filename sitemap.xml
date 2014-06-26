@@ -3,13 +3,13 @@
 		<!-- Site/Blog Indexes -->
 		<url>
 			<loc>http://andrewmccall.com</loc>
-			<lastmod>2014-06-25T16:00:27+01:00</lastmod>
+			<lastmod>2014-06-26T17:47:27+01:00</lastmod>
 			<changefreq>daily</changefreq>
 			<priority>1.0</priority>
 		</url>
 		<url>
 			<loc>http://andrewmccall.com/blog/</loc>
-			<lastmod>2014-06-25T16:00:27+01:00</lastmod>
+			<lastmod>2014-06-26T17:47:27+01:00</lastmod>
 			<changefreq>daily</changefreq>
 			<priority>1.0</priority>
 		</url>

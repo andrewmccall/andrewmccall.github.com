@@ -64,35 +64,6 @@
 </div>
 I recently read the <a href="http://tools.ietf.org/html/draft-lentczner-rhttp-00">IETF draft RFC for Reverse HTTP</a>, and it looks like a pretty simple and elegant solution to a number of problems I've seen, especially with the move to <a href="http://en.wikipedia.org/wiki/Cloud_computing" class="zem_slink" title="Cloud computing" rel="wikipedia">cloud computing</a>.
 
-The cloud brings with it some great possibilites but with them some great challenges. Computing on demand is great, if I need more power for a computationally intensive task I can just spin up a few instances for as long as I need them and shut them down when I'm done. Great in an ideal world, but&nbsp;RPC, <a href="http://en.wikipedia.org/wiki/Cluster_manager" class="zem_slink" title="Cluster manager" rel="wikipedia">cluster management</a> and many tasks you'd have to take to run nodes in the cloud can be troublesome.
-
-<a href="http://hadoop.apache.org/" class="zem_slink" title="Hadoop" rel="homepage">Apache Hadoop</a> for example, is a great, free, opensource Map/Reduce framework but it makes assumptions based on a traditional datacenter full of real hardware that is always there view of the world. One of the biggest and most troblesome for the cloud is the fact that a master needs to be aware of the slaves before they try to connect. Implementing access controls in a secure manner for nodes connection is no small task because the whole system, from end to end is based on a custom client/server model written specifically for the task.
-
-I'm not singling Hadoop out here, just using it as an example because it's well known and I'm familiar with it.
-
-Let's take a very simple API,&nbsp;imagine there is no cluster, just one node. A client submits a job to the server, the server processes it and returns the result. Now let's make it a little more complicated, let's make it a <a href="http://en.wikipedia.org/wiki/MapReduce" class="zem_slink" title="MapReduce" rel="wikipedia">Map/Reduce</a> job and add a few nodes to the cluster. As far as the client is concerned the same thing is happening. They're just submitting the jo to the server and it's handling everything else, it breaks the job down into work units, submits them to the nodes in the cluster, all the results are merged together and passed back to the client.
-
-In order to implement this you're going to need at least a basic client/server API between the master and each slave. You could do it using traditional HTTP but you'd run into a scalability issue, imagine you have 10,000 nodes in your cluster. The server is going to need to have 10,000 open HTTP connections and each of them is going to have to poll the server at fixed intervals just to ask "Any work boss?", "Nope, not at the&nbsp;moment. Take 5." Sure you could increase the interval between asking, but 10,000 nodes doing nothing for 30 seconds is almost 3 1/2 days of computing power wasted.
-
-To get around the problem you've got to design your architecture to push jobs to the nodes as soon as they come in. Which means writing your own client/server architecture and your own access control&nbsp;mechanisms&nbsp;amongst&nbsp;other things. If we flipped things around though, and the slave connected to the master over HTTP and then told the master it wanted to be the server we've&nbsp;achieved&nbsp;exactly what we wanted. The master knowing nothing about a slave, can now interact with the slave as if it were a client and it can submit a job as soon as it comes in.
-
-An added benefit, the master/slave API can be the same as the user/master! After all, the master would be doing almost the exact same thing on a slave as the user is doing connecting via HTTP and submitting a job. No more custom client/server and vastly&nbsp;simplified&nbsp;code.
-
-It would be easy to make it even more robust and allow for multiple tiers of masters and sub nodes. Just add a call to the API which asks the server how many slots it has free for jobs. Useful to a user from a management perspective, but also it would allow the master to partition the work into chunks based on the cluster size and based on the number of nodes served by any particular master. This would also be useful in terms of best use of resources given network topology issues - not all nodes are in the same rack or even datacentre.
-
-Add to this the&nbsp;simplicity&nbsp;and power of simply adding something like HTTP AUTH-DIGEST at the server end and you've got ready made access controls. One certificate for clients, one for slaves. Clients can submit jobs, slaves get the work and there is no real need to know of anything about a slave before the first time it connects.
-
-Why this is better than something like <a href="http://en.wikipedia.org/wiki/Extensible_Messaging_and_Presence_Protocol" class="zem_slink" title="Extensible Messaging and Presence Protocol" rel="wikipedia">XMPP</a> I can hear you asking. It's not better. Not for any real reason, and yes it has some cross over in functionality with other technologies that are already out there. In the right situations though, it gives developers the option to simply things, and that's never a bad thing.
-<h6 class="zemanta-related-title" style="font-size: 1em;">Related articles by Zemanta</h6>
-<ul class="zemanta-article-ul">
-	<li class="zemanta-article-ul-li">
-<a href="http://clubtroppo.com.au/2009/01/14/a-new-http-header-that-might-be-useful/">A new HTTP header that might be useful</a> (clubtroppo.com.au)</li>
-	<li class="zemanta-article-ul-li">
-<a href="http://news.cnet.com/8301-13846_3-10128773-62.html?part=rss&amp;subj=news">Cloud platforms of the future: Hadoop and Eucalyptus</a> (news.cnet.com)</li>
-</ul>
-<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">
-[[posterous-content:vhGFzmuAwrDhpDzrdwhz]]<span class="zem-script more-related"></span>
-</div>
 
 		</div>
 	</div>
@@ -110,33 +81,6 @@ Why this is better than something like <a href="http://en.wikipedia.org/wiki/Ext
 <h2><strong>Virgin Media</strong></h2>
 Last year when we moved home we moved out of a cable area, generally being happy with Virgin Media though and not wanting to pay the early termination fee we opted to go with their ADSL service. Of course these things never go smoothly and we had to have the ADSL line already here terminated, a new account created when that&nbsp;happened&nbsp;and it was all going to take a few weeks.
 
-So I cancelled my account, they told me I'd have to pay the termination fee, but that it would be refunded when our new account was opened. A few weeks later, more or less on time the ADSL line was connected and we were online. About a week later I get a nasty letter from the Virgin Medial collections department warning me to pay what I owe.
-
-I rang them - not a free phone number might I add and after some time got to the bottom of it. They dropped the termination fee from their demand but I did have to pay a month that was still outstanding on the account. I paid that on the card, on the spot.
-
-<strong>fail</strong> - Virgin really should have some sense and the ability to link my new account, old account and know that I'm just moving home and shouldn't need to pay the early termination fee. The fact that I can cancel within the connection period just isn't good enough, I shouldn't be penalised for&nbsp;shortcomings&nbsp;in your systems. Also, what is up with needing me to pay the last month by card? What happened to the direct debit straight from my bank account which they used every other month? And all that's before we get into the fact that I'm an existing customer and they're sending me nasty letters. If the connection hadn't been setup already we probably would have gone elsewhere, just because of that- having said that, they're a decent ISP most of the time.
-<h2><strong>3</strong></h2>
-Last year some time I signed up with 3 for a USB data card, when I was in the store I offered a &pound;15/month skype phone contract, which would half the cost of the data card. It seemed like a good deal and I though at the very least the skype phone might be useful (it wasn't) so I agreed. Some time later, after the 6 month contract was over I called to cancel the phone. I was on the phone for at least 30 minutes and must have told the operator on the other end at least a dozen times that I just want to cancel the contract. I said I was happy with my existing options for a backup phone and that even at &pound;5/month with a brand new phone, it just wasn't worth it for me to continue; I said it again, and again. Eventually he put me on hold for 5 minutes &nbsp;and came back an announced my account was cancelled.
-
-<strong>fail </strong>- The problem with someone hard selling to me when I'm trying t0 cancel the account is that I can't just put the phone down, if I do I won't get the account cancelled. No means no, after saying no 5 or 6 times I wasn't likely to change my mind. If he'd looked into the account he would have seen that I hadn't even switched the phone on in months - if he can't see that, he should be able to.
-<h2><strong>Apple</strong></h2>
-Last week,&nbsp;completely&nbsp;different. My poor used and abused macbook needed some fixing. It's over 2 1/2 years old and to be fair has travelled thousands of miles a bit of wear and tear is to be expected. The top case was a bit cracked, a somewhat common problem and the wire at the magsafe connector was a bir frayed . So I booked an appointment at the Genius Bar in the Trafford Centre this morning. Got in the car and drove an hour there. Since the power supply was out of warenty I could get it replaced under a repair and it would cost less than the retail part. Then he took a look, said that they'd replace the top case for free and book the power supply in under the same ticket so I'd get that free too. They said to drop back in an hour and it should be finished. So I left the machine with them and half an hour later they called to tell me it was fixed. 30 minutes, and my mac looks as good as new!
-
-<strong>impressed</strong> - I honestly couldn't be more impressed. I booked myself in online in a few minutes and since I had an appointment I was served as soon as I got in the store. It took the Genius behind the bar a few minutes to asses the problems and book the machine in. 30 minutes later they had it fixed.
-<h6 class="zemanta-related-title" style="font-size: 1em;">Related articles by Zemanta</h6>
-<ul class="zemanta-article-ul">
-	<li class="zemanta-article-ul-li">
-<a href="http://www.vnunet.com/vnunet/news/2235858/o2-tops-broadband-list">O2 tops broadband satisfaction lists</a> (vnunet.com)</li>
-	<li class="zemanta-article-ul-li">
-<a href="http://computerknowledge1.blogspot.com/2009/03/bitter-experience-with-yatracom.html">Bitter experience with yatra.com</a> (computerknowledge1.blogspot.com)</li>
-	<li class="zemanta-article-ul-li">
-<a href="http://www.conversationagent.com/2009/03/top-10-reasons-why-your-customers-are-being-difficult.html">Top 10 Reasons Why Your Customers are Being Difficult</a> (conversationagent.com)</li>
-	<li class="zemanta-article-ul-li">
-<a href="http://r.zemanta.com/?u=http%3A//www.telegraph.co.uk/finance/personalfinance/consumertips/3832121/Broadband-25pc-of-users-face-extra-charges.html&amp;a=2314217&amp;rid=558c2bf0-dda4-43e9-af1a-c07c96a82784&amp;e=57f4cc403f4a136772d66bc799fcf542">Broadband: 25pc of users face extra charges</a> (telegraph.co.uk)</li>
-</ul>
-<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">
-[[posterous-content:FerIcwomubbcHADnmcsc]]<span class="zem-script more-related"></span>
-</div>
 
 		</div>
 	</div>
@@ -152,29 +96,6 @@ Last week,&nbsp;completely&nbsp;different. My poor used and abused macbook neede
 		<div class="content">
 		    Sorry if you came here wondering if you should <a href="http://en.wikipedia.org/wiki/Nofollow" class="zem_slink" title="Nofollow" rel="wikipedia">nofollow</a> comments or something else on your site or blog, but I'm looking at it more from a crawler's perspective. Though if that is why you're here you&nbsp;have something to add.
 
-Basically the nofollow either in <a href="http://en.wikipedia.org/wiki/Meta_element" class="zem_slink" title="Meta element" rel="wikipedia">meta tags</a> or as a rel attribute of an a tag is a hint to a crawler telling it, in it's most basic terms, not to follow the link.&nbsp;But what does that really mean to me, if I run the crawler? More importantly, how is it actually being used?&nbsp;
-
-On blogs, personal websites and even wikipedia the nofollow policy is pretty clear and transparently aimed at preventing spam - and it works.
-
-But how are they applied? Well,&nbsp;<a href="http://www.searchenginejournal.com/how-google-yahoo-askcom-treat-the-no-follow-link-attribute/4801/">not even the big search engines treat them consistently</a>: Google completely blanks them, Yahoo indexes them but adds no juice, and Ask doesn't even support them [Granted this article may be somewhat out of date].&nbsp;
-
-One interesting thing that came out of the answers though, was the one from Google:&nbsp;
-<blockquote class="posterous_medium_quote">On a related note, though, and echoing Matt&rsquo;s earlier sentiments&hellip; we hope and expect that more and more sites &mdash; including Wikipedia &mdash; will adopt a less-absolute approach to no-follow&hellip; expiring no-follows, not applying no-follows to trusted contributors, and so on.</blockquote>
-So within even Google, with the&nbsp;strictest&nbsp;application of a nofollow policy, there is certainly a strong argument and use case for treating this as a hint as opposed to a policy. I'm not even sure why Google needs wikipedia to make a policy change, everything they hope for could be implemented at their end.&nbsp;
-
-A link on wikipeida, if it's been there long enough, probably deserves some juice. And that same logic applies to any site, even your blog - nofollow is a hint to a search engine. It's there to deter spam, but if a link sticks around then by not removing it, to a point, the site is endorsing it.&nbsp;
-
-For our application we're working from a slightly different angle - there aren't a lot of <a href="http://en.wikipedia.org/wiki/Geotagging" class="zem_slink" title="Geotagging" rel="wikipedia">geotagged</a>&nbsp;urls and there isn't much span so at least&nbsp;initially&nbsp;we want as many as we can get. So we may not index or pass juice on to the site, at least initially, but we do want to follow the link.&nbsp;
-<h6 class="zemanta-related-title" style="font-size: 1em;">Related articles by Zemanta</h6>
-<ul class="zemanta-article-ul">
-	<li class="zemanta-article-ul-li">
-<a href="http://www.list-your-blog.com/qa-what-is-the-nofollow-link-attribute/">Q&amp;A;: What is the Nofollow Link Attribute?</a> (list-your-blog.com)</li>
-	<li class="zemanta-article-ul-li">
-<a href="http://www.takeoverpageone.com/blog/seo/what-is-nofollow-used-for">What Is NoFollow Used For?</a> (takeoverpageone.com)</li>
-	<li class="zemanta-article-ul-li">
-<a href="http://www.onthenetdollars.com/wordpress/does-having-lots-of-dofollow-links-mean-your-page-rank-could-be-penalized/">Does Having Lots Of DoFollow Links Mean Your Page Rank Could Be Penalized?</a> (onthenetdollars.com)</li>
-</ul>
-<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">[[posterous-content:lowpeydxgtbFzgsmyfhv]]</div>
 
 		</div>
 	</div>
@@ -190,11 +111,6 @@ For our application we're working from a slightly different angle - there aren't
 		<div class="content">
 		    Increasing prices, obviously, can help your bottom line - as long as you don't&nbsp;alienate&nbsp;you users in the process by increasing them too much. But what if you're running a fremium model, free&nbsp;accounts&nbsp;for users hoping that the features of a paid for account are inticing enough that they'll give you money, and it becomes too expensive to service them. Can you get away with moving to a paid only model&gt;
 
-The move from 0 to even 0.01 is an infinite jump&nbsp;especially&nbsp;in the eyes of your users, if for no other reason than you're asking them to do something else; put in credit card details. So I think&nbsp;It's going to be interesting to watch Zoto who are <a href="http://mashable.com/2007/02/28/zoto/#">moving from a fremium model to one with only paid accounts</a> [via mashable]
-
-I think they'll probably suffer short term, certainly in visitor numbers, but that does it really matter long term as long as they're&nbsp;acquiring&nbsp;paying customers? Even if the number they're&nbsp;acquiring&nbsp;on a monthly basis drops off those users aren't paying the costs of the freeloaders, so Zoto may actually be better off with lower levels.&nbsp;
-
-Anyway, if I remember I'll probably check back and see how things go in a few months.
 
 		</div>
 	</div>
@@ -210,24 +126,6 @@ Anyway, if I remember I'll probably check back and see how things go in a few mo
 		<div class="content">
 		    A question most web companies in the US probably don't have to worry aboutbut one almost all British ones must is, do we write our pages in British English or American English?
 
-Building applications I've had more than a few conversations with <a href="http://twitter.com/Simon_Chapman" title="Simon on twitter">@Simon_Chapman</a>&nbsp;about it - we want to appeal to an international audience so the framework for internationalisation is already in place. Java web applications make it pretty easy anyway, we just take the time to build the application, even if we're starting with a single language version, as a properly internationalised application.&nbsp;
-
-Jakob Nielsen talks about it <a href="http://www.useit.com/alertbox/american-british-english.html">here</a> as well and I agree with most of what he says, which basically comes down to the fact that it's all about the users. If you're targeting a British audience than you should write for them, if you're targeting an American audience then you should write for them. If you're targeting an international audience you should translate - it really isn't that difficult.&nbsp;
-
-<strong>
-</strong>
-<h6 class="zemanta-related-title" style="font-size: 1em;">Related articles by Zemanta</h6>
-<ul class="zemanta-article-ul">
-	<li class="zemanta-article-ul-li">
-<a href="http://cutewriting.blogspot.com/2008/12/british-american-spelling-variation.html">Differences Between British and American Spelling: Usage Style Guidelines</a> (cutewriting.blogspot.com)</li>
-	<li class="zemanta-article-ul-li">
-<a href="http://blog.nelso.com/2008/10/separated-by-common-language.html">Separated by a common language</a> (nelso.com)</li>
-	<li class="zemanta-article-ul-li">
-<a href="http://cutewriting.blogspot.com/2008/12/british-english-american-differences_07.html">Differences Between British English and American English Words</a> (cutewriting.blogspot.com)</li>
-	<li class="zemanta-article-ul-li">
-<a href="http://www.wordsellinc.com/blog/books/yes-man/">UK Readers, Please Help Me Understand</a> (wordsellinc.com)</li>
-</ul>
-<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">[[posterous-content:JGyrgvvckobatorotuhb]]</div>
 
 		</div>
 	</div>
@@ -245,16 +143,6 @@ Jakob Nielsen talks about it <a href="http://www.useit.com/alertbox/american-bri
 <blockquote class="posterous_medium_quote">I'm not sure they need to go so far as to ban users that do it. As twitter grows communities are going to form around the speakers that have the most to offer. If the people mass following then unfollowing have nothing to say eventually their followers are going to move on.</blockquote>
 The problem I have with wanting Twitter to do something about this is that it seems to me to be an argument by people who feel like they've earned their following against people they feel haven't. An argument you could interpret at elitst and at it's most base level it's just users upset that they're now having to deal with their&nbsp;
 
-Now I'm not suggesting for a second that Andrew Hyde or anyone else is churlish, childish or elitist. I wouldn't follow him either on Twitter or his blog if I though so.&nbsp;I think it's far more likely that most users are just seeing an increase in people following them as Twitter becomes more and more mainstream. They're also seeing a lot of followers who are plainly gaming the system to inflate their&nbsp;perceived&nbsp;influence; dealing with that on a daily basis is&nbsp;frustrating ,&nbsp;I'm sure.
-
-In my comment I tried to make the point that all these users were gaining a thin perception that at a glance they matter. But that&nbsp;I don't think it makes any real difference and I don't think it's worth wasting time lobbying for change because these users really aren't building a following at all. Despite what the numbers may indicate.
-<blockquote class="posterous_medium_quote">I don't see an audience on twitter as being any different from an audience anywhere. Any idiot can get one, just walk into a crowded room and start shouting. Keeping them is what matters. An audience that isn't engaged or doesn't care, doesn't matter.</blockquote>
-I could show up in the houses of&nbsp;parliament&nbsp;and shout my message out at MPs, get on the news in the process and have it heard by hundreds, even thousands of people of influence - but they'd label my message the ravings of a lunatic and even if they were amused would quickly move on with their lives.&nbsp;
-<blockquote>Nothing twitter can do will stop the type of people that only care about the number of people listening to them from caring about that. What might be better is if tools like <a href="http://twitter.grader.com">http://twitter.grader.com</a> gave weight to the longevity of your engagement with a follower and took churn rates into account. These are in my mind more important numbers for the people that want to measure things to pay attention to. In my mind someone who is steadily gaining and keeping followers at the rate of one a day has a far more compelling message than someone getting a thousand and losing half within a week.</blockquote>
-The solution is to focus on numbers that matter, if you're going to focus on them at all, and the key to any social network or service is to care about how engaged your are with that network. High&nbsp;proportionate&nbsp;churn rates are a pretty clear indication that users are not engaged and if they're not engaged, they're not listening.
-
-I'm not part of the twitter elite, my opinion doesn't really matter. If someone follows me I tend to follow them back, but since I'm not a person of any great influence I probably don't get quite the level of requests some do. I'm doing my best to follow people interesting and working in similar fields, to me some level of engagement with a hundred followers would be better than shouting at ten thousand.&nbsp;
-<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">[[posterous-content:udmDnDkFAAmCIlomghyB]]</div>
 
 		</div>
 	</div>
@@ -270,16 +158,6 @@ I'm not part of the twitter elite, my opinion doesn't really matter. If someone 
 		<div class="content">
 		    We launched the crawler a while ago now and the results are impressive and even a little surprising in some respects, while in others they're not. Basically we're happy we found a few thousand pages with geotags on the first crawl though the longer we've let it go the lower the ratio gets. Totally expected because we seeded it with pages we knew were geotagged in the first place.&nbsp;
 
-To get more pages, we've started using the mechanical turk. We're hoping to get pages that aren't otherwise tagged added by real people. Once we launch this is obviously going to be a function of the site, something we want any user to be able to do. In the meantime I'm tweaking our turk jobs and starting to get some good data back, though not as much as we'd like - we'll probably have to up the cost.&nbsp;
-
-I'll let you know how it turns out, in the meantime if anyone has any experience with turk, any hints or thoughts - let me know.&nbsp;
-<h6 class="zemanta-related-title" style="font-size: 1em;">Related articles by Zemanta</h6>
-<ul class="zemanta-article-ul">
-	<li class="zemanta-article-ul-li"><a href="http://andrewmccall.com/2009/01/crawler/">Crawler</a></li>
-	<li class="zemanta-article-ul-li"><a href="http://aws.typepad.com/aws/2008/12/solve-for-efficiency-with-amazon-mechanical-turk.html">Solve for Efficiency With Amazon Mechanical Turk</a></li>
-	<li class="zemanta-article-ul-li"><a href="http://www.mathewingram.com/work/2008/11/21/whos-inside-that-mechanical-turk/">Who's inside that Mechanical Turk?</a></li>
-</ul>
-<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">[[posterous-content:HhjBiwnEesyfuvulimac]]</div>
 
 		</div>
 	</div>
@@ -295,16 +173,6 @@ I'll let you know how it turns out, in the meantime if anyone has any experience
 		<div class="content">
 		    A large part of the assumptions we're making with goroam are based around the idea that local business wants to capitalise on the Internet to bring in business. But it's not easy. How do promote a book store, toy shop, cafe or plumber in your local area online, now imagine you have a books and toys to sell, coffees and tea to make or houses without hot water to help - in short, a full time job that doesn't leave much time for SEO, SEM, analytics and tweaking a website and search advertising strategy. &nbsp;&nbsp;
 
-We're not just pulling the assumption out of thin air though- helping local business market online is big business,&nbsp;Yodle's<a href="http://feedproxy.google.com/~r/Techcrunch/~3/BLLJYMvh38I/"> 700% growth last year and $10M C round</a> is a great example of this trend and from the techcrunch article, they're not the only ones in the game.&nbsp;
-<blockquote>
-<a href="http://www.yodle.com/" class="zem_slink" title="Yodle" rel="homepage">Yodle</a> competes against a number of similar, venture-backed companies such as&nbsp;<a href="http://www.crunchbase.com/company/reachlocal" target="_blank">ReachLocal</a>(which raised a substantial $65 million in funding to date),&nbsp;<a href="http://www.crunchbase.com/company/merchantcircle" target="_blank">MerchantCircle</a>&nbsp;(which raised its&nbsp;<a href="http://www.techcrunch.com/2007/11/07/merchantcircle-takes-10-million-series-b/" target="_blank">$10 million in Series B funding round</a>&nbsp;in November 2007),&nbsp;<a href="http://www.crunchbase.com/company/ingenio" target="_blank">Ingenio</a>&nbsp;(acquired by AT&amp;T, also in November 2007),&nbsp;<a href="http://www.crunchbase.com/company/webvisible" target="_blank">WebVisible</a>&nbsp;(total funding: $17 million) and a plethora of smaller companies trying to get their piece of the pie.</blockquote>
-So we've got the social proof, now we just have to capitalise on it and bring something to market that makes it easy for small businesses to target their services at the people in their area who are interested.&nbsp;
-<h6 class="zemanta-related-title" style="font-size: 1em;">Related articles by Zemanta</h6>
-<ul class="zemanta-article-ul">
-	<li class="zemanta-article-ul-li"><a href="http://www.businessweek.com/the_thread/blogspotting/archives/2009/01/study_small_bus.html?campaign_id=rss_blog_blogspotting">Study: Small businesses love Google, even when things go wrong</a></li>
-	<li class="zemanta-article-ul-li"><a href="http://www.avc.com/a_vc/2008/11/joe-the-plumber.html">Joe The Plumber's Landing Page</a></li>
-</ul>
-<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">[[posterous-content:mcfncrGafHzqeyGhhjFs]]</div>
 
 		</div>
 	</div>
@@ -324,17 +192,6 @@ So we've got the social proof, now we just have to capitalise on it and bring so
 </div>
 I've been a bit quiet lately, but not inactive. I've been working very hard on our location based service project- A better way to search and explore things around you.
 
-Right now everything we're doing is happening in the background, laying the ground work for the things to come. Background things like our <a href="http://en.wikipedia.org/wiki/Web_crawler">crawler</a>.
-
-I finished the first milestone for our <a href="http://goroam.net/crawler">crawler</a> a few days ago and set it loose on the internet. It's been crawling from my laptop, then I moved it to our hosted server and let it do a few crawls from there.
-
-After a few teething issues it's finally managed to cross a bit of a milestone - 250,000 pages downloaded, approximately 3000 of them with geo tags have been indexed. I feel a bit like a proud parent, and have spent far too much time just watching the crawl take place.
-
-<strong>What it's looking for</strong>
-First and probably most important is for any pages that have been geo tagged; second the structure and links to/from a page are being analysed to help create a picture of how important a page is both in an area and in general.
-
-I'll try and pop my head above the parapet here and on the <a href="http://goroam.net">goroam</a> site more and more often as we get closer to a launch to try and fill in more of the blanks.
-<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">[[posterous-content:JFdJuoEGckHjelEatGzi]]</div>
 
 		</div>
 	</div>
@@ -350,14 +207,6 @@ I'll try and pop my head above the parapet here and on the <a href="http://goroa
 		<div class="content">
 		    I've made some progress over the last few days getting things working towards getting the crawler online and came across a scenario where git would have been useful and had one of those epiphany&nbsp;movements&nbsp;when distributed development clicked and it made sense to me.&nbsp;
 
-The first run of our crawler is based on a pretty vanilla nutch install with some plugins; it works already and saves us an awful lot of leg work. The first thing I wanted to do was quickly mavenise it so we could better integrate it into our development environment. Problem is if I pull the trunk, I can't commit and update from our own internal repository and the Apache one.&nbsp;
-
-I intend at some point, once it's working and I'm happy with it, to submit a patch back to the <a href="http://www.apache.org/" class="zem_slink" title="Apache Software Foundation" rel="homepage">ASF&nbsp;</a>but in the short term I just want to share my fork with other developers on my team. This is where git would come in.&nbsp;Next I was hoping to start to move the configuration over to the springframework IOC controller, to see if/how it works or doesn't, again I'd submit the patches if the community was interested.&nbsp;
-
-When I get a bit of time in the next few weeks I think I'll install a central git repository for our dev environment and trial a transition there. Has anyone tried something similar, is git what I'm looking for?&nbsp;
-
-&nbsp;
-<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">[[posterous-content:kdkjIdCzCzCjzGozfuHh]]</div>
 
 		</div>
 	</div>

@@ -60,9 +60,6 @@
 		<div class="content">
 		    Saw a truly awesome piece of kit on the engadget <a href="http://www.engadget.com/2009/10/25/phototrackr-mini-geotagging-device-shrinks-down-adds-mac-and-ra/">website</a>, the&nbsp;<a href="http://www.gisteq.com/PhotoTrackr/PhotoTrackrDPL900.php">PhotoTrackr mini </a>from GiSTEQ. It's a little USB dongle that you carry around with you and it logs your route as you go. When you're done you plug it in and use the software to add geo data about where you were when you took the picture.
 
-It's less than &pound;50 and what's best, it exports the logs as NEMA and GPX.
-
-[[posterous-content:JGiAlnuGzyvnmeebxebE]]
 
 		</div>
 	</div>
@@ -78,21 +75,6 @@ It's less than &pound;50 and what's best, it exports the logs as NEMA and GPX.
 		<div class="content">
 		    I've had an ongoing conversation with a few people over the course of a few projects about the questions to ask when people sign up on the web or what hoops you make them jump through.
 
-Ask most people what they need to know about user's and you'll end up with a list of information from the useful like name to the truly useless like job title or title. Give me one good reason for either. Are you going to be sending Mr John Smith or Dr. Sarah Jones a letter using their formal titles?
-
-When it comes to things like Job Title, the reason I usually hear is that it'll be useful for marketing and demographics later. Maybe, but I've never actually seen that later come to anything. So I don't buy it.
-
-If the signup form is the depth of your engagement with your user you might as well drop the pretense of a web application and go back to sending newsletters.&nbsp;Just don't do it. Ask your user the bare minimum number of questions you need to get them started using what your product does now and stop throwing up barriers to entry.
-
-Aside from just the questions that are asked there are other things, the hoops almost every site makes you jump through before you can start using it. Probably the best example is the ubiquitous confirm your email step. Do we need to be doing this?&nbsp;In some circumstances I'll admit it makes sense, if your delivering content via email for example or signing up for a mailing list. Of course you want to make sure the user wants what you're sending them.
-
-But for every other site, I'm not sold. It's just another step they have to take to start using your service and all the little steps all add up to users hating signing up for new things.
-
-Also it begs the question, why even bother? For 99% of websites the only reason to make sure a user has entered their email address correctly is so that you can let them recover a password. You're adding the step for people that have lost their password and haven't managed to get their email right. That's going to be a fairly small proportion of your users; even less if you let login with their email address, then they'll know it's wrong anyway as soon as they try it.
-
-Do we pander to the idiots or make things as quick and easy for everyone else? I'll take quick an easy any day.
-
-I'm finding myself not just asking what any given field in a form is for and making it justify it's self, I'm trying to figure out how to get by without it.&nbsp;I'm leaning towards going beyond just the bare minimum and into the realm of how can I modify this service to work with even less.
 
 		</div>
 	</div>
@@ -108,11 +90,6 @@ I'm finding myself not just asking what any given field in a form is for and mak
 		<div class="content">
 		    First of all, I don't go in for the whole write a test that fails before I write any code. But I do aim for as close to 100% code coverage as I can get, again sometimes I pick and choose what I want to ignore when it comes to missing methods. Testing every getter and setter in a Java bean for 100% coverage seems like total overkill to me.
 
-I do rely heavily on tests when it comes to regression testing - making sure I haven't broken anything. I've spent time having to go through every page on a fair sized web app after every release and inevitably finding something broken that I then had to quickly patch. Once it's patched you start the testing over again and probably find a few more things. With no way back &nbsp;it ends up an all nighter. It's not a lot of fun and testing helps prevent it.
-
-The other reason I write tesst is that they help a huge amount when I refactor code. Like over the last few days. I've spent them undertaking a major retooling of large swaths of code. I've been pulling out all the RDBMS stuff from some user management code and replacing it with a Hbase implementation. It's also shown me that the code was pretty tied to the RDBMS implementations, much more than I'd originally thought.
-
-It's not anymore, and I'm not sure I could have pulled it apart without a coherent set of unit tests.&nbsp;I'll post a little on the strategy for writing tests I've implemented to prevent it in the future a bit later.
 
 		</div>
 	</div>
@@ -128,14 +105,6 @@ It's not anymore, and I'm not sure I could have pulled it apart without a cohere
 		<div class="content">
 		    I've been playing with <a href="http://www.hibernate.org" class="zem_slink" title="Hibernate (Java)" rel="homepage">Hibernate</a> Validator 4.0 lately, it's an implementaion of <a href="http://en.wikipedia.org/wiki/Jet_Set_Radio" class="zem_slink" title="Jet Set Radio" rel="wikipedia">JSR</a> 303 Bean Validation - basically the ability to annotate validations for your beans. Great in Hibernate as you'll know if you've ever done it because you're object describe the constraints and Hibernate enforces them for you.
 
-JSR 303 builds on it by codifying the annotated validation framework into a standard you should be able to use from front to back and everywhere in between maintaining your rules for what is and is not valid.&nbsp;Of course that's the pot of gold at the end of the rainbow, it's far messier living on the bleeding edge before the standards have been officially released.
-
-I've released a small very early project that builds on some of the stuff I've done using the Hibernate annotaions with Springframework in the past. Basically, wrap a <a href="http://www.springsource.org" class="zem_slink" title="Spring Framework" rel="homepage">Spring</a> validator around the Hibernate one - or in this case around a generic javax.annotations validator.
-
-I've also added a few new constraints that I need. NotEmpty validates that a field must not be null and must not have a size of 0. Email validates email addresses and URL validates Urls. It's an early release, but check it out <a href="http://github.com/andrewmccall/validation">here on GitHub</a> if you're interested. If you want to use it feel free if you want to make additions I'd love to accept them.
-<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">
-[[posterous-content:kdrnzvwJgFilHgFJCjof]]<span class="zem-script more-related pretty-attribution"></span>
-</div>
 
 		</div>
 	</div>
@@ -151,17 +120,6 @@ I've also added a few new constraints that I need. NotEmpty validates that a fie
 		<div class="content">
 		    We had a meeting last night about the state of the Sproozi project, where we wanted to be and the results of a few tests we'd run. We more or less came to the conclusion that we're going to need to push on with the social aspect of the site sooner rather than later. We're still trying to figure out what that means in terms of funding, if we need to raise any and how we go about it if we decide we do. It does start to pose some interesting questions the first and biggest is how we're going to store user data.
 
-We're already running Hbase and storing lots of data in there and I'd like the application to scale as easily as possible. The idea of running another framework or service just to store user data seems overkill and seems like one more system to worry about. So I'm going to run a little experiment in storing users in Hbase.
-
-The downside to Hbase is that it's not easy to search for things when you only want one of them by something other than the id. It's easy to pick a row by it's id and even to scan the table in order from there or to start and the beginning and go all the way through, but it's not very easy to quickly pick out a random row by the value of one of it's other fields. You'd have to start a map reduce task and start crunching the data until you found what you were looking for.
-
-Given the simple example of a user with a long id an email address, a username and a password it would be easy to get the user by it's id, but not very easy to get the user by the email address or username.&nbsp;So I'm toying with how to get it to work, probably by creating some additional tables to store keys for columns I want to search that link back to the correct user. Sort of like making my own indices.
-
-Once I get some code written and tested I'll probably throw up another post with some more details on whether or not it worked.
-
-Any thoughts?
-
-<em>Update: Check out this Vitamin </em><a href="http://thinkvitamin.com/dev/should-you-go-beyond-relational-databases/"><em>article</em></a>
 
 		</div>
 	</div>
@@ -177,27 +135,6 @@ Any thoughts?
 		<div class="content">
 		    Jeff Atwood <a href="http://www.codinghorror.com/blog/archives/001279.html">goes into some calculations about the cost of scaling up vs scaling out </a>and makes an interesting point, it quickly becomes impractical if you're not using open source software. I think Jeff slightly missed the point though, it's not about open or closed source, it's that scaling out is simply impractical if you're paying traditional software licences.
 
-This is something we came across when building Sproozi. If we wanted to store petabytes of data and run hundreds or thousands of concurrent processors there was no way we could ever afford to do it on machines running windows we were paying for by the box. But it's not because we'd have to pay for software, per se, it's how we'd have to pay for it.
-
-Software has traditionally been licensed by machine, when machines got bigger vendors wanted to cash in so the licences got a little bigger. They had to cover their losses when you threw a few new processors in the machine rather than getting a new one to put alongside after all. It has always been in their best interest though for you to get a bigger box than to get more cheap ones - scaling out is very hard and the software doesn't do it well. Most RDBMS just can't do it well and they certainly can't get anywhere near the the scale of something like <a href="http://hadoop.apache.org/" class="zem_slink" title="Hadoop" rel="homepage">Hadoop</a>. If you want to scale out, forget SQL servers, you need software that's going to scale out.
-
-But let's forget the specific software for the time being and just assume that the big boys (MS, Oracle, IBM) will have a scaling out solution soon - don't worry this isn't going to kill them, but it will change them. They will still want to licence an operating system and a data storage and retrieval system to you.
-
-What I'm almost positive you're going to see is these companies introduce new pricing schemes to meet the needs of the cloud, they have to or they're going to lose all that revenue to the open source projects that have a head start on them. Just look at EC2, you can already provision MS and other software and I think that's a trend that's just going to continue.
-
-So while Jeff is right that if I want to buy as many cheap boxes as I could for the hardware cost of a big iron server and put windows and SQL on them and it would all cost a small fortune. It's not really a fair argument, you're taking an old big iron way of thinking and trying to apply it to the cloud. What it fails to take into account is how much more powerful your new cloud cluster is than the big iron box, let the software vendors figure out the economics of making their software an attractive ROI when compared to OSS because if they want to compete in the cloud they're going to have to.
-<h6 class="zemanta-related-title" style="font-size: 1em;">Related articles by Zemanta</h6>
-<ul class="zemanta-article-ul">
-	<li class="zemanta-article-ul-li">
-<a href="http://gigaom.com/2009/06/08/hadoop-summit-we-have-10-tickets-to-give-away/"> Hadoop Summit: We Have 10 Tickets to Give Away </a> (gigaom.com)</li>
-	<li class="zemanta-article-ul-li">
-<a href="http://www.computerworld.com/action/article.do?command=viewArticleBasic&amp;articleId=9134282"> Watch out, Oracle: Google tests cloud-based database </a> (computerworld.com)</li>
-	<li class="zemanta-article-ul-li">
-<a href="http://www.techcrunchit.com/2009/06/10/yahoo-releases-internal-hadoop-source-code/"> Yahoo Releases Internal Hadoop Source Code </a> (techcrunchit.com)</li>
-</ul>
-<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">
-[[posterous-content:vFjGuevFhbnHbzsjkxmx]]<span class="zem-script more-related pretty-attribution"></span>
-</div>
 
 		</div>
 	</div>
@@ -213,22 +150,6 @@ So while Jeff is right that if I want to buy as many cheap boxes as I could for 
 		<div class="content">
 		    I really dropped the ball on the whole post a day for this month thing. It's been over a week and I haven't written anything. It's like all the other things you're meant to do, then time goes by and you don't and it gets to a point where addressing the issue becomes awkward.
 
-Things between us dear reader, have become awkward, it's my fault and I'm sorry.&nbsp; I've just been quite busy, I know it's not an excuse, but there it is anyway.
-
-So let's try to get back on track in the form of an update.
-
-Sproozi is coming along, I've had a few setbacks with the code and we've changed the scope some. We had to make a decision about content for a real launch we're selling to investors and actual users as opposed to the few that happen upon our non functional demo.
-
-The problem was that although the crawler worked pretty well, better than I'd hoped, the results were a bit lacklustre.&nbsp; We weren't confident that the data we brought back was going to set the world on fire. So it then became a question of what is worse no data or crap data?
-
-I've also been working on getting a coworking space and some geeky events going going in Hebden Bridge. Lots of work getting emails sent to see if there would be funding available, trying to gauge interest and all sorts of other aspects about it.&nbsp; I'll have a lot more to say about this in the next few days once I've had a chance to digest where I am.
-
-In the meantime, go take the survey- <a href="http://spreadsheets.google.com/viewform?formkey=cmpwamZ4aFJ4S0RUZVVEeEFVUjQ2aWc6MA.." target="_blank">it's here</a>.
-
-Lastly I've actually been working on this site in the background. It's on <a href="http://github.com/" class="zem_slink" title="GitHub" rel="homepage">github</a> already over <a href="http://github.com/andrewmccall/hemingway/">here</a>. I like the simplicity of the look but I want to bring a few more things on to the front page. I really want to integrate my <a href="http://tumblr.com" class="zem_slink" title="Tumblr" rel="homepage">tumblr</a> feed and start using that a lot more for posting links, pictures and music. Also now that I'm back into posting a little more regularly (the irony I'm sure isn't lost on you) I also want to put the blog posts on the front page. Which is where I start to get into things I don't like about the hemingway theme.
-<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">
-[[posterous-content:nHCDnBAptpjigjJmkDjg]]<span class="zem-script more-related pretty-attribution"></span>
-</div>
 
 		</div>
 	</div>
@@ -244,31 +165,6 @@ Lastly I've actually been working on this site in the background. It's on <a hre
 		<div class="content">
 		    <em>I Meant to post this yesterday and just plain forgot, so I'll try to get two out today to make up for it. </em>
 
-I got some feed back on my post the other day about setting rates. It's an interesting topic to a lot of people. One of the questions it did bring up was how to deal with negotiating on rates, or specifically dealing with a customer that doesn't want to pay what you're asking.
-
-I for one set out my rate at the start in a quote, explain that it's competitive and that's what it costs.
-
-I'm open to negotiation if for example you're offering me a couple of days a week for a month, few months or a year. It costs less to develop and maintain one relationship like that than the equivalent in smaller customers - even if it is putting more eggs than I may like into one basket.
-
-If on the other hand it's a couple of days then I'm going to be much more firm about my rates.
-
-One strategy for getting paid what you should, and giving a customer a price they want is to determine the budget from the outset then structure a proposal around that. Once you've got a number, make sure you can deliver what they want, or negotiate on a cut down version, which you can deliver within their budget. If it's design work, cut some of the revisions, base the design on a template of their choosing. For coding work cut some of the scope, remove one or two of the lest important requirements.
-
-A lot of times you may just find "you're too expensive" really means, "we can't afford it" and there are a lot of great companies out there that aren't just being cheap, even if that's the way it may seem on the surface and they'd be more than willing to compromise on the scope to get it done properly within their budget. Then who knows, revisit the rest in a few months time.
-
-Other times you just can't meet in the middle, you can't do the work in the time allowed by the budget but don't give up - there might still be a deal you can both cut. Maybe they offer a service you're currently paying for, or have staff that aren't being fully utilised you can borrow. Trading your services for theirs isn't a bad thing, you still get a client, word of mouth referrals, case studies, testimonials and add to your portfolio and you still get something in return for it. I've done this in the past and it's always worked out well for me, in fact it's probably lead to more work from and through that client than we could otherwise expect.
-
-If all else fails, my advice is to walk away. It's hard but the brutal truth is that you're risking getting stuck in a working relationship where the other side doesn't value your skills. In my experience that attitude extends right through into how they value your opinions and the result of your labours. To them what you produce is a commodity and they're probably going for the cheapest quote they can find. Everyone has worked with people like this, it's not fun and it's almost never worth the money. In fact, my advice is run - don't walk.
-<h6 class="zemanta-related-title" style="font-size: 1em;">Related articles by Zemanta</h6>
-<ul class="zemanta-article-ul">
-	<li class="zemanta-article-ul-li">
-<a href="http://underthegrapetree.blogspot.com/2009/03/happy-customers-equal-better-business.html">Happy Customers Equal Better Business</a> (underthegrapetree.blogspot.com)</li>
-	<li class="zemanta-article-ul-li">
-<a href="http://www.sitepoint.com/blogs/2009/03/04/5-ways-to-please-your-clients-and-5-reasons-why-you-should/">5 Ways to Please Your Clients and 5 Reasons Why You Should</a> (sitepoint.com)</li>
-</ul>
-<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">
-[[posterous-content:IwfiaDkzxExkyGjkogro]]<span class="zem-script more-related pretty-attribution"></span>
-</div>
 
 		</div>
 	</div>
@@ -284,30 +180,6 @@ If all else fails, my advice is to walk away. It's hard but the brutal truth is 
 		<div class="content">
 		    Lloyds TSB just announced they're shutting down all C&amp;G branches with loads of job losses. Though they said they were hoping to avoid compulsory redundancies with early retirement and by hiring less contractors.
 
-So they're not cutting jobs, except for contractors. Which is too bad for the contractors but brings up an important point if you are a contractor and you're setting your rates.
-
-<strong>You are responsible for your own job security and you have to charge for it</strong>. You don't get holiday pay, you need to spend some of your time on the non billables that need to be done to operate, you won't get a redundancy payment if through no fault of your own the company cuts your role in a cost savings exercise. You just don't have a job.
-
-There are various ways to mitigate the disaster and the best is probably to have as many customers as possible. The more you have the less the loss of one matters.
-
-But you also need to be aware of the reality that you may lose customers when you set your rates. You need to bill for your desired salary + operating costs + expenses + some headroom for the time you aren't doing billable work.
-
-Here's an example. Let's say you want a &pound;30,000 salary. You have operating costs for equipment, software, travel, expenses, taxes, accountants, rent, phones, internet etc; say &pound;15,000/ year. Given 45 working weeks in a year, because you deserve holidays like everyone else and you'll no doubt catch a cold or two at some point.
-
-30,000 + 15,000 = &pound;45,000/year MINIMUM turnover.
-45,000/45 working weeks / 5 working days = &pound;200/day
-
-So if you want to earn a &pound;30,000/year salary and you have enough work to keep you occupied every single day - you can afford to do it for about &pound;200/day.
-
-Let's for a moment say you spend just one day a week on things you need to do, but you can't bill a customer for directly&nbsp;- your accounts, taxes, your website, finding new customers, writing proposals, travelling to and from meetings, meetings, professional development.
-
-That's a rate &pound;250/day and you still have absolutely no cushion.&nbsp;Lose a customer and even if it's one day a month you're not at capacity and you lose &pound;3000 from your salary. If you lose a few or a big one and you're idle a day a week - you're out over &pound;11,000!
-
-Now if you want to build yourself in a cushion so that if you lose some work you've got money to eat while you spend time trying to get more customers, you need to up the rate. For the sake of argument let's say you want to be able to eat working at 75% capacity if the times get lean and stay that way for a while. That means you need to be able to survive billing for 3 working days every week, so with the numbers above we get.
-
-&pound;45,000 / 45 working weeks / 3 working days = &pound;333.33/day
-
-Now in theory, working at capacity that would give you enough to pay yourself almost &pound;45,000/year - but if you were smart and like the C&amp;G contractors a major client suddenly pulled the rug out from under your feet, you've saved that and now have a good cushion going forward to find new customers. If they were 100% of your work, it could take sometime to build up that client base from scratch so the &pound;15,000 really isn't that much when you start to eat through it - literally.
 
 		</div>
 	</div>
@@ -327,16 +199,6 @@ Now in theory, working at capacity that would give you enough to pay yourself al
 </dd>
 </dl></div></div>Came up with a good distraction tonight and thought briefly about being an <a href="http://www.apple.com/iphone" class="zem_slink" title="iPhone" rel="homepage">iPhone</a> developer. Was chatting with <a href="http://twitter.com/Simon_Chapman">@Simon_Chapman</a> (not sure I'd bother clicking there - nothing but tumble weed) about the various services out there and was trying to come up with a unique way to use some of the new features offered by the iPhone 3.0 software. 
 
-Specifically we were talking about how to use the new support for in app purchases and location to build a compelling service. The first thing that came to mind was pretty obvious and no doubt you'd just end up a small fish in a big pond with some monsters, create a service to search for and buy tickets for events near you. 
-
-The next idea that came to mind is to create a map based <a href="http://en.wikipedia.org/wiki/Podcast" class="zem_slink" title="Podcast" rel="wikipedia">podcasting</a> application. Allow any geotagged podcasts to be places on a map. Browse the map and get some audio or video about things around you. Revenue could be either generated through advertising or through access to premium content. 
-
-There you go, that one's free, unless I find the spare time to develop it myself. ;) <h6 class="zemanta-related-title" style="font-size: 1em;">Related articles by Zemanta</h6><ul class="zemanta-article-ul"><li class="zemanta-article-ul-li">
-<a href="http://www.manolith.com/2009/06/08/iphone-3gs/"> iPhone 3GS </a> (manolith.com)</li></ul>
-
-<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">
-[[posterous-content:whBJBdkmyCEDEjofasBD]]<span class="zem-script more-related pretty-attribution"></span>
-</div>
 
 		</div>
 	</div>

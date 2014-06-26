@@ -60,13 +60,6 @@
 		<div class="content">
 		    It's been a week or so with a few good days coding in Eclipse, I even took IDEA off my own machines and replaced it so that I'm only working in the one environment and it's going well. I'm pretty much using the default settings and only adding to them a little as I go. I'm resisting the urge to change the key bindings to the IDEA ones. 
 
-So far I've found a few things Eclipse does that I really like, it has some good highlighting features that make it easy to see where classes, variables, parameters etc are being used. Some IDEA does better - I miss the key bindings for generating code, a lot and it's about the only thing I've carried over and added myself. 
-
-One thing that really bothers me about Eclipse and that I'm going to see if I can spend some time sorting out tomorrow is the order of maven imports. They're in classpath order, which I suppose in some circumstances is good, but for browsing or trying to look at the imports it's frustrating. 9 times out of 10 I'm looking to see if something is there or looking into the dependencies themselves for something and trying to dig through that mess takes longer than it should. 
-
-In fact I have to say the whole 'project explorer' in Eclipse is a bit lacklustre. IDEA's is simpler without losing any of the functionality. I'm probably missing something and just need to find some options to make it work more like I'd like (or use a completely different view). Eclipse has a lot of preferences I've never looked at. 
-
-Aside from that it's all good. I'd have to say some bits of IDEA are more polished, but in other ways I prefer Eclipse. The choice to drop IDEA completely though because I need to use Eclipse at work was a good one - I don't think I'd be making the same progress if I was switching between the two yearning for IDEA all day at work.
 
 		</div>
 	</div>
@@ -82,9 +75,6 @@ Aside from that it's all good. I'd have to say some bits of IDEA are more polish
 		<div class="content">
 		    I've been using Intellij IDEA for years, I pretty much swear by it for development and I have no real complaints. But now I've got a new job and they use Eclipse. Now, so do I.&nbsp;I figure there is no way to properly learn to use Eclipse if my heart is still in IDEA, so there's nothing for it except to say goodbye IDEA and move over to Eclipse for everything.
 
-Looking around the Eclipse ecosystem and there are an awful lot of what look to be excellent plugins. I know IDEA had a plugin system but the ecosystem never seemed as good and I never really got into them.
-
-Now it's off to import my projects and see what's what. I did try this a few weeks ago after my interview, but gave up with the excuse that I wanted to get some work done.
 
 		</div>
 	</div>
@@ -100,21 +90,6 @@ Now it's off to import my projects and see what's what. I did try this a few wee
 		<div class="content">
 		    I've been updating my OAuth library to support OAuth 2.0 mostly so I can add Facebook to Announce.ly and Sproozi, but more on that later. OAuth 2.0 is similar to 1.0 but changes a few key things fundamentally and isn't backwards compatible.
 
-<strong>What's wrong with 1.0, doesn't it work?</strong>
-
-It does, but probably the biggest issue is the fact that you have to sign the message knowing all it's content beforehand. This works well if the data is on the querystring in a GET request or for simple operations but isn't optimal if your data is part of the POST body. It also means you have to construct your requests in a certain way, which is a bad thing.
-
-Take photo, audio or video data - to post that you'll need to sign the whole request and it's not clear how it should work with multipart data. There are several extensions to the spec that deal with some of these issues, but the fact that there are non standard extensions to do something pretty standard kinda says it all.
-
-Even if you're not dealing with these issues you still have to work with your requests as units where you know the whole content beforehand.
-
-<strong>What's new in OAuth 2?</strong>
-
-OAuth 2.0 in it's simplest form works over HTTPS connections and simply asks for a token - the security and trust are built in to the protocol. It's that easy.
-
-OAuth 2.0 sill lets users sign messages to transmit them over insecure channels, plain HTTP, but the signing methods are much easier to implement. Gone is the complicated parameter normalisation algorithm and in it's place is a much simpler version that doesn't require POST data in the signature. So even with multipart submissions it should just work.
-
-At the moment I'm cleaning things up and preparing the oauth library to work with oauth 2.0 and changing the way it works to reflect the simpler way oauth 2.0 does. You can check it out on GitHub [<a href="http://github.com/andrewmccall/oauth">http://github.com/andrewmccall/oauth</a>]
 
 		</div>
 	</div>
@@ -130,17 +105,6 @@ At the moment I'm cleaning things up and preparing the oauth library to work wit
 		<div class="content">
 		    Anyone with an issues.apache.org account is probably already aware there is an exploit out there for JIRA. Apache and Atlassian have both had servers compromised.
 
-More info:&nbsp;<a href="https://blogs.apache.org/infra/entry/apache_org_04_09_2010">https://blogs.apache.org/infra/entry/apache_org_04_09_2010</a>
-
-If you've signed up for a public JIRA server (or run one) and it wasn't a password you only used for that, you should probably think about proactively changing it anywhere else you use it.
-
-The passwords are hashed, but JIRA uses a random site wide salt, so it'll take time but eventually they <em>could</em> figure them all out.
-
-It's actually could have been a pretty clever exploit, go after developers who are more likely to have accounts with one of the cloud providers. Use the accounts to launch instances and use the instances to generate password tables, compromise more accounts, launch more instances....
-
-I'm lazy and the password I used on the Apache JIRA was one I used a few other places. I knew it was a bad idea, but I did it anyway. I've learned my lesson and spent the whole night changing my passwords and getting them all in <a href="https://agilewebsolutions.com/">1password</a> on my mac on iphone.
-
-There's no reason to believe that my password has been compromised yet, but it's better to be safe than sorry. Now my passwords are all randomly generated, really long with letters, numbers and symbols.
 
 		</div>
 	</div>
@@ -156,9 +120,6 @@ There's no reason to believe that my password has been compromised yet, but it's
 		<div class="content">
 		    I'm having a bit of a clear out, taking a look at some of the code I've written and I've been pushing some of the stuff I'm currently using up to <a href="http://github.com/andrewmccall">GitHub</a> under and Apache 2 licence. I've used things in <a href="http://announce.ly">Announce.ly</a>, <a href="http://sproozi.com">Sproozi</a> and some other small projects and figure they may be useful to someone else. My only criteria has been to ask If I'm using it now in a project, if so I'm actively supporting it and I've started pushing that stuff to <a href="http://github.com/andrewmccall">GitHub</a>, everything else is dormant and I don't want to release something I'm not actively supporting- it also occurs to me that if even I'm not using it, it can't be all that worthwhile.
 
-I've just pushed <a href="http://github.com/andrewmccall/accounts">some code </a>I've been testing for a few months in a couple of projects to <a href="http://github.com/andrewmccall">GitHub</a>. It's an accounts package written for <a href="http://springframework.org">Spring</a>, that ties my <a href="http://github.com/andrewmccall/oauth">oAuth</a> library and <a href="http://twitter.com">Twitter</a> together with either <a href="http://hibernate.org">Hibernate</a> or <a href="http://hadoop.apache.org/hbase">Hbase</a> as backend storage. In it's simplest form when you login with twitter it creates you a new user and persists it and the oAuth access tokens you need to act on behalf of that user.
-
-I'll write some more about it, better documentation and probably throw a little more code up on <a href="http://github.com/andrewmccall">GitHub</a> over the course of the next couple of weeks as and when I get a chance.
 
 		</div>
 	</div>
@@ -174,49 +135,6 @@ I'll write some more about it, better documentation and probably throw a little 
 		<div class="content">
 		    I've just pushed out a new open source java OAuth library because I couldn't find one that did what I needed. My key requirement was simplicity. I didn't like the idea of using the library for HTTP stuff and there is no reason I should. Once I've obtained the Access Token all I'm doing with oAuth is signing my requests.
 
-I want to use HttpClient directly and only use the oAuth library to sign the message for various reasons not the least of which being that I already have a HttpClient object setup in my IoC container.
-
-The closest I found was <a href="http://github.com/kaeppler/signpost">signpost</a> but it wasn't very IoC friendly or thread-safe which meant every time I wanted to make a call I'd have to create new objects, or at the very least call a bunch of methods to set them up which highlights the third problem, there were no clear objects that I could store for later.
-
-The library I've just release is a fork of the signpost code, that's now thread-safe and should be more IoC friendly. You create your method calls as you would normally, and just before you call <code>HttpClient.execute(HttpMethod)</code> simply call <code>OAuthConsumer.sign(HttpMethod, AccessToken);</code>.
-
-I've added a few new objects that handle most of the work. Service, RequestToken and AccessToken are all beans that you pass to a consumer depending on what you want to do. Starting with a Service you call
-
-<div class="CodeRay">
-  <div class="code"><pre>Service service = new Service();
-service.setRequestTokenUrl(&quot;http://twitter.com/oauth/request_token&quot;);
-service.setAccessTokenUrl(&quot;http://twitter.com/oauth/access_token&quot;);
-
-service.setConsumerKey(&quot;b8sA385mBBNqOTD6Omlsw&quot;);
-service.setSharedSecret(&quot;MD4Sve6AdaDasjdvOAsbpAJsA87S8s64e5rE4&quot;);
-
-service.setMessageSigner(new PlainTextMessageSigner());
-service.setSigningStrategy(new AuthorizationHeaderSigningStrategy());
-
-RequestToken requestToken = oAuthConsumer.getRequestToken(twitter);</pre></div>
-</div>
-
-
-You'll have to send the user off to twitter to check their credentials. When they come back
-they'll be given a verifier set it and trade the request token for an access token
-<div class="CodeRay">
-  <div class="code"><pre>requestToken.setVerifier(verifier):
-AccessToken accessToken = oAuthConsumer.getAccessToken(requestToken);</pre></div>
-</div>
-
-Now you can store the accessToken to use later, when you want to simply setup your http method as you would normally.   
-
-<div class="CodeRay">
-  <div class="code"><pre>HttpUriRequest request...
-// do your HttpClient stuff here
-
-oAuthConsumer.sign(request, accessToken);
-HttpResponse response = httpClient.execute(request);</pre></div>
-</div>
-
-There is also code in there for the Jetty HttpClient, but it's a bit rough and I haven't used it. Have  play with it and let me know what you think. 
-
-UPDATE: Forgot to link to it... Dumb. <a href="http://github.com/andrewmccall/oauth">It's on GitHub here</a>.
 
 		</div>
 	</div>
@@ -232,24 +150,6 @@ UPDATE: Forgot to link to it... Dumb. <a href="http://github.com/andrewmccall/oa
 		<div class="content">
 		    [[posterous-content:ByqskufswwnprelCChrJ]]
 
-I Released <a href="http://announce.ly">Announce.ly</a> last night, it's a side project I put together with some of the code that I built for <a href="http://sproozi.com">Sproozi</a>.
-
-<strong>What's it good for?</strong>
-
-<strong><span style="font-weight: normal;"><a href="http://announce.ly">Announce.ly makes it easy to make announcements through twitter</a>. </span></strong>
-
-<strong><span style="font-weight: normal;">People have lots of questions about how to use twitter for their business. Should you create an account in the name of the business and use that to communicate, use some of the tools out there to share access to the account.&nbsp;Or you could create an account as a personality to represent the business, many company CEOs do this.</span></strong>
-
-Either way works and there are lots of companies out there following both models successfully but there is another way.
-
-I want to be myself on twitter, I want to make announcements for the projects I'm involved in and I want the project accounts to retweet me when I use hashtags associated with the projects. I don't want to have to manage accounts for every project.
-
-For example if I tweet an announcement about Announce.ly - "Announce.ly is live! #announcely" then I want the <a href="http://twitter.com/announcely">Announce.ly twitter</a> account to retweet it automatically
-
-And that's what <a href="http://announce.ly">announce.ly</a> does, check it out now to start your free trial then head on over to the <a href="http://blog.announce.ly">Announce.ly blo</a>g&nbsp;where we'll highlight use cases and feature some of our most interesting users.
-<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">
-[[posterous-content:qAkFBcnFmkJDyGlICsDj]]<span class="zem-script more-related pretty-attribution"></span>
-</div>
 
 		</div>
 	</div>
@@ -265,17 +165,6 @@ And that's what <a href="http://announce.ly">announce.ly</a> does, check it out 
 		<div class="content">
 		    As I <a href="http://andrewmccall.com/2010/02/continuous-deployment/">posted</a> a couple of weeks ago I'm working on working a continuous deployment setup so that I can push changes live quicker and easier for the projects I'm working on.
 
-I've installed and configured <a href="hudson.dev.java.net">Hudson</a>, which was a good first step. It's shown me that my builds are a bit fragile, they're heavily based on packages that I've compiled and installed into my local <a href="http://maven.apache.org/">Maven</a> repository. To solve the problem and to make my build a little more sensible I'm getting <a href="http://www.jfrog.org/">Artifactory</a> working.
-
-At this stage I'm just trying to get a very basic system in place so that I have an idea of how long a deployment will take. It's a little more complicated because I'm using Java and the WARs contain all the libraries. I could just use the defaults and push a deployment directly to the target servers, but that doesn't work. First wars are big, they can easily weigh in at 20Mb.
-
-There are a couple of things I could do here. Ideally I could unroll all the jar libs and only include the classes I need. That would drastically reduce the size, as a bonus I could probably also have it give me a warning that I'm including an unused jar, even better if I could work out the path to the maven dependency. But there's the whole problem of resources, the fact that using Springframework means most of the classes aren't being explicitly called and the fact that since I don't know anything that does all of this this, I'd have to write it all.
-
-So I've written that whole idea off, and added a shorter to-do item to make sure I'm only including jars I need. Instead I've gone for a far easier solution: deploy exploded wars, and use rsync so I can push only changes to the server.
-
-The next step is to get trigger a Hudson build with a commit-hook and use a successful Hudson build to trigger a script that does the rsync. Then I'll have very basic continuous deployments up and running albeit without any automatic roll backs of a failed deployment which ultimately is a must, but it's a start.
-
-[[posterous-content:qwszooAFbmqCtBttyFDB]]
 
 		</div>
 	</div>
@@ -292,7 +181,6 @@ The next step is to get trigger a Hudson build with a commit-hook and use a succ
 		    <strong>When: Wednesday February 24th @ 7:00pm</strong>
 <strong>Where: Hole in&rsquo;t Wall, Hebden Bridge (</strong><a href="http://maps.google.co.uk/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Hole+in't+Wall,+hebden+bridge&amp;sll=53.7421,-2.012268&amp;sspn=0.003135,0.009409&amp;ie=UTF8&amp;hq=Hole+in't+wall,&amp;hnear=Hebden+Bridge,+UK&amp;ll=53.742265,-2.013545&amp;spn=0.006269,0.018818&amp;z=16&amp;iwloc=A&amp;cid=9649925289155905514"><strong>map</strong></a><strong>)</strong>
 
-Read more about Geek Ups in general at&nbsp;<a href="http://geekup.org/">Geek Up</a>. Questions, comments etc direct them at me here, on twitter&nbsp;<a href="http://twitter.com/andrewmccall">@andrewmccall</a> or&nbsp;<a href="mailto:andrew@andrewmccall.com">email</a>.
 
 		</div>
 	</div>
@@ -308,15 +196,6 @@ Read more about Geek Ups in general at&nbsp;<a href="http://geekup.org/">Geek Up
 		<div class="content">
 		    I've been working lately trying to implement some of the things <a href="http://www.startuplessonslearned.com/">Eric Ries</a> talks about. Primarily the idea of con<a href="http://www.startuplessonslearned.com/search/label/continuous%20deployment">tinuous deployments</a> for lean startups and getting away from the fear of release.
 
-On the surface and looking back on some of the disastrous releases I've seen (deployed) it's a frightening concept. The problem with most of those releases though hasn't so much been that there was a bug or a problem, it was there was no fall back position - the release was made and there was no way to unmake it. Also working in Java releasing WARs has been a pretty big issue - you have to upload the whole release to fix even a small bug like a typo. One bug in these cases can mean you're 15-20 minutes from uploading a fix.
-
-It's a very bad place to be and I want to avoid it at all costs in the future, both the problems and as a result the fear of a release.
-
-With that in mind I've been fashioning a system for <a href="http://sproozi.com">Sproozi</a> where a release is made as an exploded war using <a href="https://hudson.dev.java.net/">Hudson</a>. On commit it's tested, deployed to a single server in the cluster and tested some more. The server joins the main cluster and it's monitored as the release is pushed to the rest of the servers to make sure it's stable.
-
-The only problem I'm having conceptually is how do I treat a commit that comes in before a release is finished - I guess I have to sit on it, but what if the release fails and I have to lock the repository? What about if the release is a success but in the meantime I have 2, 3 or even more commits that I'm sitting on? Do I deploy them one at a time until they're either all successful or one fails?
-
-How has anyone else practising dealt with these issues?
 
 		</div>
 	</div>
