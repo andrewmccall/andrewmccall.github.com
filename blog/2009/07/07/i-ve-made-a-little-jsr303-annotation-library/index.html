@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  	<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>I've Made a Little JSR303 Annotation Library</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Andrew's Website woot!">
+    <link rel="canonical" href="http://andrewmccall.com/blog/2009/07/07/i-ve-made-a-little-jsr303-annotation-library">
+
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+
+
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+    <!-- Custom CSS -->
+	<link rel="stylesheet" href="/css/main.css">
+	<link rel="stylesheet" href="/css/code.css">
+	
+	
+</head>
+    <body>
+    <header class="site-header">
+	<div class="container-fluid">
+		<div class="navbar-default navbar-fixed-top" role="navigation">
+			<a class="navbar-brand" href="/">andrewmccall.com</a>
+		</div>
+		<div class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				<li class="page-link"><a href="/about/">About</a></li>
+			</ul>
+			<form class="navbar-form navbar-left" role="search">
+				<div class="form-group">
+					<input type="text" class="form-control" placeholder="Search">
+		        </div>
+		        <button type="submit" class="btn btn-default">Submit</button>
+			</form>
+		</div>
+	</div>
+</header>
+
+
+    <div class="container-fluid">
+		<div class="row">
+		  <div class="col-xs-12 col-md-8 page-content"><div class="post">
+
+  <header class="post-header">
+    <h1>I've Made a Little JSR303 Annotation Library</h1>
+    <p class="meta">Jul 7, 2009</p>
+  </header>
+
+  <article class="post-content">
+  I've been playing with <a href="http://www.hibernate.org" class="zem_slink" title="Hibernate (Java)" rel="homepage">Hibernate</a> Validator 4.0 lately, it's an implementaion of <a href="http://en.wikipedia.org/wiki/Jet_Set_Radio" class="zem_slink" title="Jet Set Radio" rel="wikipedia">JSR</a> 303 Bean Validation - basically the ability to annotate validations for your beans. Great in Hibernate as you'll know if you've ever done it because you're object describe the constraints and Hibernate enforces them for you.
+
+JSR 303 builds on it by codifying the annotated validation framework into a standard you should be able to use from front to back and everywhere in between maintaining your rules for what is and is not valid.&nbsp;Of course that's the pot of gold at the end of the rainbow, it's far messier living on the bleeding edge before the standards have been officially released.
+
+I've released a small very early project that builds on some of the stuff I've done using the Hibernate annotaions with Springframework in the past. Basically, wrap a <a href="http://www.springsource.org" class="zem_slink" title="Spring Framework" rel="homepage">Spring</a> validator around the Hibernate one - or in this case around a generic javax.annotations validator.
+
+I've also added a few new constraints that I need. NotEmpty validates that a field must not be null and must not have a size of 0. Email validates email addresses and URL validates Urls. It's an early release, but check it out <a href="http://github.com/andrewmccall/validation">here on GitHub</a> if you're interested. If you want to use it feel free if you want to make additions I'd love to accept them.
+<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">
+[[posterous-content:kdrnzvwJgFilHgFJCjof]]<span class="zem-script more-related pretty-attribution"></span>
+</div>
+
+  </article>
+
+</div></div>
+		  <div class="col-xs-6 col-md-4 page-sidebar">
+				<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/06/24/new-site-again">New Site, Again</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/12/installing-java-8-on-os-x-10-dot-10-yosimite">Installing Java 8 on OS X 10.10 Yosimite</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/octopress">Octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/11/customer-support-what-a-joke-">Customer Support, What a Joke.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/23/validation-1-0-0-released-">Validation 1.0.0 Released.</a>
+      </li>
+    
+  </ul>
+</section>
+		  </div>
+		</div>
+    </div>
+    <footer class="site-footer">
+
+
+    <h2 class="footer-heading">andrewmccall.com</h2>
+
+    <div class="footer-col-1 column">
+      <ul>
+        <li>andrewmccall.com</li>
+        <li><a href="mailto:andrew@andrewmccall.com">andrew@andrewmccall.com</a></li>
+      </ul>
+    </div>
+
+   
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    </body>
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52254722-1', 'andrewmccall.com');
+  ga('send', 'pageview');
+
+</script>
+</html>

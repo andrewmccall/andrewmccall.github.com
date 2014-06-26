@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  	<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Testing for Search Result Quality</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Andrew's Website woot!">
+    <link rel="canonical" href="http://andrewmccall.com/blog/2008/11/03/testing-for-search-result-quality">
+
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+
+
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+    <!-- Custom CSS -->
+	<link rel="stylesheet" href="/css/main.css">
+	<link rel="stylesheet" href="/css/code.css">
+	
+	
+</head>
+    <body>
+    <header class="site-header">
+	<div class="container-fluid">
+		<div class="navbar-default navbar-fixed-top" role="navigation">
+			<a class="navbar-brand" href="/">andrewmccall.com</a>
+		</div>
+		<div class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				<li class="page-link"><a href="/about/">About</a></li>
+			</ul>
+			<form class="navbar-form navbar-left" role="search">
+				<div class="form-group">
+					<input type="text" class="form-control" placeholder="Search">
+		        </div>
+		        <button type="submit" class="btn btn-default">Submit</button>
+			</form>
+		</div>
+	</div>
+</header>
+
+
+    <div class="container-fluid">
+		<div class="row">
+		  <div class="col-xs-12 col-md-8 page-content"><div class="post">
+
+  <header class="post-header">
+    <h1>Testing for Search Result Quality</h1>
+    <p class="meta">Nov 3, 2008</p>
+  </header>
+
+  <article class="post-content">
+  I've been faced with a bit of a problem lately, how to test the quality of results being produced from a changing dataset? It's easy to write unit tests for components of an application, and to make sure they're producing the expected results, but how do you test end to end? 
+
+Andraz from <a href="http://www.zemanta.com" title="Zemanta" class="zem_slink" rel="homepage">Zemanta</a> asking the same question, <a href="http://www.zemanta.com/blog/quality-assurance/">How do you test a complex system that is trying to mimic being smart,</a> last year.
+
+<blockquote>when you have new content in the system, you get completely new related stories and you have to go back and have a human judge them. There is expansion of the evaluation data - as you add new tests you generally can&rsquo;t send them through previous versions of your algorithms, since that would be prohibitely expansive. And there is statistics that hardly gives you overview over what exactly your changes caused, just few final numbers. And then there is the problem of pipelining the processing. Even if you improve the first stage, end results might be worse, since you&rsquo;ve already adapted the second stage to previous first one. So you need to actually evaluate each part of the system in isolation and then together.
+
+At the end you actually find out that you spend disproportional amount of time evaluating even the smallest changes. So you are in danger to just skip that evaluation which naturally you shouldn&rsquo;t.
+</blockquote>
+
+The fundamental problem you run up against is that the index is constantly changing, and it's meant to change. So it's hard to automatically test the output without a clear idea of what is going in. It's also difficult to get an accurate picture of how small changes in code affect the general results if you're just using a testing index with a small dataset.
+
+One way to go about it is to gauge result quality based on measuring user interaction. Basically there are things users do when they get results they're expecting and things they do when they haven't found what they were looking for. So if you can get measure how they're reacting, you can get an idea of quality. 
+
+At the moment I'm a lone developer putting all the data in the index, and I have a good idea of what I should be seeing out if it's actually working. In the next while though we're going to be rolling out to a few more internal beta users as we get a prototype system developed and we're not going to be in control of the inputs or output anymore. So soon enough we're going to actually be faced with trying to measure the quality of the results we're giving users in a dynamic system - expect to hear much more about this as we go on. 
+
+<h6 class="zemanta-related-title" style="font-size: 1em;">Related articles by Zemanta</h6><ul class="zemanta-article-ul">
+<li class="zemanta-article-ul-li"><a href="http://www.zemanta.com/blog/?p=32">Quality assurance</a></li>
+<li class="zemanta-article-ul-li"><a href="http://marlenacompton.blogspot.com/2008/08/why-developers-balk-at-unit-testing.html">Why Developers Balk at Unit Testing</a></li>
+<li class="zemanta-article-ul-li"><a href="http://www.readwriteweb.com/archives/12_unit_testing_tips_for_software_engineers.php">12 Unit Testing Tips for Software Engineers</a></li>
+</ul>
+
+<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">[[posterous-content:JpIyswAytcrlqHthpmds]]</div>
+
+  </article>
+
+</div></div>
+		  <div class="col-xs-6 col-md-4 page-sidebar">
+				<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/06/24/new-site-again">New Site, Again</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/12/installing-java-8-on-os-x-10-dot-10-yosimite">Installing Java 8 on OS X 10.10 Yosimite</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/octopress">Octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/11/customer-support-what-a-joke-">Customer Support, What a Joke.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/23/validation-1-0-0-released-">Validation 1.0.0 Released.</a>
+      </li>
+    
+  </ul>
+</section>
+		  </div>
+		</div>
+    </div>
+    <footer class="site-footer">
+
+
+    <h2 class="footer-heading">andrewmccall.com</h2>
+
+    <div class="footer-col-1 column">
+      <ul>
+        <li>andrewmccall.com</li>
+        <li><a href="mailto:andrew@andrewmccall.com">andrew@andrewmccall.com</a></li>
+      </ul>
+    </div>
+
+   
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    </body>
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52254722-1', 'andrewmccall.com');
+  ga('send', 'pageview');
+
+</script>
+</html>

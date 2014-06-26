@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  	<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Some Progress on Continuous Deployment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Andrew's Website woot!">
+    <link rel="canonical" href="http://andrewmccall.com/blog/2010/03/02/some-progress-on-continuous-deployment">
+
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+
+
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+    <!-- Custom CSS -->
+	<link rel="stylesheet" href="/css/main.css">
+	<link rel="stylesheet" href="/css/code.css">
+	
+	
+</head>
+    <body>
+    <header class="site-header">
+	<div class="container-fluid">
+		<div class="navbar-default navbar-fixed-top" role="navigation">
+			<a class="navbar-brand" href="/">andrewmccall.com</a>
+		</div>
+		<div class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				<li class="page-link"><a href="/about/">About</a></li>
+			</ul>
+			<form class="navbar-form navbar-left" role="search">
+				<div class="form-group">
+					<input type="text" class="form-control" placeholder="Search">
+		        </div>
+		        <button type="submit" class="btn btn-default">Submit</button>
+			</form>
+		</div>
+	</div>
+</header>
+
+
+    <div class="container-fluid">
+		<div class="row">
+		  <div class="col-xs-12 col-md-8 page-content"><div class="post">
+
+  <header class="post-header">
+    <h1>Some Progress on Continuous Deployment</h1>
+    <p class="meta">Mar 2, 2010</p>
+  </header>
+
+  <article class="post-content">
+  As I <a href="http://andrewmccall.com/2010/02/continuous-deployment/">posted</a> a couple of weeks ago I'm working on working a continuous deployment setup so that I can push changes live quicker and easier for the projects I'm working on.
+
+I've installed and configured <a href="hudson.dev.java.net">Hudson</a>, which was a good first step. It's shown me that my builds are a bit fragile, they're heavily based on packages that I've compiled and installed into my local <a href="http://maven.apache.org/">Maven</a> repository. To solve the problem and to make my build a little more sensible I'm getting <a href="http://www.jfrog.org/">Artifactory</a> working.
+
+At this stage I'm just trying to get a very basic system in place so that I have an idea of how long a deployment will take. It's a little more complicated because I'm using Java and the WARs contain all the libraries. I could just use the defaults and push a deployment directly to the target servers, but that doesn't work. First wars are big, they can easily weigh in at 20Mb.
+
+There are a couple of things I could do here. Ideally I could unroll all the jar libs and only include the classes I need. That would drastically reduce the size, as a bonus I could probably also have it give me a warning that I'm including an unused jar, even better if I could work out the path to the maven dependency. But there's the whole problem of resources, the fact that using Springframework means most of the classes aren't being explicitly called and the fact that since I don't know anything that does all of this this, I'd have to write it all.
+
+So I've written that whole idea off, and added a shorter to-do item to make sure I'm only including jars I need. Instead I've gone for a far easier solution: deploy exploded wars, and use rsync so I can push only changes to the server.
+
+The next step is to get trigger a Hudson build with a commit-hook and use a successful Hudson build to trigger a script that does the rsync. Then I'll have very basic continuous deployments up and running albeit without any automatic roll backs of a failed deployment which ultimately is a must, but it's a start.
+
+[[posterous-content:qwszooAFbmqCtBttyFDB]]
+
+  </article>
+
+</div></div>
+		  <div class="col-xs-6 col-md-4 page-sidebar">
+				<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/06/24/new-site-again">New Site, Again</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/12/installing-java-8-on-os-x-10-dot-10-yosimite">Installing Java 8 on OS X 10.10 Yosimite</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/octopress">Octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/11/customer-support-what-a-joke-">Customer Support, What a Joke.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/23/validation-1-0-0-released-">Validation 1.0.0 Released.</a>
+      </li>
+    
+  </ul>
+</section>
+		  </div>
+		</div>
+    </div>
+    <footer class="site-footer">
+
+
+    <h2 class="footer-heading">andrewmccall.com</h2>
+
+    <div class="footer-col-1 column">
+      <ul>
+        <li>andrewmccall.com</li>
+        <li><a href="mailto:andrew@andrewmccall.com">andrew@andrewmccall.com</a></li>
+      </ul>
+    </div>
+
+   
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    </body>
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52254722-1', 'andrewmccall.com');
+  ga('send', 'pageview');
+
+</script>
+</html>

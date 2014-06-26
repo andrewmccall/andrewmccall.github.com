@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  	<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Continuous Deployment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Andrew's Website woot!">
+    <link rel="canonical" href="http://andrewmccall.com/blog/2010/02/23/continuous-deployment">
+
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+
+
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+    <!-- Custom CSS -->
+	<link rel="stylesheet" href="/css/main.css">
+	<link rel="stylesheet" href="/css/code.css">
+	
+	
+</head>
+    <body>
+    <header class="site-header">
+	<div class="container-fluid">
+		<div class="navbar-default navbar-fixed-top" role="navigation">
+			<a class="navbar-brand" href="/">andrewmccall.com</a>
+		</div>
+		<div class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				<li class="page-link"><a href="/about/">About</a></li>
+			</ul>
+			<form class="navbar-form navbar-left" role="search">
+				<div class="form-group">
+					<input type="text" class="form-control" placeholder="Search">
+		        </div>
+		        <button type="submit" class="btn btn-default">Submit</button>
+			</form>
+		</div>
+	</div>
+</header>
+
+
+    <div class="container-fluid">
+		<div class="row">
+		  <div class="col-xs-12 col-md-8 page-content"><div class="post">
+
+  <header class="post-header">
+    <h1>Continuous Deployment</h1>
+    <p class="meta">Feb 23, 2010</p>
+  </header>
+
+  <article class="post-content">
+  I've been working lately trying to implement some of the things <a href="http://www.startuplessonslearned.com/">Eric Ries</a> talks about. Primarily the idea of con<a href="http://www.startuplessonslearned.com/search/label/continuous%20deployment">tinuous deployments</a> for lean startups and getting away from the fear of release.
+
+On the surface and looking back on some of the disastrous releases I've seen (deployed) it's a frightening concept. The problem with most of those releases though hasn't so much been that there was a bug or a problem, it was there was no fall back position - the release was made and there was no way to unmake it. Also working in Java releasing WARs has been a pretty big issue - you have to upload the whole release to fix even a small bug like a typo. One bug in these cases can mean you're 15-20 minutes from uploading a fix.
+
+It's a very bad place to be and I want to avoid it at all costs in the future, both the problems and as a result the fear of a release.
+
+With that in mind I've been fashioning a system for <a href="http://sproozi.com">Sproozi</a> where a release is made as an exploded war using <a href="https://hudson.dev.java.net/">Hudson</a>. On commit it's tested, deployed to a single server in the cluster and tested some more. The server joins the main cluster and it's monitored as the release is pushed to the rest of the servers to make sure it's stable.
+
+The only problem I'm having conceptually is how do I treat a commit that comes in before a release is finished - I guess I have to sit on it, but what if the release fails and I have to lock the repository? What about if the release is a success but in the meantime I have 2, 3 or even more commits that I'm sitting on? Do I deploy them one at a time until they're either all successful or one fails?
+
+How has anyone else practising dealt with these issues?
+
+  </article>
+
+</div></div>
+		  <div class="col-xs-6 col-md-4 page-sidebar">
+				<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/06/24/new-site-again">New Site, Again</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/12/installing-java-8-on-os-x-10-dot-10-yosimite">Installing Java 8 on OS X 10.10 Yosimite</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/octopress">Octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/11/customer-support-what-a-joke-">Customer Support, What a Joke.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/23/validation-1-0-0-released-">Validation 1.0.0 Released.</a>
+      </li>
+    
+  </ul>
+</section>
+		  </div>
+		</div>
+    </div>
+    <footer class="site-footer">
+
+
+    <h2 class="footer-heading">andrewmccall.com</h2>
+
+    <div class="footer-col-1 column">
+      <ul>
+        <li>andrewmccall.com</li>
+        <li><a href="mailto:andrew@andrewmccall.com">andrew@andrewmccall.com</a></li>
+      </ul>
+    </div>
+
+   
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    </body>
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52254722-1', 'andrewmccall.com');
+  ga('send', 'pageview');
+
+</script>
+</html>

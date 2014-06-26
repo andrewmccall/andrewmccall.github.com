@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  	<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>There Is No Excuse for... Bad URLs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Andrew's Website woot!">
+    <link rel="canonical" href="http://andrewmccall.com/blog/2008/07/11/there-is-no-excuse-for-bad-urls">
+
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+
+
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+    <!-- Custom CSS -->
+	<link rel="stylesheet" href="/css/main.css">
+	<link rel="stylesheet" href="/css/code.css">
+	
+	
+</head>
+    <body>
+    <header class="site-header">
+	<div class="container-fluid">
+		<div class="navbar-default navbar-fixed-top" role="navigation">
+			<a class="navbar-brand" href="/">andrewmccall.com</a>
+		</div>
+		<div class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				<li class="page-link"><a href="/about/">About</a></li>
+			</ul>
+			<form class="navbar-form navbar-left" role="search">
+				<div class="form-group">
+					<input type="text" class="form-control" placeholder="Search">
+		        </div>
+		        <button type="submit" class="btn btn-default">Submit</button>
+			</form>
+		</div>
+	</div>
+</header>
+
+
+    <div class="container-fluid">
+		<div class="row">
+		  <div class="col-xs-12 col-md-8 page-content"><div class="post">
+
+  <header class="post-header">
+    <h1>There Is No Excuse for... Bad URLs</h1>
+    <p class="meta">Jul 11, 2008</p>
+  </header>
+
+  <article class="post-content">
+  <p>The address bar is at the top of every user's browser and it's often totally overlooked by developers. We all know we should think a little when choosing a domain name, well <a href="http://independentsources.com/2006/07/12/worst-company-urls/">mostly</a>, but after we've done that normally let the our toolkit or internal organisation work against the user and clutter up the address bar with crap.</p>
+
+<h1>it should make sense to the user</h1>
+
+<p>All developers primary motivation, for the address bar as with the rest of the ui, should be something that's useful to a user. It's there on every browser, on top of every page of every visitor to your site. Make them short and simple, easy to see where you are, easy to remember and easy to type. </p>
+
+<p><a href="http://mysite.com/products">http://mysite.com/products</a> <br />
+<a href="http://mysite.com/services">http://mysite.com/services</a> <br />
+<a href="http://mysite.com/services/urls">http://mysite.com/services/urls</a> <br />
+<a href="http://mysite.com/contactus">http://mysite.com/contactus</a> <br /> These are all good URLs, easy to see where you are and easy to remember. </p>
+
+
+<p>I've seen a number of applications or frameworks that want URLs in the form <b><a href="http://somesite.com/site/PAGES/EN/index.php">http://somesite.com/site/PAGES/EN/index.php</a></b>. It irritates me just seeing it.  None of that cruft has anything to do with anything a user cares about. It's inattention to detail, it's endemic on the Internet and there is no excuse for it. </p>
+
+<h1>case sensitivity</h1>
+<p>A URL should not under normal circumstances be case sensitive. Storing something at the same place with the same name only differing in case is very confusing and counter intuitive to users. Don't do it. </p>
+
+<p>
+<a href="http://mysite.com/HOME">http://mysite.com/HOME</a><br /> 
+<a href="http://mysite.com/Home">http://mysite.com/Home</a><br /> 
+<a href="http://mysite.com/home">http://mysite.com/home</a><br /> 
+These are all the same to most users and you wouldn't actually put different pages at each of them would you? So why not do the sensible thing for the user and make sure that no matter what case they use it just works?</p>
+
+<p>The case to use depends on a variety of factors. For most uses all lowercase is probably the best default choice, however using <a href="http://en.wikipedia.org/wiki/CamelCase">CamelCase</a> in a wiki, casing for adherence to brand standards or common conventions are all reasonable situations where preserving case may be the prefered option. Preserve the case yes, but don't make the URL case sensitive.</p>
+
+<p>In the 37 signals book <a href="http://www.amazon.co.uk/gp/redirect.html?ie=UTF8&amp;location=http%3A%2F%2Fwww.amazon.com%2FDefensive-Design-Web-improve-messages%2Fdp%2F073571410X%3Fie%3DUTF8%26s%3Dbooks%26qid%3D1215616513%26sr%3D8-1&amp;tag=andrewmccallc-21&amp;linkCode=ur2&amp;camp=1634&amp;creative=6738">Defensive Design for the Web</a>[[posterous-content:AdnwJyzzGmvqpgpgGjub]] [<a href="http://www.amazon.co.uk/gp/redirect.html?ie=UTF8&amp;location=http%3A%2F%2Fwww.amazon.co.uk%2FDefensive-Design-Web-Improve-Messages%2Fdp%2F073571410X%3Fie%3DUTF8%26s%3Dbooks%26qid%3D1215616625%26sr%3D1-1&amp;tag=andrewmccallc-21&amp;linkCode=ur2&amp;camp=1634&amp;creative=6738">amazon.co.uk</a>[[posterous-content:AdnwJyzzGmvqpgpgGjub]]] they point out a classic from a usability best:</p>
+
+<blockquote class="posterous_medium_quote">
+<p>I typed "www.apple.com/iTunes" in my browser's address bar but instead of information on the MP3 application, I received a "Page Not Found" error. Even though the application is called "iTunes" apple's site only accepts "www.apple.com/itunes" (all lowercase).</p>
+<p>This is an unfortunate branding situation for Apple. Customers are actually punished for adhering to the brand's naming conventions</p>
+</blockquote>
+
+<p>At the time of this post on Apple has fixed it, both URLs will now give you the correct page but I think it's a great example. As well as a great excuse to link to the excellent 37 signals book. It's worth pointing out that the apple page currently redirects to the lowercase <a href="http://www.apple.com/itunes">www.apple.com/itunes</a> url so it's not case preserving or using the correct case to adhere to the brand's naming conventions, but at least it works. </p>
+
+<h1>file extentions</h1>
+
+<p>Why do so many websites have pages that end in html, asp, php, jsp, .do? Users don't care about what language you're using, telling them is pointless and worse makes it hard for them to figure out URLs from memory or by making an educated guess. Take the time to configure your server to at the very least drop the extensions.</p>
+
+<h2>The exception to the rule</h2>
+
+<p>There are times when a file extention is important, and developers should know when to apply the above rules and when for everyone's sake not to- when a file extention dictates the mime type, or when you're providing a file for a user to download you obviously want to maintain the extention. There is nothing wrong with having .pdf, .exe, .dmg, .gif, .jpg, .avi, .mov etc. Most of those files are embedded, or downloaded and should maintain their extensions.</p>
+
+<h1>Querystrings</h1>
+
+<p>I hate them. I really hate them. What the is index.php?ID=123 anyway, what does that mean to me? Keep your database IDs in the database and give me something useful. Blogs get this right a lot of the time, or close anyway. Forums are notorious for getting this wrong. </p>
+
+<p>A querystring is alright, if you're running a query, a search or something similar where various parameters are going to affect the outcome. It's not alright if you're pulling one element out of a database. It's alright if you're using an API. If you're pulling a single item and the only identifier is a numeric id you can still do better than a query string. How about: <a href="http://mysite/items/12345/">http://mysite/items/12345/</a></p>
+
+<h1>why should we care?</h1>
+
+<p>It seems like a small thing to worry about when you've got a whole application to build. The URL is like a lot of little things, it shows attention to detail. It's easy to make them sensible if you choose to and it will make some users lives easier. The short  term pain of making all your URLs sensible will in the long run improve usability- you might even retain a few more users here and there and eventually that will add up.</p>
+
+<p>Take for example something like a property sales application. Let's give it two URLs for the sake of argument.</p>
+
+<ol>
+<li><a href="http://joespropertysite.com/PAGES/EN/SITE/property.php?ID=233223">http://joespropertysite.com/PAGES/EN/SITE/property.php?ID=233223</a></li>
+<li><a href="http://joespropertysite.com/property/spain/malaga/2Bed/StunningTownHouse">http://joespropertysite.com/property/spain/malaga/2Bed/StunningTownHouse</a></li>
+</ol>
+
+<p>I hammed it up a bit on the last one to prove a point- they're both a similar number of characters but the second is so much better even though it's longer!</p>
+
+<ul>
+<li>The second is much more user friendly.</li>
+<li>The second URL is much more information rich than the fist. You're looking at a property, on a page, on a site written in php in english - or - You're looking at a property, in Malaga, Spain with 2 bedrooms and it's a 'Stunning town house'.</li> 
+<li>To quickly broaden a search for related two bedroom properties in malaga it's obvious you can just remove the last part of the URL on the second. The first you'll have to use the search function.</li>
+</ul>
+
+<h1>No excuse for... regular features on blogs</h1>
+
+<p><i>This might turn into a regular feature, I've got a growing list of things and there is no excuse for them. I think what I'll do is queue them up as I write them then post them for a Friday afternoon read. </i></p>
+
+  </article>
+
+</div></div>
+		  <div class="col-xs-6 col-md-4 page-sidebar">
+				<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/06/24/new-site-again">New Site, Again</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/12/installing-java-8-on-os-x-10-dot-10-yosimite">Installing Java 8 on OS X 10.10 Yosimite</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/octopress">Octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/11/customer-support-what-a-joke-">Customer Support, What a Joke.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/23/validation-1-0-0-released-">Validation 1.0.0 Released.</a>
+      </li>
+    
+  </ul>
+</section>
+		  </div>
+		</div>
+    </div>
+    <footer class="site-footer">
+
+
+    <h2 class="footer-heading">andrewmccall.com</h2>
+
+    <div class="footer-col-1 column">
+      <ul>
+        <li>andrewmccall.com</li>
+        <li><a href="mailto:andrew@andrewmccall.com">andrew@andrewmccall.com</a></li>
+      </ul>
+    </div>
+
+   
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    </body>
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52254722-1', 'andrewmccall.com');
+  ga('send', 'pageview');
+
+</script>
+</html>

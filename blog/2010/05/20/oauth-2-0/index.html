@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  	<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>OAuth 2.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Andrew's Website woot!">
+    <link rel="canonical" href="http://andrewmccall.com/blog/2010/05/20/oauth-2-0">
+
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+
+
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+    <!-- Custom CSS -->
+	<link rel="stylesheet" href="/css/main.css">
+	<link rel="stylesheet" href="/css/code.css">
+	
+	
+</head>
+    <body>
+    <header class="site-header">
+	<div class="container-fluid">
+		<div class="navbar-default navbar-fixed-top" role="navigation">
+			<a class="navbar-brand" href="/">andrewmccall.com</a>
+		</div>
+		<div class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				<li class="page-link"><a href="/about/">About</a></li>
+			</ul>
+			<form class="navbar-form navbar-left" role="search">
+				<div class="form-group">
+					<input type="text" class="form-control" placeholder="Search">
+		        </div>
+		        <button type="submit" class="btn btn-default">Submit</button>
+			</form>
+		</div>
+	</div>
+</header>
+
+
+    <div class="container-fluid">
+		<div class="row">
+		  <div class="col-xs-12 col-md-8 page-content"><div class="post">
+
+  <header class="post-header">
+    <h1>OAuth 2.0</h1>
+    <p class="meta">May 20, 2010</p>
+  </header>
+
+  <article class="post-content">
+  I've been updating my OAuth library to support OAuth 2.0 mostly so I can add Facebook to Announce.ly and Sproozi, but more on that later. OAuth 2.0 is similar to 1.0 but changes a few key things fundamentally and isn't backwards compatible.
+
+<strong>What's wrong with 1.0, doesn't it work?</strong>
+
+It does, but probably the biggest issue is the fact that you have to sign the message knowing all it's content beforehand. This works well if the data is on the querystring in a GET request or for simple operations but isn't optimal if your data is part of the POST body. It also means you have to construct your requests in a certain way, which is a bad thing.
+
+Take photo, audio or video data - to post that you'll need to sign the whole request and it's not clear how it should work with multipart data. There are several extensions to the spec that deal with some of these issues, but the fact that there are non standard extensions to do something pretty standard kinda says it all.
+
+Even if you're not dealing with these issues you still have to work with your requests as units where you know the whole content beforehand.
+
+<strong>What's new in OAuth 2?</strong>
+
+OAuth 2.0 in it's simplest form works over HTTPS connections and simply asks for a token - the security and trust are built in to the protocol. It's that easy.
+
+OAuth 2.0 sill lets users sign messages to transmit them over insecure channels, plain HTTP, but the signing methods are much easier to implement. Gone is the complicated parameter normalisation algorithm and in it's place is a much simpler version that doesn't require POST data in the signature. So even with multipart submissions it should just work.
+
+At the moment I'm cleaning things up and preparing the oauth library to work with oauth 2.0 and changing the way it works to reflect the simpler way oauth 2.0 does. You can check it out on GitHub [<a href="http://github.com/andrewmccall/oauth">http://github.com/andrewmccall/oauth</a>]
+
+  </article>
+
+</div></div>
+		  <div class="col-xs-6 col-md-4 page-sidebar">
+				<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/06/24/new-site-again">New Site, Again</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/12/installing-java-8-on-os-x-10-dot-10-yosimite">Installing Java 8 on OS X 10.10 Yosimite</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/octopress">Octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/11/customer-support-what-a-joke-">Customer Support, What a Joke.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/23/validation-1-0-0-released-">Validation 1.0.0 Released.</a>
+      </li>
+    
+  </ul>
+</section>
+		  </div>
+		</div>
+    </div>
+    <footer class="site-footer">
+
+
+    <h2 class="footer-heading">andrewmccall.com</h2>
+
+    <div class="footer-col-1 column">
+      <ul>
+        <li>andrewmccall.com</li>
+        <li><a href="mailto:andrew@andrewmccall.com">andrew@andrewmccall.com</a></li>
+      </ul>
+    </div>
+
+   
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    </body>
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52254722-1', 'andrewmccall.com');
+  ga('send', 'pageview');
+
+</script>
+</html>

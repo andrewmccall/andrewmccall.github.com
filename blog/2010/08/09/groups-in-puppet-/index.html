@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  	<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Groups in Puppet.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Andrew's Website woot!">
+    <link rel="canonical" href="http://andrewmccall.com/blog/2010/08/09/groups-in-puppet-">
+
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+
+
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+    <!-- Custom CSS -->
+	<link rel="stylesheet" href="/css/main.css">
+	<link rel="stylesheet" href="/css/code.css">
+	
+	
+</head>
+    <body>
+    <header class="site-header">
+	<div class="container-fluid">
+		<div class="navbar-default navbar-fixed-top" role="navigation">
+			<a class="navbar-brand" href="/">andrewmccall.com</a>
+		</div>
+		<div class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				<li class="page-link"><a href="/about/">About</a></li>
+			</ul>
+			<form class="navbar-form navbar-left" role="search">
+				<div class="form-group">
+					<input type="text" class="form-control" placeholder="Search">
+		        </div>
+		        <button type="submit" class="btn btn-default">Submit</button>
+			</form>
+		</div>
+	</div>
+</header>
+
+
+    <div class="container-fluid">
+		<div class="row">
+		  <div class="col-xs-12 col-md-8 page-content"><div class="post">
+
+  <header class="post-header">
+    <h1>Groups in Puppet.</h1>
+    <p class="meta">Aug 9, 2010</p>
+  </header>
+
+  <article class="post-content">
+  <a href="http://andrewmccall.com/2010/08/setting-up-users-and-securing-my-server/">Last time</a> I ended up not being able to create my user because I didn't have a group for it and ran out of time before I needed to call it a night. So I'll start tonight by creating a group for my user. 
+
+Go to the puppet config dir:
+<div class="CodeRay">
+  <div class="code"><pre># cd /etc/puppet</pre></div>
+</div>
+
+
+Then edit the virtual file we created in our users module last time and add a group, like this:
+<em><div class="CodeRay">
+  <div class="code"><pre>users/manifests/virtual.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre>class user::virtual {
+    @user { &quot;andrewmccall&quot;:
+        ensure  =&gt; &quot;present&quot;,
+        uid     =&gt; &quot;1001&quot;,
+        gid     =&gt; &quot;1001&quot;,
+        comment =&gt; &quot;Andrew McCall&quot;,
+        home    =&gt; &quot;/home/andrewmccall&quot;,
+        shell   =&gt; &quot;/bin/bash&quot;,
+        managehome =&gt; true,
+        require =&gt; [Group[&quot;andrewmccall&quot;]],
+    }
+
+    @group { &quot;andrewmccall&quot;:
+        ensure  =&gt; &quot;present&quot;,
+        gid     =&gt; &quot;1001&quot;, 
+    }
+
+}</pre></div>
+</div>
+
+
+Next in the unixadmins file we need to realize our new group, it should look like this:
+<em><div class="CodeRay">
+  <div class="code"><pre>users/manifests/virtual.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre>class user::unixadmins inherits user::virtual {
+    realize(
+        Group[&quot;andrewmccall&quot;],
+        User[&quot;andrewmccall&quot;]
+    )
+}</pre></div>
+</div>
+
+
+Run puppet on the local files and you'll have a new user and a group for it. It should look something like this: 
+
+<div class="CodeRay">
+  <div class="code"><pre># puppet -v --modulepath=/etc/puppet/modules /etc/puppet/manifests/site.pp
+info: Autoloaded module sudo
+info: Autoloaded module user
+info: Applying configuration version '1281368198'
+notice: //user::virtual/Group[andrewmccall]/ensure: created
+notice: //user::virtual/User[andrewmccall]/ensure: created</pre></div>
+</div>
+
+
+ Don't forget to commit the changes to the git repo. 
+
+<div class="CodeRay">
+  <div class="code"><pre># git add .
+# git commit -a -m &quot;Added a users module to manage users&quot;</pre></div>
+</div>
+
+  </article>
+
+</div></div>
+		  <div class="col-xs-6 col-md-4 page-sidebar">
+				<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/06/24/new-site-again">New Site, Again</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/12/installing-java-8-on-os-x-10-dot-10-yosimite">Installing Java 8 on OS X 10.10 Yosimite</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/octopress">Octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/11/customer-support-what-a-joke-">Customer Support, What a Joke.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/23/validation-1-0-0-released-">Validation 1.0.0 Released.</a>
+      </li>
+    
+  </ul>
+</section>
+		  </div>
+		</div>
+    </div>
+    <footer class="site-footer">
+
+
+    <h2 class="footer-heading">andrewmccall.com</h2>
+
+    <div class="footer-col-1 column">
+      <ul>
+        <li>andrewmccall.com</li>
+        <li><a href="mailto:andrew@andrewmccall.com">andrew@andrewmccall.com</a></li>
+      </ul>
+    </div>
+
+   
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    </body>
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52254722-1', 'andrewmccall.com');
+  ga('send', 'pageview');
+
+</script>
+</html>

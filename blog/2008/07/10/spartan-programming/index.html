@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  	<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Spartan Programming</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Andrew's Website woot!">
+    <link rel="canonical" href="http://andrewmccall.com/blog/2008/07/10/spartan-programming">
+
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+
+
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+    <!-- Custom CSS -->
+	<link rel="stylesheet" href="/css/main.css">
+	<link rel="stylesheet" href="/css/code.css">
+	
+	
+</head>
+    <body>
+    <header class="site-header">
+	<div class="container-fluid">
+		<div class="navbar-default navbar-fixed-top" role="navigation">
+			<a class="navbar-brand" href="/">andrewmccall.com</a>
+		</div>
+		<div class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				<li class="page-link"><a href="/about/">About</a></li>
+			</ul>
+			<form class="navbar-form navbar-left" role="search">
+				<div class="form-group">
+					<input type="text" class="form-control" placeholder="Search">
+		        </div>
+		        <button type="submit" class="btn btn-default">Submit</button>
+			</form>
+		</div>
+	</div>
+</header>
+
+
+    <div class="container-fluid">
+		<div class="row">
+		  <div class="col-xs-12 col-md-8 page-content"><div class="post">
+
+  <header class="post-header">
+    <h1>Spartan Programming</h1>
+    <p class="meta">Jul 10, 2008</p>
+  </header>
+
+  <article class="post-content">
+  <p><a href="http://codinghorror.com">Jeff Atwood</a> was pleased to find that his coding conventions, the ones we all settle into, have been tending towards those of a style of programming called Spartan Programming. Which is minimalist programming, as in "a spartan lifestyle". Check his <a href="http://www.codinghorror.com/blog/archives/001148.html">post</a> out for a more in depth explination but suffice to say the aim is to reduce complexity in any way possible. </p>
+
+<p>I've got to agree that more and more I've tended in that direction too. I don't remember the last time I had more than a handful of conditionals or loops in a method. My methods are terse and accomplish one thing, sub tasks are split out into other methods. It's come very naturally, but it has taken time. I don't think it's something you can be taught, or learn. It's definitely a practice thing. </p>
+
+<p>One aspect of Spartan Programming where I disagree is with the terse variable names. I think they could end up introducing more accidental and avoidable errors. They lessen the utility of some key IDE features. And generally would just make my life harder, so I've gone the other way. Once upon a time I would happily create the following code: </p>
+
+<div class="CodeRay">
+  <div class="code"><pre>public void sendMessage() {
+    MimeMessage m = new MimeMessage();
+    m.setBody(&quot;This is a test&quot;);
+    m.send();
+}</pre></div>
+</div>
+
+
+<p>These days I try to avoid calling variables things like <em>m</em> and prefer to call them what they are: </p>
+
+<div class="CodeRay">
+  <div class="code"><pre>public void sendMessage() {
+    MimeMessage message = new MimeMessage();
+    message.setBody(&quot;This is a test&quot;);
+    message.send();
+}</pre></div>
+</div>
+
+
+<p>I know the arguments and logic: </p>
+<ul>
+<li>The method should be simple enough that the variable name <em>m</em> is clear enough. </li>
+<li>The shorter name reduces complexity and therefore errors. </li>
+<li>Less characters means lines don't get too long</li>
+</ul>
+
+<p>Of these three the third is the only one I really buy though. Long variable names and too many characters on a line can push some stuff too far to the right potentially hiding errors or overly complex code; but it's an edge case and there are other ways to solve the problem.</p>
+
+<p>While true that in a short minimalist method a variable <em>m</em> would be clear enough, a variable called <em>message</em> is equally clear. The shortening doesn't gain anything in clarity. The argument for less characters reducing errors in the era of modern IDEs doesn't wash with me either - My IDE tells me of I mistype a variable and auto completes them furthermore by typing actual words I actually improve the accuracy even more. </p>
+
+<p>Shorter names on the other hand can tend more towards a crowded namespace and can result in properly typing the wrong variable. This is especially a problem in a <a href="http://en.wikipedia.org/wiki/Programming_language#Weak_and_strong_typing">weakly typed language</a>.</p>
+
+<p>Consider the following:</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>function sendInviteMessages(n) 
+    for i = 0 to n
+        Set m = Server.CreateObject(&quot;MimeMessage)
+        m.Body = &quot;Welcome to our fancy new site!&quot;
+        m.Send
+        Set n = Nothing
+    next
+end function</pre></div>
+</div>
+
+
+<p>What you see here is something that wouldn't happen, or not as often with a variable name like <em>number</em> instead of <em>n</em> and <em>message</em> instead of <em>m</em>. Worse still, depending on the language and how it treats null variables it might even pass a quick test with a single address and appear to be working!</p>
+
+<p>The one place I totally disagree with the terse variable naming conventions though, is the method parameters. That actually makes life harder when working with code completion. Which is easier to follow?</p>
+
+[[posterous-content:eGAIahqgzytkaCBzAqDi]]
+[[posterous-content:BytBtkkrvcjwhyJbrGHq]]
+
+<p>There are plenty of other code completion and helpful shortcuts in a modern IDE where the parameter names are used to make our lives easier. All of which lost, with no real gain.</p>
+
+<p>I'm not arguing that variable names shouldn't be terse and sensible. Going back to the first example the following is just stupid and is far worse than using just <em>m</em>, it's practically illegible and very difficult to just eyeball the code to see what is going on.</p>
+
+<div class="CodeRay">
+  <div class="code"><pre>public void sendMessage() {
+    MimeMessage theMessageToSend = new MimeMessage();
+    theMessageToSend.setBody(&quot;This is a test&quot;);
+    theMessageToSend.send();
+}</pre></div>
+</div>
+
+
+<p>Other times I go the opposite way and have adopted conventions for making some variables extremely terse. <em>InputStream</em> and <em>OutputStream</em> variables for example I always call <em>is</em> and <em>os</em>. So I do try and be as terse as possible, but never terseness at the expense of obviousness of intent.</p>
+
+<p>While I agree with most of the practices and like Jeff was nodding along as I read about Spartan Programming, there are a few I don't fully follow and some I'm against. In the end though I tend to agree with his assertion that <em>Minimalism isn't always the right choice, but it's rarely the <i>wrong</i> choice</em> as long as it's not at the expense of clarity of intent.</p>
+
+  </article>
+
+</div></div>
+		  <div class="col-xs-6 col-md-4 page-sidebar">
+				<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/06/24/new-site-again">New Site, Again</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/12/installing-java-8-on-os-x-10-dot-10-yosimite">Installing Java 8 on OS X 10.10 Yosimite</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/octopress">Octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/11/customer-support-what-a-joke-">Customer Support, What a Joke.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/23/validation-1-0-0-released-">Validation 1.0.0 Released.</a>
+      </li>
+    
+  </ul>
+</section>
+		  </div>
+		</div>
+    </div>
+    <footer class="site-footer">
+
+
+    <h2 class="footer-heading">andrewmccall.com</h2>
+
+    <div class="footer-col-1 column">
+      <ul>
+        <li>andrewmccall.com</li>
+        <li><a href="mailto:andrew@andrewmccall.com">andrew@andrewmccall.com</a></li>
+      </ul>
+    </div>
+
+   
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    </body>
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52254722-1', 'andrewmccall.com');
+  ga('send', 'pageview');
+
+</script>
+</html>

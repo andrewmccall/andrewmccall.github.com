@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  	<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Interfaces First</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Andrew's Website woot!">
+    <link rel="canonical" href="http://andrewmccall.com/blog/2008/09/30/interfaces-first">
+
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+
+
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+    <!-- Custom CSS -->
+	<link rel="stylesheet" href="/css/main.css">
+	<link rel="stylesheet" href="/css/code.css">
+	
+	
+</head>
+    <body>
+    <header class="site-header">
+	<div class="container-fluid">
+		<div class="navbar-default navbar-fixed-top" role="navigation">
+			<a class="navbar-brand" href="/">andrewmccall.com</a>
+		</div>
+		<div class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				<li class="page-link"><a href="/about/">About</a></li>
+			</ul>
+			<form class="navbar-form navbar-left" role="search">
+				<div class="form-group">
+					<input type="text" class="form-control" placeholder="Search">
+		        </div>
+		        <button type="submit" class="btn btn-default">Submit</button>
+			</form>
+		</div>
+	</div>
+</header>
+
+
+    <div class="container-fluid">
+		<div class="row">
+		  <div class="col-xs-12 col-md-8 page-content"><div class="post">
+
+  <header class="post-header">
+    <h1>Interfaces First</h1>
+    <p class="meta">Sep 30, 2008</p>
+  </header>
+
+  <article class="post-content">
+  Don't write spec documents, throw away any you have near you, they're next to useless anyway. It might seem like a hearsay to some but it's true and deep down even the most most anal planner in all of us knows it. Two of the biggest reasons for this are: 
+
+<ul>
+	<li>
+<strong>size and scope</strong>: In order to address every aspect of your project a full specification document has to, well address every aspect of your project and it's going to be huge as a result. </li>
+	<li>
+<strong>lack of vision</strong>: For most people relating what's written on paper to a vision of a design in their heads is difficult if not impossible.  </li>
+</ul>
+
+Loose documents don't work well either, because leaving the obvious unsaid just leads to problems, chiefly not everything is obvious to everyone. The devil is in the details and avoiding them until the end of a project is just going to cause trouble. 
+
+<em>"Why haven't we implemented x, that should have been obvious!"</em>
+
+<h1>create the interfaces</h1>
+
+Prototype the interfaces and use them as your spec. Working this way has so many benefits, try it once and I promise you'll be converted. Before you write a single line of backend code, sit down and  work out your interfaces. Build each screen, put all the buttons, fields and elements on the page
+
+I normally start with index cards and write a few simple requirements for each screen or page - just a few simple sentences listing what the page is expected to achieve. 
+
+My next step is to turn those requirements into interfaces. 
+
+<h2>in HTML, not photoshop</h2>
+
+Photoshop is great, but let's face it it's no better for trying to work out a functional interface prototype than some paper and a pencil. It's very easy to focus on making things look pretty over making them functional and you risk missing something important out. 
+
+The best way to avoid both of these traps is to write your interfaces in HTML, mark them up semantically as they will be marked up in the release and use them as your working spec. 
+
+<h3>I know good design but I'm no designer</h3>
+
+Another benefit of coding up your interfaces in HTML before you start writing code is you can hand them off to designers so they can make them look pretty as you're working on making them work. I have a pretty basic idea of design principals and the tools - but I find it hard work. So with interface first development I don't have to think about it. 
+
+<h3>let the testing begin</h3>
+
+Another thing which is made infinitely easier with interface first development is functional testing, because your testers don't have to wait for a release before they can start developing a test suite. <i>You are using an automated test suite aren't you?</i> By generating interfaces as developers add functionality testers can already have been through the interfaces and written a whole series of failing tests. 
+
+<h2>updating later</h2>
+
+<p>The great thing about using HTML as your design and communication tool is that when it comes to making a change to a page you have the most up to date working copy there ready to modify in the form of your site. Just save the page, add the change to the HTML and you've got your interfaces ready for discussion and later implementation. What could be easier, faster or more clear for everyone?</p>
+
+<h1>it's not a panacea</h1>
+
+There have been times when I've been working with notoriously difficult individuals where nothing was going to satisfy. An exmaple that springs to mind is a multi month project where we produced an interface design early in the project. The design was a set of PDF images not HTML (see above), but the delivered product was a pixel perfect implementation of it. Only once the project was delivered was there any input on the design or functioning of the project - I'm not just talking things that a PDF can't show you like what clicking a link looks like. I'm taking basic things like colours, layout and the size of elements! 
+
+Would a HTML mock up have made any difference, I actually doubt it. I take blame for miscommunication and resulting mistakes when it's my fault but in this case even after the site was fully developed and deployed to a staging area for testing none of these issues were highlighted. It was only after the site was put into production that these "critical issues" were discovered.
+
+  </article>
+
+</div></div>
+		  <div class="col-xs-6 col-md-4 page-sidebar">
+				<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/06/24/new-site-again">New Site, Again</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/12/installing-java-8-on-os-x-10-dot-10-yosimite">Installing Java 8 on OS X 10.10 Yosimite</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/02/24/octopress">Octopress</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/11/customer-support-what-a-joke-">Customer Support, What a Joke.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2010/12/23/validation-1-0-0-released-">Validation 1.0.0 Released.</a>
+      </li>
+    
+  </ul>
+</section>
+		  </div>
+		</div>
+    </div>
+    <footer class="site-footer">
+
+
+    <h2 class="footer-heading">andrewmccall.com</h2>
+
+    <div class="footer-col-1 column">
+      <ul>
+        <li>andrewmccall.com</li>
+        <li><a href="mailto:andrew@andrewmccall.com">andrew@andrewmccall.com</a></li>
+      </ul>
+    </div>
+
+   
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    </body>
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-52254722-1', 'andrewmccall.com');
+  ga('send', 'pageview');
+
+</script>
+</html>
