@@ -12,25 +12,25 @@ Let's start with the latter.
 First we need a group of administrators, for the sake of ease and self-documentation I called it sudo. Well ubuntu called it sudo, but we still need to ensure it exists, because it won't on all operating systems.
 
 <em><div class="CodeRay">
-  <div class="code"><pre>modules/sudo/manifests/init.pp</pre></div>
+  <code>modules/sudo/manifests/init.pp</code>
 </div>
 </em>
 <div class="CodeRay">
-  <div class="code"><pre>import &quot;*&quot;
+  <code>import &quot;*&quot;
 class sudo {
     include sudo::install, sudo::sudoers
     group{&quot;sudo&quot;: ensure =&gt; &quot;present&quot;}
-}</pre></div>
+}</code>
 </div>
 
 
 All we did here was very simply ensure that the puppet group existed. Next we need to update our sudoers file to allow members of the sudo group to sudo. 
 <em><div class="CodeRay">
-  <div class="code"><pre>modules/sudo/files/sudoers</pre></div>
+  <code>modules/sudo/files/sudoers</code>
 </div>
 </em>
 <div class="CodeRay">
-  <div class="code"><pre># /etc/sudoers
+  <code># /etc/sudoers
 #
 # This file MUST be edited with the 'visudo' command as root.
 #
@@ -50,7 +50,7 @@ Defaults        env_reset
 
 # User privilege specification
 root        ALL=(ALL) ALL
-%sudo   ALL=(ALL) ALL</pre></div>
+%sudo   ALL=(ALL) ALL</code>
 </div>
 
 
@@ -59,11 +59,11 @@ All we did here was add the last line which allows members of the sudo group to 
 The next and final step is to ensure our user module allows us to specify additional groups. 
 
 <em><div class="CodeRay">
-  <div class="code"><pre>modules/user/manifests/init.pp</pre></div>
+  <code>modules/user/manifests/init.pp</code>
 </div>
 </em>
 <div class="CodeRay">
-  <div class="code"><pre>import &quot;*&quot;
+  <code>import &quot;*&quot;
 class user {
 
     define create ($groups = &quot;&quot;) {
@@ -97,7 +97,7 @@ class user {
     define server_key ($ensure = &quot;&quot;, $user = &quot;&quot;) {
         ssh::auth::server{&quot;$title&quot;: ensure=&gt;$ensure, user=&gt;$user}
     }
-}</pre></div>
+}</code>
 </div>
 
 
@@ -116,18 +116,18 @@ Our sshd module is a lot like the original sudoers module. We're simply copying 
 Start by creating our module directories
 
 <div class="CodeRay">
-  <div class="code"><pre># mkdir -p modules/sshd/files modules/sshd/manifests</pre></div>
+  <code># mkdir -p modules/sshd/files modules/sshd/manifests</code>
 </div>
 
 
 Next we create the init.pp file for the ssh module. I've taken inspiration from the <a href="http://projects.puppetlabs.com/projects/1/wiki/Puppet_Common_Modules_Ssh">example on the puppet wiki</a> 
 
 <em><div class="CodeRay">
-  <div class="code"><pre>modules/sshd/manifests/init.pp</pre></div>
+  <code>modules/sshd/manifests/init.pp</code>
 </div>
 </em>
 <div class="CodeRay">
-  <div class="code"><pre>class sshd {
+  <code>class sshd {
 
    package {&quot;openssh-server&quot;: ensure=&gt; &quot;installed&quot;}
 
@@ -148,43 +148,43 @@ Next we create the init.pp file for the ssh module. I've taken inspiration from 
             Package[&quot;openssh-server&quot;]
         ]
     }
-}</pre></div>
+}</code>
 </div>
 
 
 Next copy your current sshd_config into the files directory of your module
 
 <div class="CodeRay">
-  <div class="code"><pre># cp /etc/ssh/sshd_config modules/sshd/files</pre></div>
+  <code># cp /etc/ssh/sshd_config modules/sshd/files</code>
 </div>
 
 
 Then I edited the following lines to deny root logins and password authentication:
 
 <em><div class="CodeRay">
-  <div class="code"><pre>modules/sshd/files/sshd_config</pre></div>
+  <code>modules/sshd/files/sshd_config</code>
 </div>
 </em>
 <div class="CodeRay">
-  <div class="code"><pre>PermitRootLogin no
+  <code>PermitRootLogin no
 ...
-PasswordAuthentication no</pre></div>
+PasswordAuthentication no</code>
 </div>
 
 
 Finally I updated my node.pp to include the new module
 
 <em><div class="CodeRay">
-  <div class="code"><pre>manifests/nodes.pp</pre></div>
+  <code>manifests/nodes.pp</code>
 </div>
 </em>
 <div class="CodeRay">
-  <div class="code"><pre>node build {
+  <code>node build {
     include sudo, user, sshd, ssh::auth, user::keystore
     user::create{&quot;andrewmccall&quot;: groups =&gt; &quot;sudo&quot;}
     user::client_key{&quot;andrewmccall&quot;:}
     user::server_key{&quot;andrewmccall&quot;:}
-}</pre></div>
+}</code>
 </div>
 
 

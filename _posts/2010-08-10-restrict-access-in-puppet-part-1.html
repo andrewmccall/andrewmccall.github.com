@@ -21,62 +21,62 @@ I was going to write the framework myself, even had a skeleton all laid out - I'
 Then I found the <a href="http://projects.reductivelabs.com/projects/puppet/wiki/Module_Ssh_Auth_Patterns">ssh::auth</a> from the puppet wiki. it's released under the GPL, while everything else I write is Apache 2 compatible - if that's a problem you may want to stop here and look for another solution. If you find one that's Apache 2 compatible, I'd love to know about it. For what I'm doing it doesn't really matter, I went with my skeleton package as a thin wrapper around it and downloaded the module into my users package.
 
 <div class="CodeRay">
-  <div class="code"><pre># wget http://projects.reductivelabs.com/attachments/download/935/auth.pp -O ./modules/user/manifests/auth.pp</pre></div>
+  <code># wget http://projects.reductivelabs.com/attachments/download/935/auth.pp -O ./modules/user/manifests/auth.pp</code>
 </div>
 
 
 The first thing I did was create a new keystore.pp file, the ssh::auth package made that pretty easy: 
 
 <em><div class="CodeRay">
-  <div class="code"><pre>modules/user/manifests/keystore.pp</pre></div>
+  <code>modules/user/manifests/keystore.pp</code>
 </div>
 </em>
 <div class="CodeRay">
-  <div class="code"><pre>class user::keystore {
+  <code>class user::keystore {
     include ssh::auth::keymaster
-}</pre></div>
+}</code>
 </div>
 
 
 Then I needed to do was create a keystore. The keystore is just the host you nominate to control all your client and server keys.  To do that in nodes.pp I properly named my only node and stopped using the default and added a couple of new includes.
 
 <em><div class="CodeRay">
-  <div class="code"><pre>manifests/nodes.pp</pre></div>
+  <code>manifests/nodes.pp</code>
 </div>
 </em>
 <div class="CodeRay">
-  <div class="code"><pre>node build {
+  <code>node build {
     include sudo, user, ssh::auth, user::keystore
-}</pre></div>
+}</code>
 </div>
 
 
 Run puppet and you should end up with a directory <em><div class="CodeRay">
-  <div class="code"><pre>/var/lib/keys</pre></div>
+  <code>/var/lib/keys</code>
 </div>
 </em> ready to store keys.
 
 <div class="CodeRay">
-  <div class="code"><pre># puppet -v --modulepath=/etc/puppet/modules /etc/puppet/manifests/site.pp</pre></div>
+  <code># puppet -v --modulepath=/etc/puppet/modules /etc/puppet/manifests/site.pp</code>
 </div>
 
 
 I decided I'd update my user package by removing some files and putting the user class into the init.pp file. I had too many files in there that just didn't seem to be doing anything. 
 
 <div class="CodeRay">
-  <div class="code"><pre># rm modules/user/manifests/virtual.pp
-# rm modules/user/manifests/unixadmins.pp</pre></div>
+  <code># rm modules/user/manifests/virtual.pp
+# rm modules/user/manifests/unixadmins.pp</code>
 </div>
 
 
 Then I added a create method in the user class in my init.pp file: 
 
 <em><div class="CodeRay">
-  <div class="code"><pre>modules/users/manifests/init.pp</pre></div>
+  <code>modules/users/manifests/init.pp</code>
 </div>
 </em>
 <div class="CodeRay">
-  <div class="code"><pre>import &quot;*&quot;
+  <code>import &quot;*&quot;
 class user {
 
     define create {
@@ -116,7 +116,7 @@ class user {
     define server_key ($ensure = &quot;&quot;, $user = &quot;&quot;) {
         ssh::auth::server{&quot;$title&quot;: ensure=&gt;$ensure, user=&gt;$user}
     }
-}</pre></div>
+}</code>
 </div>
 
 
@@ -125,16 +125,16 @@ This code defines a new method called create, and realises all the required reso
 Now we need to update our node to create ourselves a user using this new method
 
 <em><div class="CodeRay">
-  <div class="code"><pre>manifests/nodes.pp</pre></div>
+  <code>manifests/nodes.pp</code>
 </div>
 </em>
 <div class="CodeRay">
-  <div class="code"><pre>node my-server {
+  <code>node my-server {
     include sudo, ssh::auth, ssh::auth::keymaster, user
     user::create{&quot;andrewmccall&quot;:}
     user::client_key{&quot;andrewmccall&quot;:}
     user::server_key{&quot;andrewmccall&quot;:}
-}</pre></div>
+}</code>
 </div>
 
 

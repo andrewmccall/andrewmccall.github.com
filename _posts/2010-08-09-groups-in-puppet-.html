@@ -7,17 +7,17 @@ published: true
 
 Go to the puppet config dir:
 <div class="CodeRay">
-  <div class="code"><pre># cd /etc/puppet</pre></div>
+  <code># cd /etc/puppet</code>
 </div>
 
 
 Then edit the virtual file we created in our users module last time and add a group, like this:
 <em><div class="CodeRay">
-  <div class="code"><pre>users/manifests/virtual.pp</pre></div>
+  <code>users/manifests/virtual.pp</code>
 </div>
 </em>
 <div class="CodeRay">
-  <div class="code"><pre>class user::virtual {
+  <code>class user::virtual {
     @user { &quot;andrewmccall&quot;:
         ensure  =&gt; &quot;present&quot;,
         uid     =&gt; &quot;1001&quot;,
@@ -34,40 +34,40 @@ Then edit the virtual file we created in our users module last time and add a gr
         gid     =&gt; &quot;1001&quot;, 
     }
 
-}</pre></div>
+}</code>
 </div>
 
 
 Next in the unixadmins file we need to realize our new group, it should look like this:
 <em><div class="CodeRay">
-  <div class="code"><pre>users/manifests/virtual.pp</pre></div>
+  <code>users/manifests/virtual.pp</code>
 </div>
 </em>
 <div class="CodeRay">
-  <div class="code"><pre>class user::unixadmins inherits user::virtual {
+  <code>class user::unixadmins inherits user::virtual {
     realize(
         Group[&quot;andrewmccall&quot;],
         User[&quot;andrewmccall&quot;]
     )
-}</pre></div>
+}</code>
 </div>
 
 
 Run puppet on the local files and you'll have a new user and a group for it. It should look something like this: 
 
 <div class="CodeRay">
-  <div class="code"><pre># puppet -v --modulepath=/etc/puppet/modules /etc/puppet/manifests/site.pp
+  <code># puppet -v --modulepath=/etc/puppet/modules /etc/puppet/manifests/site.pp
 info: Autoloaded module sudo
 info: Autoloaded module user
 info: Applying configuration version '1281368198'
 notice: //user::virtual/Group[andrewmccall]/ensure: created
-notice: //user::virtual/User[andrewmccall]/ensure: created</pre></div>
+notice: //user::virtual/User[andrewmccall]/ensure: created</code>
 </div>
 
 
  Don't forget to commit the changes to the git repo. 
 
 <div class="CodeRay">
-  <div class="code"><pre># git add .
-# git commit -a -m &quot;Added a users module to manage users&quot;</pre></div>
+  <code># git add .
+# git commit -a -m &quot;Added a users module to manage users&quot;</code>
 </div>

@@ -14,11 +14,11 @@ The only problem I had was that I couldn't figure out how to use the same key in
 In the most simple terms I added a parameter $key throughout ssh::auth which when present indicated you're using a different key, not the one normally used in title. 
 
 <em><div class="CodeRay">
-  <div class="code"><pre>modules/user/manifests/auth.pp</pre></div>
+  <code>modules/user/manifests/auth.pp</code>
 </div>
 </em>
 <div class="CodeRay">
-  <div class="code"><pre># =========                                                 
+  <code># =========                                                 
 # ssh::auth                                                 
 # =========                                                 
 #                                                           
@@ -357,7 +357,7 @@ define ssh_auth_key_namecheck ($parm, $value) {
   if $value !~ /^[A-Za-z0-9_.:@-]+$/ {
     fail(&quot;ssh::auth::key: $parm '$value' not allowed: may only contain the characters A-Za-z0-9_.:@-&quot;)
   }
-} # define namecheck</pre></div>
+} # define namecheck</code>
 </div>
 
 
@@ -368,11 +368,11 @@ I won't go through all the changes line by line, the important things to note ar
 Using the new calls is easy. Assuming you've cerated your user addding the following lines will allow the previously created andrewmccall key to login as root:
 
 <em><div class="CodeRay">
-  <div class="code"><pre>manifests/nodes.pp</pre></div>
+  <code>manifests/nodes.pp</code>
 </div>
 </em>
 <div class="CodeRay">
-  <div class="code"><pre>node build {
+  <code>node build {
     include sudo, user, sshd, ssh::auth, user::keystore, repos
     user::create{&quot;andrewmccall&quot;: groups =&gt; &quot;sudo&quot;}
     user::client_key{&quot;andrewmccall&quot;:}
@@ -380,7 +380,7 @@ Using the new calls is easy. Assuming you've cerated your user addding the follo
 
     ssh::auth::key{&quot;andrewmccall-root&quot;: key=&gt;&quot;andrewmccall&quot;}
     ssh::auth::server{&quot;andrewmccall-root&quot;: key=&gt;&quot;andrewmccall&quot;, user=&gt;&quot;root&quot;, home=&gt;&quot;/root&quot;}
-}</pre></div>
+}</code>
 </div>
 
 

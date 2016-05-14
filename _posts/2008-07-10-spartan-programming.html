@@ -10,22 +10,22 @@ published: true
 <p>One aspect of Spartan Programming where I disagree is with the terse variable names. I think they could end up introducing more accidental and avoidable errors. They lessen the utility of some key IDE features. And generally would just make my life harder, so I've gone the other way. Once upon a time I would happily create the following code: </p>
 
 <div class="CodeRay">
-  <div class="code"><pre>public void sendMessage() {
+  <code>public void sendMessage() {
     MimeMessage m = new MimeMessage();
     m.setBody(&quot;This is a test&quot;);
     m.send();
-}</pre></div>
+}</code>
 </div>
 
 
 <p>These days I try to avoid calling variables things like <em>m</em> and prefer to call them what they are: </p>
 
 <div class="CodeRay">
-  <div class="code"><pre>public void sendMessage() {
+  <code>public void sendMessage() {
     MimeMessage message = new MimeMessage();
     message.setBody(&quot;This is a test&quot;);
     message.send();
-}</pre></div>
+}</code>
 </div>
 
 
@@ -45,14 +45,14 @@ published: true
 <p>Consider the following:</p>
 
 <div class="CodeRay">
-  <div class="code"><pre>function sendInviteMessages(n) 
+  <code>function sendInviteMessages(n) 
     for i = 0 to n
         Set m = Server.CreateObject(&quot;MimeMessage)
         m.Body = &quot;Welcome to our fancy new site!&quot;
         m.Send
         Set n = Nothing
     next
-end function</pre></div>
+end function</code>
 </div>
 
 
@@ -68,11 +68,11 @@ end function</pre></div>
 <p>I'm not arguing that variable names shouldn't be terse and sensible. Going back to the first example the following is just stupid and is far worse than using just <em>m</em>, it's practically illegible and very difficult to just eyeball the code to see what is going on.</p>
 
 <div class="CodeRay">
-  <div class="code"><pre>public void sendMessage() {
+  <code>public void sendMessage() {
     MimeMessage theMessageToSend = new MimeMessage();
     theMessageToSend.setBody(&quot;This is a test&quot;);
     theMessageToSend.send();
-}</pre></div>
+}</code>
 </div>
 
 

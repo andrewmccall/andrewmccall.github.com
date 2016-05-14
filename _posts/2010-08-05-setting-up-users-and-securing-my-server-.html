@@ -18,19 +18,19 @@ Longer term I'm hoping to extend this same process to create user certificates f
 We're going to do this pretty much straight out of the puppet best practice guide, the first thing we'll do is flesh out our users module.
 
 <div class="CodeRay">
-  <div class="code"><pre># cd /etc/puppet
-# mkdir -p modules/user/manifests</pre></div>
+  <code># cd /etc/puppet
+# mkdir -p modules/user/manifests</code>
 </div>
 
 
 Then create a virtual users file:
 
 <em><div class="CodeRay">
-  <div class="code"><pre>modules/user/manifests/virtual.pp</pre></div>
+  <code>modules/user/manifests/virtual.pp</code>
 </div>
 </em>
 <div class="CodeRay">
-  <div class="code"><pre># virtual.pp
+  <code># virtual.pp
 #
 # People accounts of interest as virtual resources
 class user::virtual {
@@ -42,18 +42,18 @@ class user::virtual {
         home    =&gt; &quot;/home/andrewmccall&quot;,
         shell   =&gt; &quot;/bin/bash&quot;,
     }
-}</pre></div>
+}</code>
 </div>
 
 
 Next let's move me from a virtual user to an actual user
 
 <em><div class="CodeRay">
-  <div class="code"><pre>modules/users/manifests/unixadmins.pp</pre></div>
+  <code>modules/users/manifests/unixadmins.pp</code>
 </div>
 </em>
 <div class="CodeRay">
-  <div class="code"><pre># unixadmins.pp
+  <code># unixadmins.pp
 #
 # Realize the members of the Unix team and include any contractors
 
@@ -62,66 +62,66 @@ class user::unixadmins inherits user::virtual {
     realize(
         User[&quot;andrewmccall&quot;]
     )
-}</pre></div>
+}</code>
 </div>
 
 
 Next we need to create an init.pp for the module.
 
 <em><div class="CodeRay">
-  <div class="code"><pre>modules/users/manifests/init.pp</pre></div>
+  <code>modules/users/manifests/init.pp</code>
 </div>
 </em>
 <div class="CodeRay">
-  <div class="code"><pre>import &quot;*&quot;
+  <code>import &quot;*&quot;
 class user {
     include user::virtual, user::unixadmins
-}</pre></div>
+}</code>
 </div>
 
 
 Now we need to go back and update the site.pp - at this stage I also add a node.pp below to manage individual hosts. 
 
 <em><div class="CodeRay">
-  <div class="code"><pre>manifests/site.pp</pre></div>
+  <code>manifests/site.pp</code>
 </div>
 </em>
 <div class="CodeRay">
-  <div class="code"><pre># site.pp
+  <code># site.pp
 
 import &quot;nodes&quot;
 
-Exec { path =&gt; &quot;/usr/bin:/usr/sbin/:/bin:/sbin&quot; }</pre></div>
+Exec { path =&gt; &quot;/usr/bin:/usr/sbin/:/bin:/sbin&quot; }</code>
 </div>
 
 
 <em><div class="CodeRay">
-  <div class="code"><pre>manifests/site.pp</pre></div>
+  <code>manifests/site.pp</code>
 </div>
 </em>
 <div class="CodeRay">
-  <div class="code"><pre># node.pp
+  <code># node.pp
 
 node default {
   include sudo, user
-}</pre></div>
+}</code>
 </div>
 
 
 Once I got that all setup I ran puppet from the command line:
 
 <div class="CodeRay">
-  <div class="code"><pre># puppet -v --modulepath=/etc/puppet/modules /etc/puppet/manifests/site.pp</pre></div>
+  <code># puppet -v --modulepath=/etc/puppet/modules /etc/puppet/manifests/site.pp</code>
 </div>
 
 
 And I got an error: 
 
 <div class="CodeRay">
-  <div class="code"><pre>info: Autoloaded module sudo
+  <code>info: Autoloaded module sudo
 info: Autoloaded module user
 info: Applying configuration version '1281041300'
-err: //user::virtual/User[andrewmccall]/ensure: change from absent to present failed: Could not create user andrewmccall: Execution of '/usr/sbin/useradd -u 1001 -g 1001 -s /bin/bash -c Andrew McCall -d /home/andrewmccall andrewmccall' returned 6: useradd: group '1001' does not exist</pre></div>
+err: //user::virtual/User[andrewmccall]/ensure: change from absent to present failed: Could not create user andrewmccall: Execution of '/usr/sbin/useradd -u 1001 -g 1001 -s /bin/bash -c Andrew McCall -d /home/andrewmccall andrewmccall' returned 6: useradd: group '1001' does not exist</code>
 </div>
 
 
