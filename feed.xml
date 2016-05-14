@@ -1,206 +1,22 @@
+---
+layout: null
+---
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>andrewmccall.com</title>
-    <description>Andrew's Website woot!</description>
-    <link>http://andrewmccall.com/</link>
-    <atom:link href="http://andrewmccall.com/feed.xml" rel="self" type="application/rss+xml" />
-    
+    <title>{{ site.theme.title | xml_escape }}</title>
+    <atom:link href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}" rel="self" type="application/rss+xml"/>
+    <link>{{ site.url }}{{ site.baseurl }}/</link>
+    <description>{{ site.theme.description | xml_escape }}</description>
+    <pubDate>{{ site.time | date_to_rfc822 }}</pubDate>
+    {% for post in site.posts limit:15 %}
       <item>
-        <title>New Site, Again</title>
-        <description>&lt;p&gt;I’ve just renewed my domain for another 10 years and figured it was time I put something on the website. It’s been pointing to a github pages 404 page for some time. &lt;/p&gt;
-
-&lt;p&gt;I’ve rebuilt the whole thing, it should for the most part work, though older posts might have funny markup and the formatting may be a bit different. I’ll have a look at fixing them over time I guess. &lt;/p&gt;
-
-&lt;p&gt;I’ve gone with Octopress again, 3.0 this time. I’ve looked more into what Octopress and Jykell do and I’m not sure that I get much &lt;em&gt;more&lt;/em&gt; with octopress, so I may one day soon go with a pure Jykell site. &lt;/p&gt;
-
-&lt;p&gt;The design, as it is, isn’t much but a work in progress for now - hopefully over time I’ll be able to get that working a bit better. &lt;/p&gt;
-
-&lt;p&gt;Also once I’ve figured out what I’ve done, what I want to do and all that I’ll do my best to document some of it here. &lt;/p&gt;
-
-&lt;p&gt;For now, that’s about it. &lt;/p&gt;
-</description>
-        <pubDate>Tue, 24 Jun 2014 20:37:23 +0100</pubDate>
-        <link>http://andrewmccall.com/blog/2014/06/24/new-site-again</link>
-        <guid isPermaLink="true">http://andrewmccall.com/blog/2014/06/24/new-site-again</guid>
+        <title>{{ post.title | xml_escape }}</title>
+        <link>{{ post.url | prepend: site.baseurl | prepend: site.url }}</link>
+        <guid isPermaLink="true">{{ post.url | prepend: site.baseurl | prepend: site.url }}</guid>
+        <description>{{ post.content | xml_escape }}</description>
+        <pubDate>{{ post.date | date_to_rfc822 }}</pubDate>
       </item>
-    
-      <item>
-        <title>Installing Java 8 on OS X 10.10 Yosimite</title>
-        <description>&lt;p&gt;So I’ve been running OS X 10.10 for a while and tonight decided I’d try to install the Java 8 JDK (JDK8u05)  and have a play for a project I’ve been messing around with. Unfortunately I got this: &lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/post_images/java8u05-osx-10.10-install-fail.png&quot; alt=&quot;Fail&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;A quick google search and the best I could come up with was to install the latest beta of OpenJDK, which apparently fixes the problem. I didn’t really want a beta version of the JDK so I had a dig around in the pkg to see if I could force the installations. &lt;/p&gt;
-
-&lt;p&gt;The checks for versions are just in a text file within the package, so it’s not hard to remove the check and force the installation.&lt;/p&gt;
-
-&lt;p&gt;First expand the pkg into a directory so you can get at the contents: &lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;$ pkgutil --expand JDK\ 8\ Update\ 05.pkg JDK8&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;This creates a new folder called JDK8, in there you’ll find a file called &lt;code&gt;Distribution&lt;/code&gt;. Open it in your favourite text editor. At about line 36 you’ll find the following code: &lt;/p&gt;
-
-&lt;figure class=&quot;code-highlight-figure&quot;&gt;&lt;div class=&quot;code-highlight&quot;&gt;&lt;pre class=&quot;code-highlight-pre&quot;&gt;&lt;div data-line=&quot;36&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;// Check is current MAC OS X version less than supportedVersion
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;37&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;checkForMacOSX&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;supportedVersion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;38&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;    &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;39&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;        &lt;span class=&quot;c1&quot;&gt;// Get current ProductVersion&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;40&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;        &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;tProductVersion&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;system&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ProductVersion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;41&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;        &lt;span class=&quot;c1&quot;&gt;// Get current ProductName&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;42&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;        &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;tProductName&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;system&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ProductName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;43&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt; &lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;44&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;        &lt;span class=&quot;c1&quot;&gt;// Check if current version is less than supportedVersion, if yes Set the result type to Fatal, and give correct message to user&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;45&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt; &lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;46&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;tProductVersion&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;lt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;supportedVersion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;47&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;48&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;            &lt;span class=&quot;c1&quot;&gt;// Set result values&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;49&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;            &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;osCheckTitle&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;system&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;localizedStringWithFormat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;OSCHECK_TITLE&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;50&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;            &lt;span class=&quot;nx&quot;&gt;osCheckTitle&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;osCheckTitle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;replace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;%1$@&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;tProductName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;51&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;            &lt;span class=&quot;nx&quot;&gt;osCheckTitle&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;osCheckTitle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;replace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;%2$@&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;supportedVersion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;52&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt; &lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;53&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;            &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;osCheckMessage&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;system&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;localizedStringWithFormat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;OSCHECK_MESSAGE&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;54&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;            &lt;span class=&quot;nx&quot;&gt;osCheckMessage&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;osCheckMessage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;replace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;%1$@&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;tProductName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;55&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;            &lt;span class=&quot;nx&quot;&gt;osCheckMessage&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;osCheckMessage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;replace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;%2$@&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;tProductVersion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;56&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;            &lt;span class=&quot;nx&quot;&gt;osCheckMessage&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;osCheckMessage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;replace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;%3$@&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;supportedVersion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;57&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt; &lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;58&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;            &lt;span class=&quot;nx&quot;&gt;my&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;osCheckTitle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;59&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;            &lt;span class=&quot;nx&quot;&gt;my&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;message&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;osCheckMessage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;60&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;            &lt;span class=&quot;nx&quot;&gt;my&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Fatal&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;61&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;62&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;catch&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;63&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;        &lt;span class=&quot;c1&quot;&gt;// an exception just occurred&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;64&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;65&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;66&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;    &lt;span class=&quot;c1&quot;&gt;// return true&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;67&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;68&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/figure&gt;
-
-&lt;p&gt;The error happens on line 45 above, the version check is comparing strings and failing because 10.10 is less than 10.7 lexicographically. If I was fixing the pkg I would rewrite the function to properly check, but I’m not and I just want the JDK to install. So I took everything out except the final &lt;code&gt;return(true);&lt;/code&gt; so that the whole method looks like this: &lt;/p&gt;
-
-&lt;figure class=&quot;code-highlight-figure&quot;&gt;&lt;div class=&quot;code-highlight&quot;&gt;&lt;pre class=&quot;code-highlight-pre&quot;&gt;&lt;div data-line=&quot;36&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;// Check is current MAC OS X version less than supportedVersion
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;37&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;checkForMacOSX&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;supportedVersion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;38&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;    &lt;span class=&quot;c1&quot;&gt;// return true&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;39&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;/div&gt;&lt;/div&gt;&lt;div data-line=&quot;40&quot; class=&quot;code-highlight-row numbered&quot;&gt;&lt;div class=&quot;code-highlight-line&quot;&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/figure&gt;
-
-&lt;p&gt;Finally package it back up with the &lt;code&gt;pkgutils&lt;/code&gt; command and the check won’t fail and Java 8 will install.&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;$ pkgutil --flatten JDK8 JDK8.pkg&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;Double click the new pkg and the installer will run without the error message.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/images/post_images/java8u05-osx-10.10-install-success.png&quot; alt=&quot;Success&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;All done, Java 8 JDK installed!&lt;/p&gt;
-
-</description>
-        <pubDate>Thu, 12 Jun 2014 21:36:55 +0100</pubDate>
-        <link>http://andrewmccall.com/blog/2014/06/12/installing-java-8-on-os-x-10-dot-10-yosimite</link>
-        <guid isPermaLink="true">http://andrewmccall.com/blog/2014/06/12/installing-java-8-on-os-x-10-dot-10-yosimite</guid>
-      </item>
-    
-      <item>
-        <title>Octopress</title>
-        <description>&lt;p&gt;Does this work?&lt;/p&gt;
-</description>
-        <pubDate>Sun, 24 Feb 2013 17:44:00 +0000</pubDate>
-        <link>http://andrewmccall.com/blog/2013/02/24/octopress</link>
-        <guid isPermaLink="true">http://andrewmccall.com/blog/2013/02/24/octopress</guid>
-      </item>
-    
-      <item>
-        <title>Customer Support, What a Joke.</title>
-        <description>&lt;div&gt;Sainsbury's online grocery site was broken last night; it kept giving me 404 errors when I tried to pay for my order. There was one slot left that would get here before I had to pick the kids up, I'd booked it and wanted to keep it,&amp;nbsp;&amp;nbsp;so I emailed their customer support. I was hoping maybe they'd tell me when it would be fixed, reserve the slot for me or something.&amp;nbsp;&lt;/div&gt;&lt;p /&gt;&lt;div&gt;I kept checking my email and trying their site and eventually later in the evening it worked, so I forgot about the whole thing until this morning when I got this:&amp;nbsp;&lt;br /&gt;&lt;p /&gt;&lt;blockquote type=&quot;cite&quot;&gt;&lt;div style=&quot;margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;&quot;&gt;&lt;span style=&quot;&quot;&gt;&lt;b&gt;From: &lt;/b&gt;&lt;/span&gt;&lt;span style=&quot;font-family: Helvetica; font-size: medium;&quot;&gt;&quot;Sainsbury's Online &quot; &amp;lt;&lt;a href=&quot;mailto:sainsburys@mailuk.custhelp.com&quot;&gt;sainsburys@mailuk.custhelp.com&lt;/a&gt;&amp;gt;&lt;br /&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;&quot;&gt;&lt;span style=&quot;&quot;&gt;&lt;b&gt;Subject: &lt;/b&gt;&lt;/span&gt;&lt;span style=&quot;font-family: Helvetica; font-size: medium;&quot;&gt;&lt;b&gt;Shopping online [Reference: 120110-00XXXX]&lt;/b&gt;&lt;br /&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;&quot;&gt;&lt;span style=&quot;&quot;&gt;&lt;b&gt;Date: &lt;/b&gt;&lt;/span&gt;&lt;span style=&quot;font-family: Helvetica; font-size: medium;&quot;&gt;11 January 2012 09:54:42 GMT&lt;br /&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;&quot;&gt;&lt;span style=&quot;&quot;&gt;&lt;b&gt;To: &lt;/b&gt;&lt;/span&gt;&lt;span style=&quot;font-family: Helvetica; font-size: medium;&quot;&gt;&lt;a href=&quot;mailto:andrew@andrewmccall.com&quot;&gt;andrew@andrewmccall.com&lt;/a&gt;&lt;br /&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px;&quot;&gt;&lt;span style=&quot;&quot;&gt;&lt;b&gt;Reply-To: &lt;/b&gt;&lt;/span&gt;&lt;span style=&quot;font-family: Helvetica; font-size: medium;&quot;&gt;&quot;Sainsbury's Online &quot; &amp;lt;&lt;a href=&quot;mailto:sainsburys@mailuk.custhelp.com&quot;&gt;sainsburys@mailuk.custhelp.com&lt;/a&gt;&amp;gt;&lt;br /&gt;&lt;/span&gt;&lt;/div&gt;&lt;br /&gt;&lt;div style=&quot;&quot;&gt;&lt;div&gt;&lt;p /&gt;&lt;table border=&quot;0&quot; style=&quot;&quot; width=&quot;100%&quot;&gt;&lt;tr&gt;&lt;td class=&quot;text&quot; style=&quot;padding-left: 4px; padding-right: 4px;&quot; colspan=&quot;2&quot;&gt;Dear Mr McCall&lt;p /&gt;Thank you for your email about our website. I'm sorry you've been having problems on our website due to an error 404 message. I understand this must be frustrating.&lt;p /&gt;I've spoke to our Customer Support Team and they have told me that Microsoft have been experiencing issues accessing the Sainsbury's servers that our website is based upon. They suggest that you search Google for &quot;Error 404 Fix&quot; and a Microsoft Tool will be available for download. Once downloaded this tool will fix the error and you'll be able to use our website again.&lt;p /&gt;If you need any further help please contact us on 0800 328 1700. One of my colleagues will be happy to assist you.&lt;p /&gt;We appreciate you taking the time to contact us and hope this issue is resolved for you soon.&lt;p /&gt;Kind regards&lt;p /&gt;&amp;lt;Name Removed&amp;gt;&lt;br /&gt;Customer Manager&lt;br /&gt;Sainsbury's Online&lt;br /&gt;&lt;a href=&quot;mailto:onlineservice@sainsburys.co.uk&quot;&gt;onlineservice@sainsburys.co.uk&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/div&gt;&lt;/blockquote&gt;&lt;/div&gt;&lt;br /&gt;&lt;div&gt;I don't know what I can add to that.&amp;nbsp;&lt;/div&gt;
-</description>
-        <pubDate>Wed, 11 Jan 2012 00:00:00 +0000</pubDate>
-        <link>http://andrewmccall.com/blog/2012/01/11/customer-support-what-a-joke-</link>
-        <guid isPermaLink="true">http://andrewmccall.com/blog/2012/01/11/customer-support-what-a-joke-</guid>
-      </item>
-    
-      <item>
-        <title>Validation 1.0.0 Released.</title>
-        <description>I just pushed my little JSR-303 validation lib out as a 1.0.0 release. The JSR-303 is not 1.0 so it&amp;nbsp;seemed like a good idea.&amp;nbsp;&lt;p /&gt;The biggest changes are probably the ones needed to support those. If you were using the&amp;nbsp;library you won't notice any difference, the changes are all internal and the actual annotations&amp;nbsp;haven't changed.&amp;nbsp;&lt;p /&gt;I've also removed the springframework package. JSR-303 is now supported in spring 3 and&amp;nbsp;their support is better.&lt;p /&gt;Finally I've added some static methods to&amp;nbsp;AbstractAnnotationTest, assertValid and&amp;nbsp;assertViolation; I've found them useful testing annotated classes and figure someone else may&amp;nbsp;too.&amp;nbsp;&lt;p /&gt;Check it out and let me know what you think.&amp;nbsp;&lt;p /&gt;&lt;a href=&quot;http://github.com/andrewmccall/validation&quot;&gt;http://github.com/andrewmccall/validation&lt;/a&gt;
-</description>
-        <pubDate>Thu, 23 Dec 2010 00:00:00 +0000</pubDate>
-        <link>http://andrewmccall.com/blog/2010/12/23/validation-1-0-0-released-</link>
-        <guid isPermaLink="true">http://andrewmccall.com/blog/2010/12/23/validation-1-0-0-released-</guid>
-      </item>
-    
-      <item>
-        <title>oEmbed</title>
-        <description>I came across&amp;nbsp;&lt;a href=&quot;http://www.oembed.com/&quot;&gt;oEmbed&lt;/a&gt;&amp;nbsp;the other day, completely by accident. &lt;p /&gt;I've been working on a couple of projects in my free time and in a few of them I really wanted to be able to embed better information about a URL, if it existed. I'd been working up my own rough JSON schema that was in many ways similar to&amp;nbsp;&lt;a href=&quot;http://www.oembed.com/&quot;&gt;oEmbed&lt;/a&gt;.&lt;p /&gt;&lt;div&gt;Then I came across a tweet that mentioned&amp;nbsp;&lt;a href=&quot;http://embed.ly&quot;&gt;embed.ly&lt;/a&gt;&amp;nbsp;and&amp;nbsp;&lt;a href=&quot;http://www.oembed.com/&quot;&gt;oEmbed&lt;/a&gt;&amp;nbsp;and&amp;nbsp;&lt;a href=&quot;http://embed.ly&quot;&gt;embed.ly&lt;/a&gt;&amp;nbsp;are the perfect solution. Instead of rolling my own service I'm integrating theirs.&lt;br /&gt;&lt;/div&gt;&lt;p /&gt;&lt;div&gt;At it's most basic it's a standard way of getting more than just a link you can embed in your site and provides a standard interface for doing it across the web.&amp;nbsp;&lt;/div&gt;&lt;p /&gt;&lt;div&gt;If you're looking to embed things in your website, take a look. There are plugins available for wordpress and others as well as a jQuery plugin you can use pretty much anywhere.&amp;nbsp;&lt;/div&gt;
-</description>
-        <pubDate>Thu, 16 Dec 2010 00:00:00 +0000</pubDate>
-        <link>http://andrewmccall.com/blog/2010/12/16/oembed</link>
-        <guid isPermaLink="true">http://andrewmccall.com/blog/2010/12/16/oembed</guid>
-      </item>
-    
-      <item>
-        <title>Even More Secure Passwords.</title>
-        <description>&lt;p&gt;A few days ago I posted suggesting that you salt your passwords, I'm back armed with even more knowledge and better advice.&amp;nbsp;Turns out the relative strengths of one hashing algorithm vs another can in fact make a difference, in a way I didn't even consider - their speed.&amp;nbsp;&lt;/p&gt;
-&lt;p /&gt;
-&lt;div&gt;Most crypto hash functions are designed for speed, you want to be able to compute the hashes of lots of data pretty quickly if your pushing it down the wire. That speed works in an attackers favour if they're brute forcing a list of passwords and&amp;nbsp;newer hashing functions can make it worse, one of the requirements for SHA-3 is that it's faster than the SHA-2 family.&amp;nbsp;&lt;/div&gt;
-&lt;p /&gt;
-&lt;div&gt;So what's the new right answer?&amp;nbsp;&lt;/div&gt;
-&lt;p /&gt;
-&lt;div&gt;Choose a function that takes enough time that an attacker has to work for each and every password - ideally long enough that it would take forever to crack just one - while making sure that legitimate users aren't waiting forever while you check their passwords.&amp;nbsp;&lt;/div&gt;
-&lt;p /&gt;
-&lt;div&gt;There are two ways of doing this, run a fast hash function many times or deliberately pick a slow hash function.&lt;/div&gt;
-&lt;p /&gt;
-&lt;div&gt;Running many iterations of a fast hashing algorithm is pretty self explanatory, run it twice and it takes twice as long, run it a thousand times and it takes a thousand times as long to attack each password.&lt;/div&gt;
-&lt;p /&gt;
-&lt;div&gt;Bcrypt is an example of the second, based on the blowfish algorithm it uses the fact that the key setup step is a relatively expensive operation and difficult to optimise. By making use of this bcrypt allows you to set a work factor and creates a hashing algorithm that is expensive and also difficult to optimise.&amp;nbsp;&lt;/div&gt;
-&lt;p /&gt;
-&lt;div&gt;Which is better? I have no idea, both are widely used and it really depends on your environment. I'd love to hear what others think though.&lt;/div&gt;
-</description>
-        <pubDate>Wed, 15 Dec 2010 00:00:00 +0000</pubDate>
-        <link>http://andrewmccall.com/blog/2010/12/15/even-more-secure-passwords-</link>
-        <guid isPermaLink="true">http://andrewmccall.com/blog/2010/12/15/even-more-secure-passwords-</guid>
-      </item>
-    
-      <item>
-        <title>Chrome OS.</title>
-        <description>I don't think Chrome OS is going to be a success. &lt;p /&gt; It's perfect for Google, shows that all you really need is a browser and does it in a compelling way. But it's not going to be a success and I'll cast my lot in with those that predict that it'll get rolled into Android. &lt;br /&gt;The reason I don't see it working is that Google won't use it. Google is a company of engineers, developers and hackers - what do they want with a computer they can't use to do that? &lt;br /&gt;The Chrome OS team is designing and building a product for someone else. Taking things away is a great thing, look at Apple, but if you take so much away that it becomes a product for someone else and you're no longer eating your own dog food. That doesn't usually work out well. &lt;p /&gt; I may be wrong, maybe the team is great and maybe they can overcome the obstacles, but I'll put my money on the best that will come of Chrome OS is that it's evolved into another product or as many are predicting, rolled into Android.
-</description>
-        <pubDate>Tue, 14 Dec 2010 00:00:00 +0000</pubDate>
-        <link>http://andrewmccall.com/blog/2010/12/14/chrome-os-</link>
-        <guid isPermaLink="true">http://andrewmccall.com/blog/2010/12/14/chrome-os-</guid>
-      </item>
-    
-      <item>
-        <title>Salt Your Passwords.</title>
-        <description>&lt;p&gt;Gawker media is the latest in a long list of compromised systems that have&amp;nbsp;&lt;a href=&quot;http://thenextweb.com/media/2010/12/13/gawker-hackers-release-file-with-ftp-author-reader-usernamespasswords/&quot;&gt;exposed user passwords.&lt;/a&gt;&amp;nbsp;Unlike when it happened to the&amp;nbsp;&lt;a href=&quot;http://andrewmccall.com/2010/04/apache-falls-victim-to-jira-xss-exploit&quot;&gt;ASF a few months ago,&lt;/a&gt;&amp;nbsp;I'm unaffected.&lt;/p&gt;
-&lt;p /&gt;
-&lt;div&gt;&lt;a href=&quot;http://blogs.forbes.com/firewall/2010/12/13/the-lessons-of-gawkers-security-mess/&quot;&gt;Forbes&lt;/a&gt;&amp;nbsp;and others are banging on about weak encryption being the problem, it's not. Passwords aren't encrypted generally, they're passed through a one way&amp;nbsp;&lt;a href=&quot;http://en.wikipedia.org/wiki/Hash_function&quot;&gt;hash function&lt;/a&gt;. You can't undo the hash, so you can't decrypt the passwords. When you hash the same value though it will always produce the same hash - so you can ask a user for their password, hash the value they enter and check that against the hash you've stored.&lt;/div&gt;
-&lt;p /&gt;
-&lt;div&gt;The relative strengths of one hash function vs another actually makes very little difference when it comes to passwords. As long as it's collision free for the set of possible passwords, which almost all will be, they're really strong enough no matter how old they are.&amp;nbsp;&lt;/div&gt;
-&lt;p /&gt;
-&lt;div&gt;
-&lt;div&gt;Gawker made a basic mistake that even the most advanced algorithm wouldn't help, they're not salting their passwords.&amp;nbsp;
-&lt;p /&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div&gt;&lt;br /&gt;
-&lt;div&gt;
-&lt;div&gt;Cracking hashed passwords involves computing the hashes until you create the same hashed value. You run the algorithm across a list of know common passwords, dictionary words and common variations. The same value will always produce the same hash, so everyone who uses the same password will also always have the same hash. You just need to compute all the common/obvious ones and look at all the users to find the ones with that match your list. Lots of those users will probably be using their password for email and other services too... oops.&lt;/div&gt;
-&lt;p /&gt;
-&lt;div&gt;Salting adds something unique to a user, say their email address or ID, forcing an&amp;nbsp;attacker to compute every possible password for each user individually. &amp;nbsp;Even if two users have chosen the same password they will have a different hash.&amp;nbsp;The better the salt you can choose, the more work an attacker has to do to get passwords.&lt;/div&gt;
-&lt;p /&gt;
-&lt;div&gt;It's not a panacea though, you've still exposed their details and given enough time a determined attacker can and will be able to recover every last password. What it gives you is time to disclose the breach and your users time to change their passwords on other services which may be the same.&lt;/div&gt;
-&lt;/div&gt;
-&lt;p /&gt;
-&lt;div&gt;&lt;strong&gt;UPDATE: &lt;em&gt;I've added a new post with some more thoughts, clarifications and corrections &lt;a href=&quot;http://andrewmccall.com/even-more-secure-passwords&quot;&gt;here&lt;/a&gt;&lt;/em&gt;&lt;/strong&gt;&lt;/div&gt;
-&lt;/div&gt;
-</description>
-        <pubDate>Mon, 13 Dec 2010 00:00:00 +0000</pubDate>
-        <link>http://andrewmccall.com/blog/2010/12/13/salt-your-passwords-</link>
-        <guid isPermaLink="true">http://andrewmccall.com/blog/2010/12/13/salt-your-passwords-</guid>
-      </item>
-    
-      <item>
-        <title>Maven and Self Signed Client Certs.</title>
-        <description>I've been using a self-signed client certificate on my development server.&amp;nbsp;Today working on my OAuth lib I started getting problems connecting to twitter, failed SSH handshakes. With a message something like:&amp;nbsp;&lt;p /&gt;&lt;div&gt;&lt;span style=&quot;font-family: monospace;&quot;&gt;Connection has been shutdown: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target&lt;/span&gt;&lt;/div&gt;&lt;p /&gt;&lt;div&gt;It's because in my maven command I'm using a custom truststore which doesn't have any of the default root certificates in it, just mine. Running this command imported the default roots into the truststore I've been using with maven:&amp;nbsp;&lt;/div&gt;&lt;p /&gt;&lt;div&gt;&lt;div&gt;[code] keytool -importkeystore -srckeystore $JAVA_HOME/lib/security/cacerts -destkeystore ./trust.jks [/code]&lt;/div&gt;&lt;/div&gt;&lt;p /&gt;&lt;div&gt;I got a long list of &amp;nbsp;&lt;span style=&quot;font-family: monospace;&quot;&gt;Entry for alias keychainrootca-xx successfully imported &lt;/span&gt;and now everything works as it should.&amp;nbsp;&lt;/div&gt;&lt;p /&gt;&lt;div&gt;Hope it helps.&amp;nbsp;&lt;/div&gt;
-</description>
-        <pubDate>Sat, 13 Nov 2010 00:00:00 +0000</pubDate>
-        <link>http://andrewmccall.com/blog/2010/11/13/maven-and-self-signed-client-certs-</link>
-        <guid isPermaLink="true">http://andrewmccall.com/blog/2010/11/13/maven-and-self-signed-client-certs-</guid>
-      </item>
-    
+    {% endfor %}
   </channel>
 </rss>

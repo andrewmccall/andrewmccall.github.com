@@ -1,0 +1,15 @@
+---
+layout: post
+title: ! 'I see the point of git. '
+published: true
+---
+I've made some progress over the last few days getting things working towards getting the crawler online and came across a scenario where git would have been useful and had one of those epiphany&nbsp;movements&nbsp;when distributed development clicked and it made sense to me.&nbsp;
+
+The first run of our crawler is based on a pretty vanilla nutch install with some plugins; it works already and saves us an awful lot of leg work. The first thing I wanted to do was quickly mavenise it so we could better integrate it into our development environment. Problem is if I pull the trunk, I can't commit and update from our own internal repository and the Apache one.&nbsp;
+
+I intend at some point, once it's working and I'm happy with it, to submit a patch back to the <a href="http://www.apache.org/" class="zem_slink" title="Apache Software Foundation" rel="homepage">ASF&nbsp;</a>but in the short term I just want to share my fork with other developers on my team. This is where git would come in.&nbsp;Next I was hoping to start to move the configuration over to the springframework IOC controller, to see if/how it works or doesn't, again I'd submit the patches if the community was interested.&nbsp;
+
+When I get a bit of time in the next few weeks I think I'll install a central git repository for our dev environment and trial a transition there. Has anyone tried something similar, is git what I'm looking for?&nbsp;
+
+&nbsp;
+<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">[[posterous-content:kdkjIdCzCzCjzGozfuHh]]</div>

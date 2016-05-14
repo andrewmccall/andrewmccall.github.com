@@ -1,0 +1,6 @@
+---
+layout: post
+title: Validation 1.0.0 released.
+published: true
+---
+I just pushed my little JSR-303 validation lib out as a 1.0.0 release. The JSR-303 is not 1.0 so it&nbsp;seemed like a good idea.&nbsp;<p />The biggest changes are probably the ones needed to support those. If you were using the&nbsp;library you won't notice any difference, the changes are all internal and the actual annotations&nbsp;haven't changed.&nbsp;<p />I've also removed the springframework package. JSR-303 is now supported in spring 3 and&nbsp;their support is better.<p />Finally I've added some static methods to&nbsp;AbstractAnnotationTest, assertValid and&nbsp;assertViolation; I've found them useful testing annotated classes and figure someone else may&nbsp;too.&nbsp;<p />Check it out and let me know what you think.&nbsp;<p /><a href="http://github.com/andrewmccall/validation">http://github.com/andrewmccall/validation</a>

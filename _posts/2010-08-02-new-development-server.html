@@ -1,0 +1,19 @@
+---
+layout: post
+title: New development server
+published: true
+---
+Things around here have stalled a bit I've not had much free time what with a new job and travelling. The time I have had I've spent getting a build server setup. Replacing my ageing <a href="http://trac.edgewall.org/">trac</a>/<a href="http://subversion.apache.org/" class="zem_slink" title="Subversion (software)" rel="homepage">subversion</a> install is something I've meant to do for a while and just never got around to.
+
+Ultimately I'm working on a continuous deployment solution for Sproozi, but while I do that I'm also keen to get my other public and private projects into a <a href="http://en.wikipedia.org/wiki/Continuous_integration" class="zem_slink" title="Continuous integration" rel="wikipedia">CI</a> build cycle and get my maven artifacts deployed so they're useful. The other major goal was to move all my main projects out of trac/svn and into <a href="http://www.atlassian.com/software/jira/">JIRA</a>/<a href="http://www.atlassian.com/software/confluence/">Confluence</a>/<a href="http://www.atlassian.com/software/fisheye/">Fisheye</a>/<a href="http://git-scm.com/" class="zem_slink" title="Git (software)" rel="homepage">Git</a>.
+
+Trac and subversion are fine tools, and they've worked well for me for many years, but trac suffers when it's running more than one project; you either need to work around the tool or have separate installs per project and I can get JIRA, Fisheye and Confluence for $10 each which is a great deal.&nbsp;I have no real complaints about svn, except I've started using git as my preferred client and I'm sick of typing 'git svn <em>command</em>' whenever I want to do anything.
+
+Also my subversion repository holds a fair bit of code from a few projects both new, old and dormant as it grows checking out gets irritating.&nbsp;I'm happy with the move to <a href="http://github.com/andrewmccall" title="GitHub" rel="homepage">GitHub</a> and public hosting of my other <a href="http://andrewmccall.com/projects">projects</a>, I like git and I liked the idea of promoting projects into repositories of their own and git lets me take the history with the project.
+
+So I've decided I'll keep my subversion repository, use it as I do now as a sandbox to keep code I'm working on in, for code I don't think is quite ready to be promoted into a project of it's own.&nbsp;When a project is ready I'll move it (and all of it's history) out of subversion and into a git repository of it's own.&nbsp;My public projects are all in <a href="http://github.com/andrewmccall">GitHub</a> and I don't see any point in using my local tools to manage them in anyway. So I'll keep them all over there. Any new ones will get promoted over there too.
+
+Over the course of the next few days/weeks I'll document what I did here, partly in case anyone else cares, partly so I can do it again if I ever need to. I'm not sure how many posts it will take me because I'm not quite finished the process yet.
+<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">
+[[posterous-content:buJaCmlHkdBCeaeucyyo]]<span class="zem-script more-related pretty-attribution"></span>
+</div>

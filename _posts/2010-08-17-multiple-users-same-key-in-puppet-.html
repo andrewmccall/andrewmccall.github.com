@@ -1,0 +1,389 @@
+---
+layout: post
+title: ! 'Multiple users, same key in puppet. '
+published: true
+---
+I've been a bit quiet on the server front and to be honest a bit stuck. I'm new to Puppet and it took me a while to figure out how to get users working the way I wanted them to. Sleeping on it and reading some more and eventually I got there. I also have a day job to hold down and a family to entertain on the weekend, so as much as I really wanted to get this done life got in the way. 
+
+My goal now is to get my repositories back online and to create a new one and start committing this Puppet config I've been building somewhere. I decided I'd go with Git for my main projects, the ones that had graduated out of the sandbox but that the sandbox would keep running subversion. I've also planned to run them both via SSH to lower the ports I open and to stick with the same key infrastructure I was building to access everything else. 
+
+The only problem I had was that I couldn't figure out how to use the same key in multiple places with the otherwise good <a href="http://projects.reductivelabs.com/projects/puppet/wiki/Module_Ssh_Auth_Patterns">ssh::auth</a> module from the Puppet patterns wiki. And I wasn't the only one, even the module author thought it was a good idea but difficult to implement. After working on it a few evenings I eventually learned enough about puppet to have a crack at it myself- it may no be the most elegant solution, but it seems to work. 
+
+<em>I allowed root to login via ssh and turned password authentication on while I did this - I didn't want to lock myself out of my server if I made a mistake. You may want to do the same, or you may not. It's up to you. If you do undo the <a href="http://andrewmccall.com/2010/08/restrict-access-in-puppet-%E2%80%93-part-2/">edits you made to your sshd_config</a> a few days ago</em>
+
+In the most simple terms I added a parameter $key throughout ssh::auth which when present indicated you're using a different key, not the one normally used in title. 
+
+<em><div class="CodeRay">
+  <div class="code"><pre>modules/user/manifests/auth.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre># =========                                                 
+# ssh::auth                                                 
+# =========                                                 
+#                                                           
+# The latest official release and documentation for ssh::auth can always
+# be found at http://reductivelabs.com/trac/puppet/wiki/Recipes/ModuleSSHAuth .
+#                                                                              
+# Version:          0.3.2                                                      
+# Release date:     2009-12-29                                                 
+
+class ssh::auth {
+
+$keymaster_storage = &quot;/var/lib/keys&quot; 
+
+Exec { path =&gt; &quot;/usr/bin:/usr/sbin:/bin:/sbin&quot; }
+Notify { withpath =&gt; false }                    
+
+
+##########################################################################
+
+
+# ssh::auth::key 
+
+# Declare keys.  The approach here is just to define a bunch of
+# virtual resources, representing key files on the keymaster, client,
+# and server.  The virtual keys are then realized by                 
+# ssh::auth::{keymaster,client,server}, respectively.  The reason for
+# doing things that way is that it makes ssh::auth::key into a &quot;one  
+# stop shop&quot; where users can declare their keys with all of their    
+# parameters, whether those parameters apply to the keymaster, server,
+# or client.  The real work of creating, installing, and removing keys
+# is done in the private definitions called by the virtual resources: 
+# ssh_auth_key_{master,server,client}.                                
+
+define key ($ensure = &quot;present&quot;, $filename = &quot;&quot;, $force = false, $group = &quot;puppet&quot;, $home = &quot;&quot;, $keytype = &quot;rsa&quot;, $length = 2048, $maxdays = &quot;&quot;, $mindate = &quot;&quot;, $options = &quot;&quot;, $user = &quot;&quot;, $key = &quot;&quot;) {                                                                                                                                                    
+
+  ssh_auth_key_namecheck { &quot;${title}-title&quot;: parm =&gt; &quot;title&quot;, value =&gt; $title }
+
+  # apply defaults
+  $_filename = $filename ? { &quot;&quot; =&gt; &quot;id_${keytype}&quot;, default =&gt; $filename }
+  $_length = $keytype ? { &quot;rsa&quot; =&gt; $length, &quot;dsa&quot; =&gt; 1024 }               
+  $_user = $user ? {                                                      
+    &quot;&quot;      =&gt; regsubst($title, '^([^@]*)@?.*$', '\1'),                   
+    default =&gt; $user,                                                     
+  }                                                                       
+  $_home = $home ? { &quot;&quot; =&gt; &quot;/home/$_user&quot;,  default =&gt; $home }            
+
+  ssh_auth_key_namecheck { &quot;${title}-filename&quot;: parm =&gt; &quot;filename&quot;, value =&gt; $_filename }
+
+  @ssh_auth_key_master { $title:
+    ensure  =&gt; $ensure,         
+    force   =&gt; $force,          
+    keytype =&gt; $keytype,        
+    length  =&gt; $_length,        
+    maxdays =&gt; $maxdays,        
+    mindate =&gt; $mindate,        
+  }                             
+  @ssh_auth_key_client { $title:
+    ensure   =&gt; $ensure,        
+    filename =&gt; $_filename,     
+    group    =&gt; $group,         
+    home     =&gt; $_home,         
+    user     =&gt; $_user,         
+  }                             
+  @ssh_auth_key_server { $title:
+    ensure  =&gt; $ensure,         
+    group   =&gt; $group,          
+    home    =&gt; $_home,          
+    options =&gt; $options,        
+    user    =&gt; $_user,  
+    key                =&gt; $key,        
+  }                             
+}                               
+
+
+##########################################################################
+
+
+# ssh::auth::keymaster
+#                     
+# Keymaster host:     
+# Create key storage; create, regenerate, and remove key pairs
+
+class keymaster {
+
+  # Set up key storage
+
+  file { $ssh::auth::keymaster_storage:
+    ensure =&gt; directory,               
+    owner  =&gt; puppet,                  
+    group  =&gt; puppet,                  
+    mode   =&gt; 644,                     
+  }                                    
+                                       
+  # Realize all virtual master keys    
+  Ssh_auth_key_master             
+
+} # class keymaster
+
+
+##########################################################################
+
+
+# ssh::auth::client
+#                  
+# Install generated key pairs onto clients
+
+define client ($ensure = &quot;&quot;, $filename = &quot;&quot;, $group = &quot;&quot;, $home = &quot;&quot;, $user = &quot;&quot;) {
+
+  # Realize the virtual client keys.
+  # Override the defaults set in ssh::auth::key, as needed.
+  if $ensure   { Ssh_auth_key_client  { ensure   =&gt; $ensure   } }
+  if $filename { Ssh_auth_key_client  { filename =&gt; $filename } }
+  if $group    { Ssh_auth_key_client  { group    =&gt; $group    } }
+
+  if $user { Ssh_auth_key_client  { user =&gt; $user, home =&gt; &quot;/home/$user&quot; } }
+  if $home { Ssh_auth_key_client  { home =&gt; $home } }                       
+  if $key { Ssh_auth_key_client  { key =&gt; $key } }
+
+  realize Ssh_auth_key_client[$title]
+
+} # define client
+
+
+##########################################################################
+
+
+# ssh::auth::server
+#                  
+# Install public keys onto clients
+
+define server ($ensure = &quot;&quot;, $group = &quot;&quot;, $home = &quot;&quot;, $options = &quot;&quot;, $user = &quot;&quot;, $key=&quot;&quot;) {
+
+  # Realize the virtual server keys.
+  # Override the defaults set in ssh::auth::key, as needed.
+  if $ensure  { Ssh_auth_key_server  { ensure  =&gt; $ensure  } }
+  if $group   { Ssh_auth_key_server  { group   =&gt; $group   } }
+  if $options { Ssh_auth_key_server  { options =&gt; $options } }
+
+  if $user { Ssh_auth_key_server  { user =&gt; $user, home =&gt; &quot;/home/$user&quot; } }
+  if $home { Ssh_auth_key_server  { home =&gt; $home } }  
+  if $key  { Ssh_auth_key_server  { key =&gt; $key } }
+                       
+
+  realize Ssh_auth_key_server[$title]
+
+} # define server
+
+} # class ssh::auth
+
+
+##########################################################################
+
+
+# ssh_auth_key_master
+#                    
+# Create/regenerate/remove a key pair on the keymaster.
+# This definition is private, i.e. it is not intended to be called directly by users.
+# ssh::auth::key calls it to create virtual keys, which are realized in ssh::auth::keymaster.
+
+define ssh_auth_key_master ($ensure, $force, $keytype, $length, $maxdays, $mindate) {
+
+  Exec { path =&gt; &quot;/usr/bin:/usr/sbin:/bin:/sbin&quot; }
+  File {                                          
+    owner =&gt; puppet,                              
+    group =&gt; puppet,                              
+    mode  =&gt; 600,                                 
+  }                                               
+
+  $keydir = &quot;${ssh::auth::keymaster_storage}/${title}&quot;
+  $keyfile = &quot;${keydir}/key&quot;                          
+
+  file { 
+    &quot;$keydir&quot;:
+      ensure =&gt; directory,
+      mode   =&gt; 644;      
+    &quot;$keyfile&quot;:           
+      ensure =&gt; $ensure;  
+    &quot;${keyfile}.pub&quot;:     
+      ensure =&gt; $ensure,  
+      mode   =&gt; 644;      
+  }                       
+
+  if $ensure == &quot;present&quot; {
+
+    # Remove the existing key pair, if
+    # * $force is true, or            
+    # * $maxdays or $mindate criteria aren't met, or
+    # * $keytype or $length have changed            
+
+    $keycontent = file(&quot;${keyfile}.pub&quot;, &quot;/dev/null&quot;)
+    if $keycontent {                                 
+
+      if $force {
+        $reason = &quot;force=true&quot;
+      }                       
+      if !$reason and $mindate and generate(&quot;/usr/bin/find&quot;, $keyfile, &quot;!&quot;, &quot;-newermt&quot;, &quot;${mindate}&quot;) {
+        $reason = &quot;created before ${mindate}&quot;                                                          
+      }                                                                                                
+      if !$reason and $maxdays and generate(&quot;/usr/bin/find&quot;, $keyfile, &quot;-mtime&quot;, &quot;+${maxdays}&quot;) {      
+        $reason = &quot;older than ${maxdays} days&quot;                                                         
+      }                                                                                                
+      if !$reason and $keycontent =~ /^ssh-... [^ ]+ (...) (\d+)$/ {                                   
+        if       $keytype != $1 { $reason = &quot;keytype changed: $1 -&gt; $keytype&quot; }                        
+        else { if $length != $2 { $reason = &quot;length changed: $2 -&gt; $length&quot; } }                        
+      }                                                                                                
+      if $reason {                                                                                     
+        exec { &quot;Revoke previous key ${title}: ${reason}&quot;:                                              
+          command =&gt; &quot;rm $keyfile ${keyfile}.pub&quot;,                                                     
+          before  =&gt; Exec[&quot;Create key $title: $keytype, $length bits&quot;],                                
+        }                                                                                              
+      }                                                                                                
+    }                                                                                                  
+
+    # Create the key pair.
+    # We &quot;repurpose&quot; the comment field in public keys on the keymaster to
+    # store data about the key, i.e. $keytype and $length.  This avoids  
+    # having to rerun ssh-keygen -l on every key at every run to determine
+    # the key length.                                                     
+    exec { &quot;Create key $title: $keytype, $length bits&quot;:                   
+      command =&gt; &quot;ssh-keygen -t ${keytype} -b ${length} -f ${keyfile} -C \&quot;${keytype} ${length}\&quot; -N \&quot;\&quot;&quot;,
+      user    =&gt; &quot;puppet&quot;,                                                                                 
+      group   =&gt; &quot;puppet&quot;,                                                                                 
+      creates =&gt; $keyfile,                                                                                 
+      require =&gt; File[$keydir],                                                                            
+      before  =&gt; File[$keyfile, &quot;${keyfile}.pub&quot;],                                                         
+    }                                                                                                      
+
+  } # if $ensure  == &quot;present&quot;
+
+} # define ssh_auth_key_master
+
+
+##########################################################################
+
+
+# ssh_auth_key_client
+#                    
+# Install a key pair into a user's account.
+# This definition is private, i.e. it is not intended to be called directly by users.
+
+define ssh_auth_key_client ($ensure, $filename, $group, $home, $user) {
+
+  File {
+    owner   =&gt; $user,
+    group   =&gt; $group,
+    mode    =&gt; 600,   
+    require =&gt; [ User[$user], File[$home]],
+  }                                                    
+
+  $key_src_file = &quot;${ssh::auth::keymaster_storage}/${title}/key&quot; # on the keymaster
+  $key_tgt_file = &quot;${home}/.ssh/${filename}&quot; # on the client                       
+
+  $key_src_content_pub = file(&quot;${key_src_file}.pub&quot;, &quot;/dev/null&quot;)
+  if $ensure == &quot;absent&quot; or $key_src_content_pub =~ /^(ssh-...) ([^ ]+)/ {
+    $keytype = $1                                                         
+    $modulus = $2                                                         
+    file {                                                                
+      $key_tgt_file:                                                      
+        ensure  =&gt; $ensure,                                               
+        content =&gt; file($key_src_file, &quot;/dev/null&quot;);                      
+      &quot;${key_tgt_file}.pub&quot;:                                              
+        ensure  =&gt; $ensure,                                               
+        content =&gt; &quot;$keytype $modulus $title\n&quot;,                          
+        mode    =&gt; 644;                                                   
+    }                                                                     
+  } else {                                                                
+    notify { &quot;Private key file $key_src_file for key $title not found on keymaster; skipping ensure =&gt; present&quot;: }
+  }                                                                                                               
+
+} # define ssh_auth_key_client
+
+
+##########################################################################
+
+
+# ssh_auth_key_server
+#                    
+# Install a public key into a server user's authorized_keys(5) file.
+# This definition is private, i.e. it is not intended to be called directly by users.
+
+define ssh_auth_key_server ($ensure, $group, $home, $options, $user, $key) {
+
+  # on the keymaster:
+  $key_src_dir = &quot;${ssh::auth::keymaster_storage}/${key}&quot;
+  $key_src_file = &quot;${key_src_dir}/key.pub&quot;                 
+  # on the server:                                         
+  $key_tgt_file = &quot;${home}/.ssh/authorized_keys&quot;           
+                                                           
+  File {                                                   
+    owner   =&gt; $user,                                      
+    group   =&gt; $group,                                     
+    require =&gt; User[$user],                                
+    mode    =&gt; 600,                                        
+  }                                                        
+  Ssh_authorized_key {                                     
+    user   =&gt; $user,                                       
+    target =&gt; $key_tgt_file,                               
+  }                                                        
+
+  if $ensure == &quot;absent&quot; {
+    ssh_authorized_key { $title: ensure =&gt; &quot;absent&quot; }
+  }                                                  
+  else {
+    $key_src_content = file($key_src_file, &quot;/dev/null&quot;)
+    if ! $key_src_content {
+      notify { &quot;Public key file $key_src_file for key $_key not found on keymaster; skipping ensure =&gt; present&quot;: }
+    } else { if $ensure == &quot;present&quot; and $key_src_content !~ /^(ssh-...) ([^ ]*)/ {
+      err(&quot;Can't parse public key file $key_src_file&quot;)
+      notify { &quot;Can't parse public key file $key_src_file for key $_key on the keymaster: skipping ensure =&gt; $ensure&quot;: }
+    } else {
+      $keytype = $1
+      $modulus = $2
+      ssh_authorized_key { $title:
+        ensure  =&gt; &quot;present&quot;,
+        type    =&gt; $keytype,
+        key     =&gt; $modulus,
+        options =&gt; $options ? { &quot;&quot; =&gt; undef, default =&gt; $options },
+      }
+    }} # if ... else ... else
+  } # if ... else
+
+} # define ssh_auth_key_server
+
+
+##########################################################################
+
+
+# ssh_auth_key_namecheck
+#
+# Check a name (e.g. key title or filename) for the allowed form
+
+define ssh_auth_key_namecheck ($parm, $value) {
+  if $value !~ /^[A-Za-z0-9]/ {
+    fail(&quot;ssh::auth::key: $parm '$value' not allowed: must begin with a letter or digit&quot;)
+  }
+  if $value !~ /^[A-Za-z0-9_.:@-]+$/ {
+    fail(&quot;ssh::auth::key: $parm '$value' not allowed: may only contain the characters A-Za-z0-9_.:@-&quot;)
+  }
+} # define namecheck</pre></div>
+</div>
+
+
+I won't go through all the changes line by line, the important things to note are that I added the variable $key and limited the ssh_auth_key_master automatic realisation to only calls that have not provided a key. Basically if you give it a key you're trying to use an exisiting key, otherwise you're looking to create a new key for a user. 
+
+<h2>Usage</h2>
+
+Using the new calls is easy. Assuming you've cerated your user addding the following lines will allow the previously created andrewmccall key to login as root:
+
+<em><div class="CodeRay">
+  <div class="code"><pre>manifests/nodes.pp</pre></div>
+</div>
+</em>
+<div class="CodeRay">
+  <div class="code"><pre>node build {
+    include sudo, user, sshd, ssh::auth, user::keystore, repos
+    user::create{&quot;andrewmccall&quot;: groups =&gt; &quot;sudo&quot;}
+    user::client_key{&quot;andrewmccall&quot;:}
+    user::server_key{&quot;andrewmccall&quot;:}
+
+    ssh::auth::key{&quot;andrewmccall-root&quot;: key=&gt;&quot;andrewmccall&quot;}
+    ssh::auth::server{&quot;andrewmccall-root&quot;: key=&gt;&quot;andrewmccall&quot;, user=&gt;&quot;root&quot;, home=&gt;&quot;/root&quot;}
+}</pre></div>
+</div>
+
+
+In lines 7 &amp; 8 you can see I use the andrewmccall key to allow logins as root. 
+
+Apologies for the brevity of the post, I guess you can probably tell I'm sick of looking at this code. If you do have any questions or there is any interest in it I'll elaborate in the comments or a future post.

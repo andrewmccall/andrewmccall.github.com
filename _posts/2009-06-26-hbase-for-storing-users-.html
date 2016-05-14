@@ -1,0 +1,18 @@
+---
+layout: post
+title: Hbase for storing Users?
+published: true
+---
+We had a meeting last night about the state of the Sproozi project, where we wanted to be and the results of a few tests we'd run. We more or less came to the conclusion that we're going to need to push on with the social aspect of the site sooner rather than later. We're still trying to figure out what that means in terms of funding, if we need to raise any and how we go about it if we decide we do. It does start to pose some interesting questions the first and biggest is how we're going to store user data.
+
+We're already running Hbase and storing lots of data in there and I'd like the application to scale as easily as possible. The idea of running another framework or service just to store user data seems overkill and seems like one more system to worry about. So I'm going to run a little experiment in storing users in Hbase.
+
+The downside to Hbase is that it's not easy to search for things when you only want one of them by something other than the id. It's easy to pick a row by it's id and even to scan the table in order from there or to start and the beginning and go all the way through, but it's not very easy to quickly pick out a random row by the value of one of it's other fields. You'd have to start a map reduce task and start crunching the data until you found what you were looking for.
+
+Given the simple example of a user with a long id an email address, a username and a password it would be easy to get the user by it's id, but not very easy to get the user by the email address or username.&nbsp;So I'm toying with how to get it to work, probably by creating some additional tables to store keys for columns I want to search that link back to the correct user. Sort of like making my own indices.
+
+Once I get some code written and tested I'll probably throw up another post with some more details on whether or not it worked.
+
+Any thoughts?
+
+<em>Update: Check out this Vitamin </em><a href="http://thinkvitamin.com/dev/should-you-go-beyond-relational-databases/"><em>article</em></a>

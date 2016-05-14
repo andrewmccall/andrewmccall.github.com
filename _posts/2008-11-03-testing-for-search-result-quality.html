@@ -1,0 +1,27 @@
+---
+layout: post
+title: Testing for search result quality
+published: true
+---
+I've been faced with a bit of a problem lately, how to test the quality of results being produced from a changing dataset? It's easy to write unit tests for components of an application, and to make sure they're producing the expected results, but how do you test end to end? 
+
+Andraz from <a href="http://www.zemanta.com" title="Zemanta" class="zem_slink" rel="homepage">Zemanta</a> asking the same question, <a href="http://www.zemanta.com/blog/quality-assurance/">How do you test a complex system that is trying to mimic being smart,</a> last year.
+
+<blockquote>when you have new content in the system, you get completely new related stories and you have to go back and have a human judge them. There is expansion of the evaluation data - as you add new tests you generally can&rsquo;t send them through previous versions of your algorithms, since that would be prohibitely expansive. And there is statistics that hardly gives you overview over what exactly your changes caused, just few final numbers. And then there is the problem of pipelining the processing. Even if you improve the first stage, end results might be worse, since you&rsquo;ve already adapted the second stage to previous first one. So you need to actually evaluate each part of the system in isolation and then together.
+
+At the end you actually find out that you spend disproportional amount of time evaluating even the smallest changes. So you are in danger to just skip that evaluation which naturally you shouldn&rsquo;t.
+</blockquote>
+
+The fundamental problem you run up against is that the index is constantly changing, and it's meant to change. So it's hard to automatically test the output without a clear idea of what is going in. It's also difficult to get an accurate picture of how small changes in code affect the general results if you're just using a testing index with a small dataset.
+
+One way to go about it is to gauge result quality based on measuring user interaction. Basically there are things users do when they get results they're expecting and things they do when they haven't found what they were looking for. So if you can get measure how they're reacting, you can get an idea of quality. 
+
+At the moment I'm a lone developer putting all the data in the index, and I have a good idea of what I should be seeing out if it's actually working. In the next while though we're going to be rolling out to a few more internal beta users as we get a prototype system developed and we're not going to be in control of the inputs or output anymore. So soon enough we're going to actually be faced with trying to measure the quality of the results we're giving users in a dynamic system - expect to hear much more about this as we go on. 
+
+<h6 class="zemanta-related-title" style="font-size: 1em;">Related articles by Zemanta</h6><ul class="zemanta-article-ul">
+<li class="zemanta-article-ul-li"><a href="http://www.zemanta.com/blog/?p=32">Quality assurance</a></li>
+<li class="zemanta-article-ul-li"><a href="http://marlenacompton.blogspot.com/2008/08/why-developers-balk-at-unit-testing.html">Why Developers Balk at Unit Testing</a></li>
+<li class="zemanta-article-ul-li"><a href="http://www.readwriteweb.com/archives/12_unit_testing_tips_for_software_engineers.php">12 Unit Testing Tips for Software Engineers</a></li>
+</ul>
+
+<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">[[posterous-content:JpIyswAytcrlqHthpmds]]</div>
