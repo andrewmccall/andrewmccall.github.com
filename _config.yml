@@ -6,15 +6,15 @@ url: "http://example.com" # the base hostname & protocol for your site
 theme:
   # Meta
   title: andrewmccall.com
-  avatar: avatar.png
+  avatar: drewcasso.png
   gravatar: # Email MD5 hash
   description: "A website with blog posts and pages" # used by search engines
 
   # Header and footer text
   header_text: >
-     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+     <h1>Hi There!</h1>
 
-     <p>Remove all header text in <code>_config.yml</code> to disable this feature.</p>
+     <p>I'm a developer, father and techie. All thoughts are my own and random.</p>
   header_text_feature_image:
   footer_text: >
    Powered by <a href="http://jekyllrb.com">Jekyll</a> with <a href="https://rohanchandra.github.io/project/type/">Type Theme</a>
@@ -30,7 +30,7 @@ theme:
   github: "andrewmccall"
   google_plus:
   instagram:
-  linkedin:  # Full URL
+  linkedin: "https://www.linkedin.com/in/drewmccall" # Full URL
   pinterest:
   reddit:
   soundcloud:
@@ -59,7 +59,7 @@ theme:
   google_fonts: "Source+Sans+Pro:400,700,700italic,400italic"
 
   # Post navigation
-  post_navigation: false
+  post_navigation: true
 
 # PAGINATION
 paginate: 5
