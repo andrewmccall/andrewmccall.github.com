@@ -1,6 +1,0 @@
----
-layout: post
-title: Git checkout a tag.
-published: true
----
-When I recently rebuilt my development server using&nbsp;<a href="http://www.puppetlabs.com/">Puppet</a>&nbsp;I decided not to backup my nexus repository since there were all of three files I'd built in there. Today I wanted to start recreating them and couldn't find out how to checkout a git tag.&nbsp;<p /><div>A couple of google searches weren't terrible successful and it's something that's not really explained well so here it is.&nbsp;</div><p /><div>To checkout a tag you just have to&nbsp;</div><div>[code]git checkout &lt;TAG_NAME&gt; [/code]</div><p /><div>Yes it's that simple.&nbsp;</div><p /><div>You'll probably get the same warning message telling you you're in a detached HEAD state. If you intended to do some work here it's probably a really good idea to take the advice the message gives you and create a branch. You could do that when you checkout by adding -b</div><p /><div>[code]git checkout &lt;TAG_NAME&gt; -b &lt;BRANCH_NAME&gt;[/code]</div><p /><div>I didn't want to do anything except a [code]mvn clean deploy[/code] to get my library deployed back to nexus, then get back to where I was. So I didn't.&nbsp;</div>

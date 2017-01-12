@@ -1,6 +1,0 @@
----
-layout: post
-title: Maven and self signed client certs.
-published: true
----
-I've been using a self-signed client certificate on my development server.&nbsp;Today working on my OAuth lib I started getting problems connecting to twitter, failed SSH handshakes. With a message something like:&nbsp;<p /><div><span style="font-family: monospace;">Connection has been shutdown: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target</span></div><p /><div>It's because in my maven command I'm using a custom truststore which doesn't have any of the default root certificates in it, just mine. Running this command imported the default roots into the truststore I've been using with maven:&nbsp;</div><p /><div><div>[code] keytool -importkeystore -srckeystore $JAVA_HOME/lib/security/cacerts -destkeystore ./trust.jks [/code]</div></div><p /><div>I got a long list of &nbsp;<span style="font-family: monospace;">Entry for alias keychainrootca-xx successfully imported </span>and now everything works as it should.&nbsp;</div><p /><div>Hope it helps.&nbsp;</div>
