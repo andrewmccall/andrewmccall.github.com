@@ -1,0 +1,18 @@
+---
+layout: post
+title: Some progress on continuous deployment
+published: true
+---
+As I <a href="http://andrewmccall.com/2010/02/continuous-deployment/">posted</a> a couple of weeks ago I'm working on working a continuous deployment setup so that I can push changes live quicker and easier for the projects I'm working on.
+
+I've installed and configured <a href="hudson.dev.java.net">Hudson</a>, which was a good first step. It's shown me that my builds are a bit fragile, they're heavily based on packages that I've compiled and installed into my local <a href="http://maven.apache.org/">Maven</a> repository. To solve the problem and to make my build a little more sensible I'm getting <a href="http://www.jfrog.org/">Artifactory</a> working.
+
+At this stage I'm just trying to get a very basic system in place so that I have an idea of how long a deployment will take. It's a little more complicated because I'm using Java and the WARs contain all the libraries. I could just use the defaults and push a deployment directly to the target servers, but that doesn't work. First wars are big, they can easily weigh in at 20Mb.
+
+There are a couple of things I could do here. Ideally I could unroll all the jar libs and only include the classes I need. That would drastically reduce the size, as a bonus I could probably also have it give me a warning that I'm including an unused jar, even better if I could work out the path to the maven dependency. But there's the whole problem of resources, the fact that using Springframework means most of the classes aren't being explicitly called and the fact that since I don't know anything that does all of this this, I'd have to write it all.
+
+So I've written that whole idea off, and added a shorter to-do item to make sure I'm only including jars I need. Instead I've gone for a far easier solution: deploy exploded wars, and use rsync so I can push only changes to the server.
+
+The next step is to get trigger a Hudson build with a commit-hook and use a successful Hudson build to trigger a script that does the rsync. Then I'll have very basic continuous deployments up and running albeit without any automatic roll backs of a failed deployment which ultimately is a must, but it's a start.
+
+[[posterous-content:qwszooAFbmqCtBttyFDB]]

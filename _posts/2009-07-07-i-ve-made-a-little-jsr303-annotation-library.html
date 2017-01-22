@@ -1,0 +1,15 @@
+---
+layout: post
+title: I've made a little JSR303 annotation library
+published: true
+---
+I've been playing with <a href="http://www.hibernate.org" class="zem_slink" title="Hibernate (Java)" rel="homepage">Hibernate</a> Validator 4.0 lately, it's an implementaion of <a href="http://en.wikipedia.org/wiki/Jet_Set_Radio" class="zem_slink" title="Jet Set Radio" rel="wikipedia">JSR</a> 303 Bean Validation - basically the ability to annotate validations for your beans. Great in Hibernate as you'll know if you've ever done it because you're object describe the constraints and Hibernate enforces them for you.
+
+JSR 303 builds on it by codifying the annotated validation framework into a standard you should be able to use from front to back and everywhere in between maintaining your rules for what is and is not valid.&nbsp;Of course that's the pot of gold at the end of the rainbow, it's far messier living on the bleeding edge before the standards have been officially released.
+
+I've released a small very early project that builds on some of the stuff I've done using the Hibernate annotaions with Springframework in the past. Basically, wrap a <a href="http://www.springsource.org" class="zem_slink" title="Spring Framework" rel="homepage">Spring</a> validator around the Hibernate one - or in this case around a generic javax.annotations validator.
+
+I've also added a few new constraints that I need. NotEmpty validates that a field must not be null and must not have a size of 0. Email validates email addresses and URL validates Urls. It's an early release, but check it out <a href="http://github.com/andrewmccall/validation">here on GitHub</a> if you're interested. If you want to use it feel free if you want to make additions I'd love to accept them.
+<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">
+[[posterous-content:kdrnzvwJgFilHgFJCjof]]<span class="zem-script more-related pretty-attribution"></span>
+</div>

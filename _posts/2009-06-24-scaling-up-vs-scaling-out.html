@@ -1,0 +1,28 @@
+---
+layout: post
+title: Scaling up vs scaling out
+published: true
+---
+Jeff Atwood <a href="http://www.codinghorror.com/blog/archives/001279.html">goes into some calculations about the cost of scaling up vs scaling out </a>and makes an interesting point, it quickly becomes impractical if you're not using open source software. I think Jeff slightly missed the point though, it's not about open or closed source, it's that scaling out is simply impractical if you're paying traditional software licences.
+
+This is something we came across when building Sproozi. If we wanted to store petabytes of data and run hundreds or thousands of concurrent processors there was no way we could ever afford to do it on machines running windows we were paying for by the box. But it's not because we'd have to pay for software, per se, it's how we'd have to pay for it.
+
+Software has traditionally been licensed by machine, when machines got bigger vendors wanted to cash in so the licences got a little bigger. They had to cover their losses when you threw a few new processors in the machine rather than getting a new one to put alongside after all. It has always been in their best interest though for you to get a bigger box than to get more cheap ones - scaling out is very hard and the software doesn't do it well. Most RDBMS just can't do it well and they certainly can't get anywhere near the the scale of something like <a href="http://hadoop.apache.org/" class="zem_slink" title="Hadoop" rel="homepage">Hadoop</a>. If you want to scale out, forget SQL servers, you need software that's going to scale out.
+
+But let's forget the specific software for the time being and just assume that the big boys (MS, Oracle, IBM) will have a scaling out solution soon - don't worry this isn't going to kill them, but it will change them. They will still want to licence an operating system and a data storage and retrieval system to you.
+
+What I'm almost positive you're going to see is these companies introduce new pricing schemes to meet the needs of the cloud, they have to or they're going to lose all that revenue to the open source projects that have a head start on them. Just look at EC2, you can already provision MS and other software and I think that's a trend that's just going to continue.
+
+So while Jeff is right that if I want to buy as many cheap boxes as I could for the hardware cost of a big iron server and put windows and SQL on them and it would all cost a small fortune. It's not really a fair argument, you're taking an old big iron way of thinking and trying to apply it to the cloud. What it fails to take into account is how much more powerful your new cloud cluster is than the big iron box, let the software vendors figure out the economics of making their software an attractive ROI when compared to OSS because if they want to compete in the cloud they're going to have to.
+<h6 class="zemanta-related-title" style="font-size: 1em;">Related articles by Zemanta</h6>
+<ul class="zemanta-article-ul">
+	<li class="zemanta-article-ul-li">
+<a href="http://gigaom.com/2009/06/08/hadoop-summit-we-have-10-tickets-to-give-away/"> Hadoop Summit: We Have 10 Tickets to Give Away </a> (gigaom.com)</li>
+	<li class="zemanta-article-ul-li">
+<a href="http://www.computerworld.com/action/article.do?command=viewArticleBasic&amp;articleId=9134282"> Watch out, Oracle: Google tests cloud-based database </a> (computerworld.com)</li>
+	<li class="zemanta-article-ul-li">
+<a href="http://www.techcrunchit.com/2009/06/10/yahoo-releases-internal-hadoop-source-code/"> Yahoo Releases Internal Hadoop Source Code </a> (techcrunchit.com)</li>
+</ul>
+<div class="zemanta-pixie" style="margin-top: 10px; height: 15px;">
+[[posterous-content:vFjGuevFhbnHbzsjkxmx]]<span class="zem-script more-related pretty-attribution"></span>
+</div>

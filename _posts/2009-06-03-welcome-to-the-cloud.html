@@ -1,0 +1,18 @@
+---
+layout: post
+title: Welcome to the cloud
+published: true
+---
+The great thing about the cloud is the extremely low barrier to entry. It's very cheap to get up and running, it's very cheap to scale and it's very cheap to store data.  I'm still not fully convinced that from a long term perspective with thousands of nodes it's going to be cheaper than provisioning your own servers and hosting but I'm more than happy to be convinced - saving money one way or another can't be a bad thing. 
+
+Long term though one thing businesses really need to be wary of is being tied to tightly to a platform. There is of course the issue of being tied to an API and not being able to choose a new provider, but this isn't really what concerns me - we use debian AMIs on EC2 with a full opensource stack top to bottom. I'm taking about the the issue of economic lock in. The massive scale and masses of data the cloud allows users to store could quickly lead a company to a very expensive decision when it chooses to or is forced into moving providers. 
+
+Moving data in or out costs about $0.10/GB (a nice easy number to work with), let's pretend it's about the same for all other provider, so to shift your data from one to another is going to cost you $0.20/GB. That could quickly add up to a massive cost just to choose a new provider. 1TB will cost you over $200, 1 petabyte, which isn't going to be an unheard of amount of data in the next few years, is going to cost over a whopping $200,000! Just to move to a new provider. That's some kind of lock-in, probably a lot more than the cost of any new or changed APIs. Not to mention how long it's going to take to transfer that amount of data and the fact that you've already paid $100,000 to get it there! 
+
+Before anyone starts, yes I'm aware you can send Amazon a big storage device and they'll put all your data on that and send it back to you. Then you could probably send that data to your new provider and they'd put it in the cloud for you- I won't get into how good a solution to the problem this is, because I haven't really thought it through nor do I have any idea what that sort of storage would cost and what sort of redundancy you'd want it to have to safely truck the thing around.
+
+What I'm trying to get across is that an open stack you control is probably something you really want to own. And it's probably something you want to deploy across more than one provider for redundancy and your own   piece of mind. Just imagine if your cloud provider launches a competitive service, shuts down or for whatever reason decides not to service your account anymore. 
+
+There are mitigation strategies you can apply to this. With sproozi for example we're holding a lot of data on the nodes so that we can work with it. A lot of this can be rebuilt and reacquired, so we don't need to truck all our data about. Saving the list of places submitted by users and that we've discovered is more than enough to re-crawl everything and rebuild all the indexes. This is just one example though and we're not saving things like images and other data critical for users, so we're likely the exception here not the rule. 
+
+We run only on EC2 at the moment, but when we actually start getting more data we're going to spread it out across a few providers - just in case.

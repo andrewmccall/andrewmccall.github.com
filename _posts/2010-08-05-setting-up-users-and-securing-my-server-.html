@@ -1,0 +1,128 @@
+---
+layout: post
+title: ! 'Setting up users and securing my server. '
+published: true
+---
+Last night I got the server upgraded to ububtu 10.04 and installed puppet. The first and only recipe we've got is one to make sure our sudoers file has the proper permissions. Tonight I'm hoping to:
+<ul>
+	<li>Add myself a user</li>
+	<li>Automatically create me ssh key</li>
+	<li>Prevent root from logging in via ssh</li>
+	<li>Prevent users from logging in other than with a key.</li>
+	<li>It would be nice to be able to email me my key since I don't run puppet on my mac, though I may be convinced to go down that route if it proves too difficult.</li>
+</ul>
+Longer term I'm hoping to extend this same process to create user certificates for https client certificate authentication and it would be nice to use the same key, certificates and revocation process to issue new credential to users or to even lock them out. Bearing that all in mind, but not getting too hung up on stuff I'm doing later, off we go.
+
+<h3>Create the users module</h3>
+
+We're going to do this pretty much straight out of the puppet best practice guide, the first thing we'll do is flesh out our users module.
+
+<div class="CodeRay">
+  <code># cd /etc/puppet
+# mkdir -p modules/user/manifests</code>
+</div>
+
+
+Then create a virtual users file:
+
+<em><div class="CodeRay">
+  <code>modules/user/manifests/virtual.pp</code>
+</div>
+</em>
+<div class="CodeRay">
+  <code># virtual.pp
+#
+# People accounts of interest as virtual resources
+class user::virtual {
+    @user { &quot;andrewmccall&quot;:
+        ensure  =&gt; &quot;present&quot;,
+        uid     =&gt; &quot;1001&quot;,
+        gid     =&gt; &quot;1001&quot;,
+        comment =&gt; &quot;Andrew McCall&quot;,
+        home    =&gt; &quot;/home/andrewmccall&quot;,
+        shell   =&gt; &quot;/bin/bash&quot;,
+    }
+}</code>
+</div>
+
+
+Next let's move me from a virtual user to an actual user
+
+<em><div class="CodeRay">
+  <code>modules/users/manifests/unixadmins.pp</code>
+</div>
+</em>
+<div class="CodeRay">
+  <code># unixadmins.pp
+#
+# Realize the members of the Unix team and include any contractors
+
+class user::unixadmins inherits user::virtual {
+    # Realize our team members
+    realize(
+        User[&quot;andrewmccall&quot;]
+    )
+}</code>
+</div>
+
+
+Next we need to create an init.pp for the module.
+
+<em><div class="CodeRay">
+  <code>modules/users/manifests/init.pp</code>
+</div>
+</em>
+<div class="CodeRay">
+  <code>import &quot;*&quot;
+class user {
+    include user::virtual, user::unixadmins
+}</code>
+</div>
+
+
+Now we need to go back and update the site.pp - at this stage I also add a node.pp below to manage individual hosts. 
+
+<em><div class="CodeRay">
+  <code>manifests/site.pp</code>
+</div>
+</em>
+<div class="CodeRay">
+  <code># site.pp
+
+import &quot;nodes&quot;
+
+Exec { path =&gt; &quot;/usr/bin:/usr/sbin/:/bin:/sbin&quot; }</code>
+</div>
+
+
+<em><div class="CodeRay">
+  <code>manifests/site.pp</code>
+</div>
+</em>
+<div class="CodeRay">
+  <code># node.pp
+
+node default {
+  include sudo, user
+}</code>
+</div>
+
+
+Once I got that all setup I ran puppet from the command line:
+
+<div class="CodeRay">
+  <code># puppet -v --modulepath=/etc/puppet/modules /etc/puppet/manifests/site.pp</code>
+</div>
+
+
+And I got an error: 
+
+<div class="CodeRay">
+  <code>info: Autoloaded module sudo
+info: Autoloaded module user
+info: Applying configuration version '1281041300'
+err: //user::virtual/User[andrewmccall]/ensure: change from absent to present failed: Could not create user andrewmccall: Execution of '/usr/sbin/useradd -u 1001 -g 1001 -s /bin/bash -c Andrew McCall -d /home/andrewmccall andrewmccall' returned 6: useradd: group '1001' does not exist</code>
+</div>
+
+
+Unfortunately I'm going to have to leave it at that for the night, see you tomorrow.
