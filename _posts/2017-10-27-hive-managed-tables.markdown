@@ -2,6 +2,8 @@
 layout: post
 title:  "Hive, managed vs external tables"
 date:   2017-10-27 18:00:00 +0000
+author: Andrew McCall
+cover: /images/post_images/hive.jpeg
 categories: bigdata hive hadoop
 ---
 
