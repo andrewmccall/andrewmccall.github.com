@@ -4,7 +4,9 @@ title: "Posts"
 permalink: /posts/
 ---
 
-{% for category in site.categories %}
+{% assign sortedCategories = site.categories | sort %}
+{% for category in sortedCategories %}
+
   {% capture cat %}{{ category | first }}{% endcapture %}
   <h2 id="{{cat}}">{{ cat | capitalize }}</h2>
   {% for desc in site.descriptions %}
