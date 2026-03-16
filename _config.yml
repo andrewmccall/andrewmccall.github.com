@@ -1,156 +1,102 @@
-# External gems
-# See http://ixti.net/software/2013/01/28/using-jekyll-plugins-on-github-pages.html for making `jekyll archives` work.
-plugins:
-  #- jekyll-archives # Sorry, not GitHub pages friendly!
-  - jekyll-feed
-  - jekyll-sitemap
-  - jekyll-paginate
+# Minimal Mistakes Configuration
+remote_theme: mmistakes/minimal-mistakes
+minimal_mistakes_skin: "air"
 
-# Site settings
-title: andrewmccall.com
-email: andrew@andrewmccall.com
-name: andrewmccall.com
-subtitle: ""
-description: >
+# Site Settings
+locale: "en-GB"
+title: "Andrew McCall"
+title_separator: "-"
+subtitle: "Data · Engineering · Leadership"
+name: "Andrew McCall"
+description: >-
+  Thoughts on data engineering, platform engineering, and building things.
+  Interim Executive Director at Lloyds Banking Group.
+url: "https://andrewmccall.com"
+baseurl: ""
+repository: "andrewmccall/andrewmccall.github.io"
 
-# Base URL of site (i.e. /blog). It should always start with a slash,
-# and never end with a slash. Set it to a blank value if hosting at the
-# root of your server.
-baseurl: "" # the subpath of your site, e.g. /blog/
-url: "http://andrewmccall.com" # the base hostname & protocol for your site
-cover: "/assets/header_image.jpg"
-logo: "/assets/logo.png"
-
-# Build settings
-markdown: kramdown
-paginate: 5
-paginate_path: "/page:num/"
-inter_post_navigation: false
-highlightjs_theme: "monokai-sublime"
-
-# Jekyll 3 now only supports Kramdown for Markdown
-kramdown:
-  # Use GitHub flavored markdown, including triple backtick fenced code blocks
-  input: GFM
-  # Jekyll 3 and GitHub Pages now only support rouge for syntax highlighting
-  syntax_highlighter: rouge
-  syntax_highlighter_opts:
-    # Use existing pygments syntax highlighting css
-    css_class: 'highlight'
-
-# Archive settings (see https://github.com/jekyll/jekyll-archives/)
-#jekyll-archives:
-#  enabled:
-#    - categories
-#    - tags
-#  layout: 'archive'
-#  permalinks:
-#    category: '/category/:name/'
-#    tag: '/tag/:name/'
-
-permalink : /:title/
-
-# Disqus comments
-# disqus_shortname: bencentra
-
-# Google analytics
-# ga_tracking_id: "UA-XXXX-1"
-
-# Category descriptions (for archive pages)
-descriptions:
-  - cat: bigdata
-    desc: "Posts about big data."
-
-# Social icons and sharing options
-#
-# Social settings are used in two places:
-# * In the footer, as links to your personal profiles
-# * After each blog post for sharing widgets
-#
-# Example:
-#
-# social:
-#   - name: Twitter                         # Name of the service
-#     icon: twitter                         # Font Awesome icon to use (minus fa- prefix)
-#     username: "@TheBenCentra"             # (User) Name to display in the footer link
-#     url: https://twitter.com/TheBenCentra # URL of your profile (leave blank to not display in footer)
-#     desc: Follow me on Twitter            # Description to display as link title, etc
-#     share: true                           # Include in the "Share" section of posts
+# SEO
+twitter:
+  username: andrewmccall
 social:
-  - name: Twitter
-    icon: twitter
-    username: andrewmccall
-    url: https://twitter.com/andrewmccall
-    desc: Follow me on Twitter
-    share: true
+  name: Andrew McCall
+  links:
+    - https://www.linkedin.com/in/drewmccall
+    - https://github.com/andrewmccall
 
-  - name: Facebook
-    icon: facebook
-    username: andrewmccall
-    url:
-    desc: Friend me on Facebook
-    share: true
+# Google Analytics
+google_analytics: UA-52254722-1
 
-  - name: GitHub
-    icon: github
-    username: andrewmccall
-    url: https://github.com/andrewmccall
-    desc: Fork me on GitHub
-    share: false
+# Comments
+comments:
+  provider: disqus
+  disqus:
+    shortname: andrewmccall
 
-  - name: LinkedIn
-    icon: linkedin
-    username: Andrew McCall
-    url: https://www.linkedin.com/in/drewmccall
-    desc: Connect with me on LinkedIn
-    share: true
+# Footer
+footer:
+  links:
+    - label: "LinkedIn"
+      icon: "fab fa-fw fa-linkedin"
+      url: "https://www.linkedin.com/in/drewmccall"
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/andrewmccall"
 
-  - name: Reddit
-    icon: reddit
-    username:
-    url:
-    desc: Share to Reddit
-    share: true
+# Reading
+words_per_minute: 200
 
-  - name: "Hacker News"
-    icon: hacker-news
-    username:
-    url:
-    desc: Share to Hacker News
-    share: false
+# Pagination
+paginate: 10
+paginate_path: /page:num/
 
-# Enter your Disqus shortname (not your username) to enable commenting on posts
-# You can find your shortname on the Settings page of your Disqus account
-disqus:
-  shortname: "andrewmccall"
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: single
+      author_profile: true
+      read_time: true
+      share: true
+      related: true
+      comments: true
+  - scope:
+      path: ""
+      type: pages
+    values:
+      layout: single
+      author_profile: true
 
-# Enter your Google Analytics web tracking code (e.g. UA-2110908-2) to activate tracking
-ga_tracking_id: "UA-52254722-1"
+# Collections
+collections:
+  pages:
+    output: true
+    permalink: /:path/
 
+# Category / Tag
+category_archive:
+  type: liquid
+  path: /categories/
+tag_archive:
+  type: liquid
+  path: /tags/
 
-# Social sharing protocols
-# These are for automatically generating sharing metadata for FB and Twitter
-# OS Protocol is for sharing the source of your site, if you're interested. For more, see osprotocol.com
-protocols:
-    fb_image: "/assets/logo.png"
-    fb_image_width: 612
-    fb_image_height: 605
-    fb_image_type: "image/png"
+# Build
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
 
-    twitter_image: "/assets/logo.png"
-
-    os_repo: "https://github.com/bencentra/centrarium.com"
-    os_rcs_type: "git"
-    os_src: "git@github.com:bencentra/centrarium.com.git"
-
-# Set the Sass partials directory, as we're using @imports
+# Sass
 sass:
-  style: :expanded # You might prefer to minify using :compressed
+  style: compressed
 
-# Exclude these files from your production _site
+# Exclude
 exclude:
   - Gemfile
   - Gemfile.lock
   - LICENSE
   - README.md
-  - CNAME
+  - vendor
