@@ -1,57 +1,102 @@
-# Chirpy Theme Configuration
-theme: jekyll-theme-chirpy
+# Minimal Mistakes Configuration
+remote_theme: mmistakes/minimal-mistakes
+minimal_mistakes_skin: "air"
 
-lang: en
-timezone: Europe/London
-
-title: Andrew McCall
-tagline: Data, Engineering, Leadership
+# Site Settings
+locale: "en-GB"
+title: "Andrew McCall"
+title_separator: "-"
+subtitle: "Data · Engineering · Leadership"
+name: "Andrew McCall"
 description: >-
   Thoughts on data engineering, platform engineering, and building things.
   Interim Executive Director at Lloyds Banking Group.
-
 url: "https://andrewmccall.com"
+baseurl: ""
+repository: "andrewmccall/andrewmccall.github.io"
 
-github:
+# SEO
+twitter:
   username: andrewmccall
-
 social:
   name: Andrew McCall
-  email: andrew@andrewmccall.com
   links:
     - https://www.linkedin.com/in/drewmccall
     - https://github.com/andrewmccall
 
-analytics:
-  google:
-    id: UA-52254722-1
+# Google Analytics
+google_analytics: UA-52254722-1
 
+# Comments
 comments:
   provider: disqus
   disqus:
     shortname: andrewmccall
 
+# Footer
+footer:
+  links:
+    - label: "LinkedIn"
+      icon: "fab fa-fw fa-linkedin"
+      url: "https://www.linkedin.com/in/drewmccall"
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/andrewmccall"
+
+# Reading
+words_per_minute: 200
+
+# Pagination
 paginate: 10
+paginate_path: /page:num/
 
-toc: true
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: single
+      author_profile: true
+      read_time: true
+      share: true
+      related: true
+      comments: true
+  - scope:
+      path: ""
+      type: pages
+    values:
+      layout: single
+      author_profile: true
 
-categories_enabled:
-  - Data
-  - Engineering
-  - Leadership
+# Collections
+collections:
+  pages:
+    output: true
+    permalink: /:path/
 
-tag_enabled: true
+# Category / Tag
+category_archive:
+  type: liquid
+  path: /categories/
+tag_archive:
+  type: liquid
+  path: /tags/
 
-pwa:
-  enabled: true
+# Build
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
 
-copyright:
-  license:
-    name: CC BY-NC 4.0
-    link: https://creativecommons.org/licenses/by-nc/4.0/
-
-feed:
-  path: /feed.xml
-
+# Sass
 sass:
   style: compressed
+
+# Exclude
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - LICENSE
+  - README.md
+  - vendor
