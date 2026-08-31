@@ -1,29 +1,17 @@
 ---
 layout: page
-title: "Posts"
+title: Writing
+prompt: ls writing/
+intro: Notes accumulated over the years—mostly software, data, infrastructure and whatever I was trying to understand at the time.
 permalink: /posts/
 ---
 
-{% assign sortedCategories = site.categories | sort %}
-{% for category in sortedCategories %}
-
-  {% capture cat %}{{ category | first }}{% endcapture %}
-  <h2 id="{{cat}}">{{ cat | capitalize }}</h2>
-  {% for desc in site.descriptions %}
-    {% if desc.cat == cat %}
-      <p class="desc"><em>{{ desc.desc }}</em></p>
-    {% endif %}
+<div class="entry-list">
+  {% for post in site.posts %}
+  <a class="entry-row" href="{{ post.url | relative_url }}">
+    <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%d.%m.%Y" }}</time>
+    <strong>{{ post.title }}</strong>
+    <span class="entry-meta">{% if post.categories.size > 0 %}{{ post.categories | join: " / " | downcase }}{% endif %}</span>
+  </a>
   {% endfor %}
-  <ul class="posts-list">
-  {% for post in site.categories[cat] %}
-    <li>
-      <strong>
-        <a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
-      </strong>
-      <span class="post-date">- {{ post.date | date_to_long_string }}</span>
-    </li>
-  {% endfor %}
-  </ul>
-  {% if forloop.last == false %}<hr>{% endif %}
-{% endfor %}
-<br>
+</div>

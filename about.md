@@ -1,26 +1,42 @@
 ---
 layout: page
 title: About
+prompt: cat about.md
+intro: I’m Andrew—or Drew, if you prefer.
 permalink: /about/
 ---
 
-Hi there! 👋
+I lead engineering for Data & Platform Enablement at a large UK retail bank. Over more than twenty years I’ve moved from writing software and working on distributed data systems to leading large engineering organisations. Along the way, I’ve twice stepped into interim Executive Director roles, leading the organisation responsible for the bank’s data systems, infrastructure and engineering frameworks.
 
-I'm Andrew (or Drew if you rather). I've been doing things with data and data
-systems for quite some time.🤓
+Most of my work sits where software, data and infrastructure meet: turning ambiguous problems into systems that can be operated, trusted and scaled. I’m still happiest close to the details—testing an idea, tracing a failure or making something small enough to understand.
 
-My earliest internet evidence are some commits to HBase and Nutch from 2008
-when I was working on a location based search engine startup with a friend. It
-failed, but was a lot of fun and started me off on my passion 💖 for
-scalable distributed systems.🚀
+Right now I’m particularly interested in reliable platforms, agentic AI and what these technologies change about the way engineering is practised at scale.
 
-I've been a developer professionally for almost 20 years 👴. In compaines and
-teams of all sizes and tech stacks. Most recently I've been the Chief Engineer
-on a team of Data Engineers in a large UK retail bank and the Head of Data
-Engineering at a ride sharing startup.
+I started out building search and data systems, including early work with HBase and Nutch. That mix of software, infrastructure and messy real-world data has held my attention ever since.
 
-All opinions and thoughts on this site are my own.🧐
+***All opinions and mistakes are my own.***
 
-## Contact me
+## Elsewhere
 
-[andrew@andrewmccall.com](mailto:andrew@andrewmccall.com)
+You can find the work, the career version and a direct line here.
+
+<nav class="elsewhere-grid" aria-label="Elsewhere">
+  <a class="elsewhere-card" href="https://github.com/andrewmccall">
+    <span class="elsewhere-kicker">Code</span>
+    <strong>GitHub</strong>
+    <span class="elsewhere-detail">@andrewmccall</span>
+    <span class="elsewhere-arrow" aria-hidden="true">↗</span>
+  </a>
+  <a class="elsewhere-card" href="https://www.linkedin.com/in/drewmccall/">
+    <span class="elsewhere-kicker">Work</span>
+    <strong>LinkedIn</strong>
+    <span class="elsewhere-detail">/in/drewmccall</span>
+    <span class="elsewhere-arrow" aria-hidden="true">↗</span>
+  </a>
+  <a class="elsewhere-card" href="mailto:andrew@andrewmccall.com">
+    <span class="elsewhere-kicker">Contact</span>
+    <strong>Email</strong>
+    <span class="elsewhere-detail">Say hello</span>
+    <span class="elsewhere-arrow" aria-hidden="true">→</span>
+  </a>
+</nav>

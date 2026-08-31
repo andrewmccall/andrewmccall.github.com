@@ -1,18 +1,15 @@
-<!DOCTYPE html>
-<html>
-
+<!doctype html>
+<html lang="{{ site.lang | default: 'en-GB' }}">
   {% include head.html %}
-
-  <body>
-
-    {% include header.html %}
-
-    <div class="page-content">
+  <body class="layout-{{ page.layout | default: 'default' }}">
+    <a class="skip-link" href="#content">Skip to content</a>
+    <div class="site-frame">
+      {% include header.html %}
+      <main id="content" class="site-main">
         {{ content }}
+        {% include footer.html %}
+      </main>
     </div>
-
-    {% include footer.html %}
-
+    {% include analytics.html %}
   </body>
-
 </html>

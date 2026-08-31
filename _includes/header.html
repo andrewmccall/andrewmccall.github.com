@@ -1,23 +1,22 @@
-<header class="navigation" role="banner">
-  <div class="navigation-wrapper">
-    <a href="{{ site.baseurl }}/" class="logo">
-      {% if site.logo %}
-      <img src="{{ site.logo | prepend: site.baseurl }}" alt="{{ site.title }}">
-      {% else %}
-      <span>{{ site.title }}</span>
-      {% endif %}
-    </a>
-    <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">
-      <i class="fa fa-bars"></i>
-    </a>
-    <nav role="navigation">
-      <ul id="js-navigation-menu" class="navigation-menu show">
-        {% for page in site.pages %}
-          {% if page.title and page.main_nav != false %}
-          <li class="nav-link"><a href="{{ page.url | prepend: site.baseurl }}">{{ page.title }}</a>
-          {% endif %}
-        {% endfor %}
-      </ul>
-    </nav>
-  </div>
-</header>
+<aside class="site-rail">
+  <a class="identity" href="{{ '/' | relative_url }}" aria-label="Andrew McCall, home">
+    <span class="monogram" aria-hidden="true">AM</span>
+    <span class="identity-copy">
+      <strong>Andrew McCall</strong>
+      <small>Engineer / systems builder<br>{{ site.author.location }}</small>
+    </span>
+  </a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <a href="{{ '/' | relative_url }}"{% if page.url == '/' %} aria-current="page"{% endif %}><span>01 /</span> home</a>
+    <a href="{{ '/posts/' | relative_url }}"{% if page.url == '/posts/' or page.layout == 'post' %} aria-current="page"{% endif %}><span>02 /</span> writing</a>
+    <a href="{{ '/projects/' | relative_url }}"{% if page.url == '/projects/' %} aria-current="page"{% endif %}><span>03 /</span> projects</a>
+    <a href="{{ '/about/' | relative_url }}"{% if page.url == '/about/' %} aria-current="page"{% endif %}><span>04 /</span> about</a>
+  </nav>
+
+  <nav class="rail-links" aria-label="External links">
+    <a href="https://github.com/{{ site.author.github }}" rel="me">github.com/{{ site.author.github }}</a>
+    <a href="https://www.linkedin.com/in/{{ site.author.linkedin }}/" rel="me">linkedin.com/in/{{ site.author.linkedin }}</a>
+    <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+  </nav>
+</aside>
